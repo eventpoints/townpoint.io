@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Test\Controller;
+declare(strict_types = 1);
+
+namespace App\Tests\Controller;
 
 use App\Entity\PhoneNumber;
 use App\Repository\PhoneNumberRepository;
@@ -10,7 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class PhoneNumberControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
+
     private PhoneNumberRepository $repository;
+
     private string $path = '/phone/';
 
     protected function setUp(): void
@@ -34,7 +38,7 @@ class PhoneNumberControllerTest extends WebTestCase
         // self::assertSame('Some text on the page', $crawler->filter('.p')->first());
     }
 
-    public function testNew(): void
+    public function testNew(): never
     {
         $originalNumObjectsInRepository = count($this->repository->findAll());
 
@@ -56,7 +60,7 @@ class PhoneNumberControllerTest extends WebTestCase
         self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
     }
 
-    public function testShow(): void
+    public function testShow(): never
     {
         $this->markTestIncomplete();
         $fixture = new PhoneNumber();
@@ -76,7 +80,7 @@ class PhoneNumberControllerTest extends WebTestCase
         // Use assertions to check that the properties are properly displayed.
     }
 
-    public function testEdit(): void
+    public function testEdit(): never
     {
         $this->markTestIncomplete();
         $fixture = new PhoneNumber();
@@ -109,7 +113,7 @@ class PhoneNumberControllerTest extends WebTestCase
         self::assertSame('Something New', $fixture[0]->getOwner());
     }
 
-    public function testRemove(): void
+    public function testRemove(): never
     {
         $this->markTestIncomplete();
 

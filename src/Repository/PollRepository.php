@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\Poll;
@@ -24,54 +26,33 @@ class PollRepository extends ServiceEntityRepository
 
     public function add(Poll $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(Poll $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
-//    /**
-//     * @return Poll[] Returns an array of Poll objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Poll
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
-    public function findByUser(User $user)
+    public function findByUser(User $user): mixed
     {
         $qb = $this->createQueryBuilder('p');
-        $qb->andWhere(
-            $qb->expr()->eq('p.owner', ':id')
-        )->setParameter('id', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('p.owner', ':id'))
+            ->setParameter('id', $user->getId(), 'uuid');
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
-
 }

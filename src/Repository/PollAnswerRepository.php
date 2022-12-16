@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
-use App\Entity\Poll;
 use App\Entity\PollAnswer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,19 +25,23 @@ class PollAnswerRepository extends ServiceEntityRepository
 
     public function add(PollAnswer $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(PollAnswer $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
@@ -64,5 +69,4 @@ class PollAnswerRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-
 }

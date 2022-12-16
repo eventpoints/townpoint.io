@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\ConversationRepository;
@@ -22,12 +24,18 @@ class Conversation
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $title = null;
 
+    /**
+     * @var Collection<int, Message> $messages
+     */
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, cascade: ['persist'])]
     private Collection $messages;
 
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
+    /**
+     * @var Collection<int, User> $users
+     */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'conversations')]
     private Collection $users;
 
@@ -65,7 +73,7 @@ class Conversation
 
     public function addMessage(Message $message): self
     {
-        if (!$this->messages->contains($message)) {
+        if (! $this->messages->contains($message)) {
             $this->messages->add($message);
             $message->setConversation($this);
         }
@@ -75,11 +83,9 @@ class Conversation
 
     public function removeMessage(Message $message): self
     {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getConversation() === $this) {
-                $message->setConversation(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->messages->removeElement($message) && $message->getConversation() === $this) {
+            $message->setConversation(null);
         }
 
         return $this;
@@ -107,7 +113,7 @@ class Conversation
 
     public function addUser(User $user): self
     {
-        if (!$this->users->contains($user)) {
+        if (! $this->users->contains($user)) {
             $this->users->add($user);
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\PhoneNumber;
@@ -13,11 +15,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PhoneNumberFormType extends AbstractType
 {
-
     public function __construct(
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -25,20 +25,20 @@ class PhoneNumberFormType extends AbstractType
         $builder
             ->add('content', TelType::class, [
                 'attr' => [
-                    'placeholder' => $this->translator->trans('phone-number')
-                ]
+                    'placeholder' => $this->translator->trans('phone-number'),
+                ],
             ])
             ->add('countryCode', TextType::class, [
                 'attr' => [
-                  'placeholder' =>  $this->translator->trans('dial-code')
-                ]
+                    'placeholder' => $this->translator->trans('dial-code'),
+                ],
             ])
             ->add('isDefault', CheckboxType::class, [
                 'label_attr' => [
                     'class' => 'checkbox-switch',
                 ],
                 'label' => $this->translator->trans('is-default-phone-number'),
-                'required' => false
+                'required' => false,
             ]);
     }
 

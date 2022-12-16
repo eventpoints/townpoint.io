@@ -1,13 +1,17 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
-use App\Repository\FriendRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FriendRepository::class)]
+#[ORM\Entity]
 class Interactor
 {
+    public bool $isAccepted = false;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,11 +26,11 @@ class Interactor
     private ?User $user = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -58,12 +62,12 @@ class Interactor
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -81,5 +85,4 @@ class Interactor
 
         return $this;
     }
-
 }

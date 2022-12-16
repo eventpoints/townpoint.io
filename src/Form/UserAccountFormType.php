@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -8,7 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -20,18 +21,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserAccountFormType extends AbstractType
 {
-
-
     public function __construct(
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class,[
+            ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => $this->translator->trans('email'),
                 ],
@@ -39,7 +37,7 @@ class UserAccountFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('firstName', TextType::class,[
+            ->add('firstName', TextType::class, [
                 'attr' => [
                     'placeholder' => $this->translator->trans('firstName'),
                 ],
@@ -47,7 +45,7 @@ class UserAccountFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('lastName', TextType::class,[
+            ->add('lastName', TextType::class, [
                 'attr' => [
                     'placeholder' => $this->translator->trans('lastName'),
                 ],
@@ -65,14 +63,14 @@ class UserAccountFormType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
             ->add('currency', CurrencyType::class, [
                 'label' => $this->translator->trans('currency'),
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
             ->add('timezone', TimezoneType::class, [
                 'row_attr' => [
@@ -81,9 +79,9 @@ class UserAccountFormType extends AbstractType
                 'attr' => [
                     'data-timezone-target' => 'timezone',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
-            ->add('age', NumberType::class,[
+            ->add('age', NumberType::class, [
                 'attr' => [
                     'placeholder' => $this->translator->trans('age'),
                 ],
@@ -95,17 +93,17 @@ class UserAccountFormType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
             ->add('currentCountry', CountryType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
-            ->add('description', TextareaType::class,[
+            ->add('description', TextareaType::class, [
                 'required' => false,
-                'label'=> $this->translator->trans('one-sentence-about-you'),
+                'label' => $this->translator->trans('one-sentence-about-you'),
                 'attr' => [
                     'placeholder' => $this->translator->trans('about'),
                 ],
@@ -115,7 +113,7 @@ class UserAccountFormType extends AbstractType
             ])
             ->add('avatar', FileType::class, [
                 'mapped' => false,
-                'required' => false
+                'required' => false,
             ])
         ;
     }

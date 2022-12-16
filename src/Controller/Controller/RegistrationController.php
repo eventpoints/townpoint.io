@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\Entity\User;
@@ -16,42 +18,35 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-
     public function __construct(
-        private AvatarService $avatarService
-    )
-    {
+        private readonly AvatarService $avatarService
+    ) {
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserWebAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserAuthenticatorInterface $userAuthenticator,
+        UserWebAuthenticator $authenticator,
+        EntityManagerInterface $entityManager
+    ): ?Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $avatar = $this->avatarService->createAvatar($user->getEmail());
             $user->setAvatar($avatar);
 
             // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword') ->getData()));
 
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
+            return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
 
         return $this->render('registration/register.html.twig', [

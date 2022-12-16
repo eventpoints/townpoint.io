@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Security\Voter;
 
 use App\Entity\Statement;
@@ -10,30 +12,30 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class StatementVoter extends Voter
 {
+    final public const VIEW = 'STATEMENT_VIEW';
 
+    final public const CREATE = 'STATEMENT_CREATE';
 
-    public const VIEW = 'STATEMENT_VIEW';
-    public const CREATE = 'STATEMENT_CREATE';
-    public const EDIT = 'STATEMENT_EDIT';
-    public const DELETE = 'STATEMENT_DELETE';
+    final public const EDIT = 'STATEMENT_EDIT';
+
+    final public const DELETE = 'STATEMENT_DELETE';
 
     public function __construct(
         private readonly Security $security
-    )
-    {
+    ) {
     }
 
-    protected function supports(string $attribute, $subject): bool
+    protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::EDIT, self::CREATE, self::DELETE])
-            && $subject instanceof Statement || $subject == null;
+        return in_array($attribute, [self::VIEW, self::EDIT, self::CREATE, self::DELETE], true)
+            && $subject instanceof Statement || $subject === null;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (! $user instanceof UserInterface) {
             return false;
         }
 
@@ -44,7 +46,6 @@ class StatementVoter extends Voter
             self::DELETE => $this->canDelete($subject, $user),
             default => false
         };
-
     }
 
     private function canView(null|Statement $statement, UserInterface $user): bool
@@ -54,7 +55,7 @@ class StatementVoter extends Voter
 
     private function canEdit(null|Statement $statement, UserInterface $user): bool
     {
-        return $statement->getOwner() === $user;
+        return $statement?->getOwner() === $user;
     }
 
     private function canCreate(null|Statement $statement, UserInterface $user): bool
@@ -64,6 +65,6 @@ class StatementVoter extends Voter
 
     private function canDelete(null|Statement $statement, UserInterface $user): bool
     {
-        return $statement->getOwner() === $this->security->getUser();
+        return $statement?->getOwner() === $this->security->getUser();
     }
 }

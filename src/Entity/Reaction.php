@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Enum\ReactionEnum;
 use App\Repository\ReactionRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReactionRepository::class)]
 class Reaction
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -25,7 +27,7 @@ class Reaction
     private ?User $user = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
     {
@@ -68,12 +70,12 @@ class Reaction
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 

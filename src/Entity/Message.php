@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -18,20 +21,25 @@ class Message
     private Uuid $id;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
+    private string $content;
 
     #[ORM\ManyToOne]
-    private ?User $user = null;
+    private User $user;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     private ?Conversation $conversation = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
+    }
+
+    public function __toString(): string
+    {
+        return $this->content;
     }
 
     public function getId(): Uuid
@@ -39,7 +47,7 @@ class Message
         return $this->id;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -51,12 +59,12 @@ class Message
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -75,21 +83,15 @@ class Message
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
-    }
-
-
-    public function __toString()
-    {
-        return $this->content;
     }
 }

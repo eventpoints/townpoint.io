@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PollOptionRepository;
@@ -21,6 +23,9 @@ class PollOption
     #[ORM\ManyToOne(inversedBy: 'pollOptions')]
     private ?Poll $poll = null;
 
+    /**
+     * @var Collection<int, PollAnswer> $pollAnswers
+     */
     #[ORM\OneToMany(mappedBy: 'pollOption', targetEntity: PollAnswer::class)]
     private Collection $pollAnswers;
 
@@ -30,6 +35,11 @@ class PollOption
     public function __construct()
     {
         $this->pollAnswers = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return 'a poll option';
     }
 
     public function getId(): Uuid
@@ -59,7 +69,7 @@ class PollOption
 
     public function addPollAnswer(PollAnswer $pollAnswer): self
     {
-        if (!$this->pollAnswers->contains($pollAnswer)) {
+        if (! $this->pollAnswers->contains($pollAnswer)) {
             $this->pollAnswers->add($pollAnswer);
             $pollAnswer->setPollOption($this);
         }
@@ -69,11 +79,9 @@ class PollOption
 
     public function removePollAnswer(PollAnswer $pollAnswer): self
     {
-        if ($this->pollAnswers->removeElement($pollAnswer)) {
-            // set the owning side to null (unless already changed)
-            if ($pollAnswer->getPollOption() === $this) {
-                $pollAnswer->setPollOption(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->pollAnswers->removeElement($pollAnswer) && $pollAnswer->getPollOption() === $this) {
+            $pollAnswer->setPollOption(null);
         }
 
         return $this;
@@ -91,15 +99,9 @@ class PollOption
         return $this;
     }
 
-    public function __toString(): string
+    public function isUserAnswer(User $user): bool
     {
-        return 'a poll option';
-    }
-
-    public function isUserAnswer(User $user) : bool
-    {
-        /** @var PollOption $value */
-        return $this->pollAnswers->exists(function ($key, $value) use ($user) {
+        return $this->pollAnswers->exists(function ($key, PollAnswer $value) use ($user): bool {
             return $value->getPollOption() === $this && $value->getOwner() === $user;
         });
     }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\Conversation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Conversation>
@@ -25,29 +27,32 @@ class ConversationRepository extends ServiceEntityRepository
 
     public function add(Conversation $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(Conversation $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
-    public function findByUser(UserInterface $getUser) : Query
+    public function findByUser(User $user): Query
     {
         $qb = $this->createQueryBuilder('c');
         $qb->innerJoin('c.users', 'users');
-        $qb->andWhere(
-            $qb->expr()->in(':user', 'users')
-        )->setParameter('user', $getUser->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->in(':user', 'users'))
+            ->setParameter('user', $user->getId(), 'uuid');
 
         return $qb->getQuery();
     }

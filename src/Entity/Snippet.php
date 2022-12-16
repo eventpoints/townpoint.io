@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\SnippetRepository;
@@ -17,7 +19,7 @@ class Snippet
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
-    private Uuid|null $id;
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -42,20 +44,13 @@ class Snippet
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     */
     public function setContent(string $content): void
     {
         $this->content = $content;
     }
-
 }

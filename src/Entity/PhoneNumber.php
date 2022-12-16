@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PhoneNumberRepository;
@@ -64,12 +66,12 @@ class PhoneNumber
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
@@ -95,8 +97,8 @@ class PhoneNumber
 
     public function setIsDefault(bool $isDefault): self
     {
-
         $this->isDefault = $isDefault;
+
         return $this;
     }
 }

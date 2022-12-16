@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\Poll;
-use App\Entity\PollOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,12 +23,12 @@ class PollFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
                 'attr' => [
-                    'placeholder' => 'What would you like to ask?'
-                ]
+                    'placeholder' => 'What would you like to ask?',
+                ],
             ])
             ->add('endAt', DateTimeType::class, [
                 'widget' => 'single_text',
-                'input' => 'datetime_immutable'
+                'input' => 'datetime_immutable',
             ])
             ->add('pollOptions', CollectionType::class, [
                 'label' => false,
@@ -36,7 +36,7 @@ class PollFormType extends AbstractType
                 'allow_add' => true,
                 'delete_empty' => true,
                 'prototype' => true,
-                'by_reference' => false
+                'by_reference' => false,
             ])
         ;
     }

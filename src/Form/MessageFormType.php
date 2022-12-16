@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\Message;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,7 +21,7 @@ class MessageFormType extends AbstractType
                     'placeholder' => 'What do you want to say?',
                     'class' => 'border-0',
                     'rows' => 5,
-                    'data-controller' => 'textarea-autogrow'
+                    'data-controller' => 'textarea-autogrow',
                 ],
                 'row_attr' => [
                     'class' => 'mb-3',

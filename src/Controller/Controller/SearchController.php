@@ -1,18 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\Form\UserSearchFormType;
-use App\Repository\UserRepository;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-
     #[Route(path: '/user-search', name: '_user_search')]
     public function _userSearch(): Response
     {
@@ -22,5 +20,4 @@ class SearchController extends AbstractController
             'searchForm' => $searchForm->createView(),
         ]);
     }
-
 }

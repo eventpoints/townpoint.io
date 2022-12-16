@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -8,11 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class InteractorController extends AbstractController
 {
-
     #[Route(path: '/interactors', name: 'interactors')]
     public function index(): Response
     {
         return $this->render('interactors/index.html.twig');
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -48,8 +50,8 @@ class RegistrationFormType extends AbstractType
                 'choices' => [
                     'male' => 'male',
                     'female' => 'female',
-                    'couple' => 'couple'
-                ]
+                    'couple' => 'couple',
+                ],
             ])
             ->add('age', NumberType::class, [
                 'attr' => [

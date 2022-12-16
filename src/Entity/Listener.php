@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\ListenerRepository;
@@ -33,24 +35,24 @@ class Listener
         return $this->id;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
         return $this;
     }
 
-    public function getTarget(): ?User
+    public function getTarget(): User
     {
         return $this->target;
     }
 
-    public function setTarget(?User $target): self
+    public function setTarget(User $target): self
     {
         $this->target = $target;
 

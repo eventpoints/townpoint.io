@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Entity\Traits\ProfileTrait;
@@ -7,7 +9,6 @@ use App\Enum\ReactionEnum;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -23,6 +24,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use ProfileTrait;
 
+    /**
+     * @var Collection<int, Interactor>
+     */
+    public Collection $friendsWithMe;
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -30,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Uuid $id;
 
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column]
     private array $roles = [];
@@ -39,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
@@ -50,6 +56,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $gender = null;
 
+    /**
+     * @var Collection<int, Conversation> $conversations
+     */
     #[ORM\ManyToMany(targetEntity: Conversation::class, mappedBy: 'users')]
     private Collection $conversations;
 
@@ -59,9 +68,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $age = null;
 
+    /**
+     * @var Collection<int, Statement> $statements
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Statement::class)]
     private Collection $statements;
 
+    /**
+     * @var Collection<int, Interactor> $interactors
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Interactor::class)]
     private Collection $interactors;
 
@@ -74,24 +89,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isEnabled = false;
 
+    /**
+     * @var Collection<int, Reaction> $authoredReactions
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Reaction::class)]
     private Collection $authoredReactions;
 
+    /**
+     * @var Collection<int, Reaction> $reactions
+     */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reaction::class)]
     private Collection $reactions;
 
+    /**
+     * @var Collection<int, View> $viewed
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: View::class, orphanRemoval: true)]
     private Collection $viewed;
 
+    /**
+     * @var Collection<int, View> $views
+     */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: View::class)]
     private Collection $views;
 
+    /**
+     * @var Collection<int, Poll> $polls
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Poll::class)]
     private Collection $polls;
 
+    /**
+     * @var Collection<int, PollAnswer> $pollAnswers
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: PollAnswer::class)]
     private Collection $pollAnswers;
 
+    /**
+     * @var Collection<int, Duration> $durations
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Duration::class)]
     private Collection $durations;
 
@@ -104,15 +140,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private null|string $timezone = null;
 
+    /**
+     * @var Collection<int, Listener> $listening
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Listener::class)]
     private Collection $listening;
 
+    /**
+     * @var Collection<int, Listener> $listeners
+     */
     #[ORM\OneToMany(mappedBy: 'target', targetEntity: Listener::class)]
     private Collection $listeners;
 
+    /**
+     * @var Collection<int, PhoneNumber> $phoneNumbers
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: PhoneNumber::class)]
     private Collection $phoneNumbers;
 
+    /**
+     * @var Collection<int, Address> $addresses
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Address::class)]
     private Collection $addresses;
 
@@ -138,12 +186,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->addresses = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getFullName();
+    }
+
     public function getId(): Uuid
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -202,7 +255,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -210,7 +263,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFullName(): string
     {
-        return $this->firstName . " " . $this->lastName;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
     public function getFirstName(): ?string
@@ -259,7 +312,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addConversation(Conversation $conversation): self
     {
-        if (!$this->conversations->contains($conversation)) {
+        if (! $this->conversations->contains($conversation)) {
             $this->conversations->add($conversation);
             $conversation->addUser($this);
         }
@@ -310,7 +363,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addStatement(Statement $statement): self
     {
-        if (!$this->statements->contains($statement)) {
+        if (! $this->statements->contains($statement)) {
             $this->statements->add($statement);
             $statement->setOwner($this);
         }
@@ -320,19 +373,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeStatement(Statement $statement): self
     {
-        if ($this->statements->removeElement($statement)) {
-            // set the owning side to null (unless already changed)
-            if ($statement->getOwner() === $this) {
-                $statement->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->statements->removeElement($statement) && $statement->getOwner() === $this) {
+            $statement->setOwner(null);
         }
 
         return $this;
-    }
-
-    public function __toString(): string
-    {
-        return $this->getFullName();
     }
 
     /**
@@ -345,7 +391,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addFriend(Interactor $friend): self
     {
-        if (!$this->interactors->contains($friend)) {
+        if (! $this->interactors->contains($friend)) {
             $this->interactors->add($friend);
             $friend->setOwner($this);
         }
@@ -355,17 +401,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeFriend(Interactor $friend): self
     {
-        if ($this->interactors->removeElement($friend)) {
-            // set the owning side to null (unless already changed)
-            if ($friend->getOwner() === $this) {
-                $friend->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->interactors->removeElement($friend) && $friend->getOwner() === $this) {
+            $friend->setOwner(null);
         }
 
         return $this;
     }
 
-    public function hasFriend(User $user): bool
+    public function hasFriend(self $user): bool
     {
         /** @var Interactor $friend */
         foreach ($this->interactors as $friend) {
@@ -373,6 +417,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 return true;
             }
         }
+
         return false;
     }
 
@@ -386,7 +431,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addFriendsWithMe(Interactor $friendsWithMe): self
     {
-        if (!$this->friendsWithMe->contains($friendsWithMe)) {
+        if (! $this->friendsWithMe->contains($friendsWithMe)) {
             $this->friendsWithMe->add($friendsWithMe);
             $friendsWithMe->setUser($this);
         }
@@ -396,11 +441,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeFriendsWithMe(Interactor $friendsWithMe): self
     {
-        if ($this->friendsWithMe->removeElement($friendsWithMe)) {
-            // set the owning side to null (unless already changed)
-            if ($friendsWithMe->getUser() === $this) {
-                $friendsWithMe->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->friendsWithMe->removeElement($friendsWithMe) && $friendsWithMe->getUser() === $this) {
+            $friendsWithMe->setUser(null);
         }
 
         return $this;
@@ -447,12 +490,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getAuthoredAdmirations(): Collection
     {
-        $admirations = new ArrayCollection();
-        /** @var Reaction $reaction */
-        foreach ($this->authoredReactions as $reaction) {
-            $reaction->getType() === ReactionEnum::Admire ?? $admirations->add($reaction);
-        }
-        return $admirations;
+        return $this->authoredReactions->filter(function (Reaction $reaction): bool {
+            return $reaction->getType() === ReactionEnum::ADMIRE;
+        });
     }
 
     /**
@@ -460,17 +500,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getAuthoredDissagreements(): Collection
     {
-        $dissagreements = new ArrayCollection();
-        /** @var Reaction $reaction */
-        foreach ($this->authoredReactions as $reaction) {
-            $reaction->getType() === ReactionEnum::Disagree ?? $dissagreements->add($reaction);
-        }
-        return $dissagreements;
+        return $this->authoredReactions->filter(function (Reaction $reaction): bool {
+            return $reaction->getType() === ReactionEnum::DISAGREE;
+        });
     }
 
     public function addAuthoredReaction(Reaction $authoredReaction): self
     {
-        if (!$this->authoredReactions->contains($authoredReaction)) {
+        if (! $this->authoredReactions->contains($authoredReaction)) {
             $this->authoredReactions->add($authoredReaction);
             $authoredReaction->setOwner($this);
         }
@@ -480,11 +517,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeAuthoredReaction(Reaction $authoredReaction): self
     {
-        if ($this->authoredReactions->removeElement($authoredReaction)) {
-            // set the owning side to null (unless already changed)
-            if ($authoredReaction->getOwner() === $this) {
-                $authoredReaction->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->authoredReactions->removeElement($authoredReaction) && $authoredReaction->getOwner() === $this) {
+            $authoredReaction->setOwner(null);
         }
 
         return $this;
@@ -495,12 +530,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getAdmirations(): Collection
     {
-        $admirations = new ArrayCollection();
-        /** @var Reaction $reaction */
-        foreach ($this->reactions as $reaction) {
-            $reaction->getType() === ReactionEnum::Admire ?? $admirations->add($reaction);
-        }
-        return $admirations;
+        return $this->reactions->filter(function (Reaction $reaction): bool {
+            return $reaction->getType() === ReactionEnum::ADMIRE;
+        });
     }
 
     /**
@@ -508,17 +540,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getDissagreements(): Collection
     {
-        $dissagreements = new ArrayCollection();
-        /** @var Reaction $reaction */
-        foreach ($this->reactions as $reaction) {
-            $reaction->getType() === ReactionEnum::Disagree ?? $dissagreements->add($reaction);
-        }
-        return $dissagreements;
+        return $this->reactions->filter(function (Reaction $reaction): bool {
+            return $reaction->getType() === ReactionEnum::DISAGREE;
+        });
     }
 
     public function addReaction(Reaction $reaction): self
     {
-        if (!$this->reactions->contains($reaction)) {
+        if (! $this->reactions->contains($reaction)) {
             $this->reactions->add($reaction);
             $reaction->setUser($this);
         }
@@ -528,11 +557,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeReaction(Reaction $reaction): self
     {
-        if ($this->reactions->removeElement($reaction)) {
-            // set the owning side to null (unless already changed)
-            if ($reaction->getUser() === $this) {
-                $reaction->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->reactions->removeElement($reaction) && $reaction->getUser() === $this) {
+            $reaction->setUser(null);
         }
 
         return $this;
@@ -548,7 +575,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addViewed(View $viewed): self
     {
-        if (!$this->viewed->contains($viewed)) {
+        if (! $this->viewed->contains($viewed)) {
             $this->viewed->add($viewed);
             $viewed->setOwner($this);
         }
@@ -558,11 +585,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeViewed(View $viewed): self
     {
-        if ($this->viewed->removeElement($viewed)) {
-            // set the owning side to null (unless already changed)
-            if ($viewed->getOwner() === $this) {
-                $viewed->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->viewed->removeElement($viewed) && $viewed->getOwner() === $this) {
+            $viewed->setOwner(null);
         }
 
         return $this;
@@ -578,7 +603,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addView(View $view): self
     {
-        if (!$this->views->contains($view)) {
+        if (! $this->views->contains($view)) {
             $this->views->add($view);
             $view->setUser($this);
         }
@@ -588,11 +613,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeView(View $view): self
     {
-        if ($this->views->removeElement($view)) {
-            // set the owning side to null (unless already changed)
-            if ($view->getUser() === $this) {
-                $view->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->views->removeElement($view) && $view->getUser() === $this) {
+            $view->setUser(null);
         }
 
         return $this;
@@ -608,7 +631,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPoll(Poll $poll): self
     {
-        if (!$this->polls->contains($poll)) {
+        if (! $this->polls->contains($poll)) {
             $this->polls->add($poll);
             $poll->setOwner($this);
         }
@@ -618,11 +641,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removePoll(Poll $poll): self
     {
-        if ($this->polls->removeElement($poll)) {
-            // set the owning side to null (unless already changed)
-            if ($poll->getOwner() === $this) {
-                $poll->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->polls->removeElement($poll) && $poll->getOwner() === $this) {
+            $poll->setOwner(null);
         }
 
         return $this;
@@ -638,7 +659,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPollAnswer(PollAnswer $pollAnswer): self
     {
-        if (!$this->pollAnswers->contains($pollAnswer)) {
+        if (! $this->pollAnswers->contains($pollAnswer)) {
             $this->pollAnswers->add($pollAnswer);
             $pollAnswer->setOwner($this);
         }
@@ -648,11 +669,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removePollAnswer(PollAnswer $pollAnswer): self
     {
-        if ($this->pollAnswers->removeElement($pollAnswer)) {
-            // set the owning side to null (unless already changed)
-            if ($pollAnswer->getOwner() === $this) {
-                $pollAnswer->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->pollAnswers->removeElement($pollAnswer) && $pollAnswer->getOwner() === $this) {
+            $pollAnswer->setOwner(null);
         }
 
         return $this;
@@ -668,7 +687,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addDuration(Duration $duration): self
     {
-        if (!$this->durations->contains($duration)) {
+        if (! $this->durations->contains($duration)) {
             $this->durations->add($duration);
             $duration->setOwner($this);
         }
@@ -678,11 +697,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeDuration(Duration $duration): self
     {
-        if ($this->durations->removeElement($duration)) {
-            // set the owning side to null (unless already changed)
-            if ($duration->getOwner() === $this) {
-                $duration->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->durations->removeElement($duration) && $duration->getOwner() === $this) {
+            $duration->setOwner(null);
         }
 
         return $this;
@@ -734,7 +751,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addListening(Listener $listening): self
     {
-        if (!$this->listening->contains($listening)) {
+        if (! $this->listening->contains($listening)) {
             $this->listening->add($listening);
             $listening->setOwner($this);
         }
@@ -744,11 +761,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeListening(Listener $listening): self
     {
-        if ($this->listening->removeElement($listening)) {
-            // set the owning side to null (unless already changed)
-            if ($listening->getOwner() === $this) {
-                $listening->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($listening->getOwner() === $this) {
+            $this->listening->removeElement($listening);
         }
 
         return $this;
@@ -764,7 +779,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addListener(Listener $listener): self
     {
-        if (!$this->listeners->contains($listener)) {
+        if (! $this->listeners->contains($listener)) {
             $this->listeners->add($listener);
             $listener->setTarget($this);
         }
@@ -774,11 +789,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeListener(Listener $listener): self
     {
-        if ($this->listeners->removeElement($listener)) {
-            // set the owning side to null (unless already changed)
-            if ($listener->getTarget() === $this) {
-                $listener->setTarget(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($listener->getTarget() === $this) {
+            $this->listeners->removeElement($listener);
         }
 
         return $this;
@@ -794,7 +807,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPhoneNumber(PhoneNumber $phoneNumber): self
     {
-        if (!$this->phoneNumbers->contains($phoneNumber)) {
+        if (! $this->phoneNumbers->contains($phoneNumber)) {
             $this->phoneNumbers->add($phoneNumber);
             $phoneNumber->setOwner($this);
         }
@@ -804,20 +817,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removePhoneNumber(PhoneNumber $phoneNumber): self
     {
-        if ($this->phoneNumbers->removeElement($phoneNumber)) {
-            // set the owning side to null (unless already changed)
-            if ($phoneNumber->getOwner() === $this) {
-                $phoneNumber->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($phoneNumber->getOwner() === $this) {
+            $this->phoneNumbers->removeElement($phoneNumber);
         }
 
         return $this;
     }
 
-    public function getIsListening(User $user)
+    public function getIsListening(self $user): bool
     {
-       return $this->getListening()->exists(function ($key, $element) use ($user){
-           return  $user->getId() === $element->getTarget()->getId();
+        return $this->listening->exists(function ($key, Listener $element) use ($user): bool {
+            return $user->getId() === $element->getTarget()
+                ->getId();
         });
     }
 
@@ -831,7 +843,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addAddress(Address $address): self
     {
-        if (!$this->addresses->contains($address)) {
+        if (! $this->addresses->contains($address)) {
             $this->addresses->add($address);
             $address->setOwner($this);
         }
@@ -841,11 +853,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeAddress(Address $address): self
     {
-        if ($this->addresses->removeElement($address)) {
-            // set the owning side to null (unless already changed)
-            if ($address->getOwner() === $this) {
-                $address->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->addresses->removeElement($address) && $address->getOwner() === $this) {
+            $address->setOwner(null);
         }
 
         return $this;
@@ -862,5 +872,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
 }

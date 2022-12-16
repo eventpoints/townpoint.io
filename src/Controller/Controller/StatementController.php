@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\Builder\Contract\StatementBuilderInterface;
@@ -16,25 +18,21 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class StatementController extends AbstractController
 {
-
     public function __construct(
-        private StatementRepository         $statementRepository,
+        private readonly StatementRepository $statementRepository,
         private readonly ImageUploadService $imageUploadService,
         private readonly CurrentUserService $currentUserService
-
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/statement/{id}', name: 'show_statement')]
-    public function show(Statement $statement)
+    public function show(Statement $statement): Response
     {
         return $this->render('statement/show.html.twig', [
-            'statement' => $statement
+            'statement' => $statement,
         ]);
     }
 
@@ -43,39 +41,50 @@ class StatementController extends AbstractController
     {
         $this->denyAccessUnlessGranted(StatementVoter::DELETE, $statement);
         $this->statementRepository->remove($statement, true);
-        return $this->redirectToRoute('profile', ['id' => $this->getUser()->getId()]);
+
+        $user = $this->getUser();
+        if (! $user instanceof User) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->redirectToRoute('profile', [
+            'id' => $user->getId(),
+        ]);
     }
 
     #[Route(path: '/statements/create', name: 'create_statement')]
-    public function create(Request $request, StatementBuilderInterface $statementBuilder)
+    public function create(Request $request, StatementBuilderInterface $statementBuilder): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
-        if ($this->isGranted(StatementVoter::CREATE)) {
 
-            $statementForm = $this->createForm(StatementFormType::class);
+        if (! $this->isGranted(StatementVoter::CREATE)) {
+            return $this->redirectToRoute('app_login');
+        }
 
-            $statementForm->handleRequest($request);
-            if ($statementForm->isSubmitted() && $statementForm->isValid()) {
+        $statementForm = $this->createForm(StatementFormType::class);
 
-                $statementDirector = new StatementDirector();
-                /** @var UploadedFile $file */
-                $file = $statementForm->get('photo')->getData();
+        $statementForm->handleRequest($request);
+        if ($statementForm->isSubmitted() && $statementForm->isValid()) {
+            $statementDirector = new StatementDirector();
+            /** @var UploadedFile $file */
+            $file = $statementForm->get('photo')
+                ->getData();
 
-                $image = null;
-                if ($file) {
-                    $image = $this->imageUploadService->processStatementPhoto($file);
-                }
-
-                $statement = $statementDirector->makeStatement($statementBuilder, $statementForm, $currentUser, $image);
-                $this->statementRepository->add($statement, true);
-                return $this->redirectToRoute('profile', ['id' => $currentUser->getId()]);
+            $image = null;
+            if ($file instanceof UploadedFile) {
+                $image = $this->imageUploadService->processStatementPhoto($file);
             }
 
-            return $this->render('statement/new.html.twig', [
-                'statementForm' => $statementForm->createView()
+            //                $statement = $statementDirector->makeStatement($statementBuilder, $statementForm, $currentUser, $image);
+            //                $this->statementRepository->add($statement, true);
+
+            return $this->redirectToRoute('profile', [
+                'id' => $currentUser->getId(),
             ]);
-
         }
-    }
 
+        return $this->render('statement/new.html.twig', [
+            'statementForm' => $statementForm->createView(),
+        ]);
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\PollRepository;
@@ -28,9 +30,15 @@ class Poll
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'poll', targetEntity: PollOption::class,cascade: ['persist'])]
+    /**
+     * @var Collection<int, PollOption> $pollOptions
+     */
+    #[ORM\OneToMany(mappedBy: 'poll', targetEntity: PollOption::class, cascade: ['persist'])]
     private Collection $pollOptions;
 
+    /**
+     * @var Collection<int, PollAnswer> $pollAnswers
+     */
     #[ORM\OneToMany(mappedBy: 'poll', targetEntity: PollAnswer::class)]
     private Collection $pollAnswers;
 
@@ -38,7 +46,7 @@ class Poll
     private ?User $owner = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $endAt;
+    private ?DateTimeImmutable $endAt;
 
     public function __construct()
     {
@@ -86,7 +94,7 @@ class Poll
 
     public function addPollOption(PollOption $pollOption): self
     {
-        if (!$this->pollOptions->contains($pollOption)) {
+        if (! $this->pollOptions->contains($pollOption)) {
             $this->pollOptions->add($pollOption);
             $pollOption->setPoll($this);
         }
@@ -96,11 +104,9 @@ class Poll
 
     public function removePollOption(PollOption $pollOption): self
     {
-        if ($this->pollOptions->removeElement($pollOption)) {
-            // set the owning side to null (unless already changed)
-            if ($pollOption->getPoll() === $this) {
-                $pollOption->setPoll(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->pollOptions->removeElement($pollOption) && $pollOption->getPoll() === $this) {
+            $pollOption->setPoll(null);
         }
 
         return $this;
@@ -116,7 +122,7 @@ class Poll
 
     public function addPollAnswer(PollAnswer $pollAnswer): self
     {
-        if (!$this->pollAnswers->contains($pollAnswer)) {
+        if (! $this->pollAnswers->contains($pollAnswer)) {
             $this->pollAnswers->add($pollAnswer);
             $pollAnswer->setPoll($this);
         }
@@ -126,11 +132,9 @@ class Poll
 
     public function removePollAnswer(PollAnswer $pollAnswer): self
     {
-        if ($this->pollAnswers->removeElement($pollAnswer)) {
-            // set the owning side to null (unless already changed)
-            if ($pollAnswer->getPoll() === $this) {
-                $pollAnswer->setPoll(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->pollAnswers->removeElement($pollAnswer) && $pollAnswer->getPoll() === $this) {
+            $pollAnswer->setPoll(null);
         }
 
         return $this;
@@ -148,36 +152,34 @@ class Poll
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeImmutable
+    public function getEndAt(): ?DateTimeImmutable
     {
         return $this->endAt;
     }
 
-    public function setEndAt(\DateTimeImmutable $endAt): self
+    public function setEndAt(DateTimeImmutable $endAt): self
     {
         $this->endAt = $endAt;
 
         return $this;
     }
 
-    public function hasEnded() : bool
+    public function hasEnded(): bool
     {
         return Carbon::now()->isAfter($this->endAt);
     }
 
-    public function hasUserVoted(User $user) : bool
+    public function hasUserVoted(User $user): bool
     {
-        /** @var PollAnswer $pollAnswer */
-        return $this->pollAnswers->exists(function($key, $pollAnswer) use ($user){
+        return $this->pollAnswers->exists(function ($key, PollAnswer $pollAnswer) use ($user): bool {
             return $pollAnswer->getOwner() === $user;
         });
     }
 
-    public function getUserPollAnswer(User $user) : null|PollAnswer
+    public function getUserPollAnswer(User $user): PollAnswer|false
     {
-        /** @var PollAnswer $element */
-        return $this->pollAnswers->filter(function($element) use ($user){
-            return $element->getOwner() === $user && $element->getPoll() === $this;
+        return $this->pollAnswers->filter(function (PollAnswer $pollAnswer) use ($user): bool {
+            return $pollAnswer->getOwner() === $user && $pollAnswer->getPoll() === $this;
         })->first();
     }
 }

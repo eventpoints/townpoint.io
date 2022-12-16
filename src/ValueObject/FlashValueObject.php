@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\ValueObject;
 
 class FlashValueObject
 {
-    public const TYPE_MESSAGE = 'message';
-    public const TYPE_ERROR = 'error';
-    public const TYPE_SUCCESS = 'success';
-    public const MESSAGE_SUCCESS_SAVED = 'all changes saved';
+    final public const TYPE_MESSAGE = 'message';
+
+    final public const TYPE_ERROR = 'error';
+
+    final public const TYPE_SUCCESS = 'success';
+
+    final public const MESSAGE_SUCCESS_SAVED = 'all changes saved';
 }

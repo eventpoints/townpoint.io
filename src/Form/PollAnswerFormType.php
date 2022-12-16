@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\PollAnswer;
 use App\Entity\PollOption;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +26,7 @@ class PollAnswerFormType extends AbstractType
                 'label_attr' => [
                     'class' => 'btn btn-light w-100 mb-1',
                 ],
-                'choice_attr'=> function($choice, $key, $value) {
+                'choice_attr' => function ($choice, $key, $value): array {
                     return [
                         'class' => 'btn-check',
                     ];
@@ -35,9 +36,7 @@ class PollAnswerFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired([
-            'poll'
-        ]);
+        $resolver->setRequired(['poll']);
         $resolver->setDefaults([
             'data_class' => PollAnswer::class,
         ]);

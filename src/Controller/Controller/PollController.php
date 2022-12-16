@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\Builder\Contract\StatementBuilderInterface;
@@ -14,6 +16,7 @@ use App\Repository\PollAnswerRepository;
 use App\Repository\PollOptionRepository;
 use App\Repository\PollRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,28 +24,26 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class PollController extends AbstractController
 {
-
-
     public function __construct(
-        private PollRepository       $pollRepository,
-        private PollAnswerRepository $pollAnswerRepository,
-        private PollOptionRepository $pollOptionRepository
-    )
-    {
+        private readonly PollRepository $pollRepository,
+        private readonly PollAnswerRepository $pollAnswerRepository,
+        private readonly PollOptionRepository $pollOptionRepository
+    ) {
     }
 
     #[Route(path: '/poll/{id}', name: 'show_poll')]
     public function show(Poll $poll): Response
     {
         $pollPercentages = $this->pollOptionRepository->getPollPercentages($poll);
+
         return $this->render('poll/show.html.twig', [
             'poll' => $poll,
-            'options' => $pollPercentages
+            'options' => $pollPercentages,
         ]);
     }
 
     #[Route(path: '/answer/poll/{id}', name: 'answer_poll')]
-    public function pollAnswerForm(Poll $poll, Request $request)
+    public function pollAnswerForm(Poll $poll, Request $request): RedirectResponse|Response
     {
         $currentUser = $this->getUser();
         assert($currentUser instanceof User && $currentUser instanceof UserInterface);
@@ -51,16 +52,19 @@ class PollController extends AbstractController
         $answer->setPoll($poll);
         $answer->setOwner($currentUser);
         $pollAnswerForm = $this->createForm(PollAnswerFormType::class, $answer, [
-            'poll' => $poll
+            'poll' => $poll,
         ]);
         $pollAnswerForm->handleRequest($request);
         if ($pollAnswerForm->isSubmitted() && $pollAnswerForm->isValid()) {
-            $pollAnswerOption = $pollAnswerForm->get('options')->getData();
+            $pollAnswerOption = $pollAnswerForm->get('options')
+                ->getData();
             assert($pollAnswerOption instanceof PollOption);
             $answer->setPollOption($pollAnswerOption);
             $this->pollAnswerRepository->add($answer, true);
 
-            return $this->redirectToRoute('show_poll', ['id' => $poll->getId()]);
+            return $this->redirectToRoute('show_poll', [
+                'id' => $poll->getId(),
+            ]);
         }
 
         return $this->render('poll/answer.html.twig', [
@@ -72,30 +76,39 @@ class PollController extends AbstractController
     #[Route(path: 'create/poll', name: 'create_poll')]
     public function create(Request $request, StatementBuilderInterface $pollBuilder): Response
     {
-
         $currentUser = $this->getUser();
         assert($currentUser instanceof User && $currentUser instanceof UserInterface);
         $pollForm = $this->createForm(PollFormType::class);
 
-
         $pollForm->handleRequest($request);
         if ($pollForm->isSubmitted() && $pollForm->isValid()) {
             $statementDirector = new StatementDirector();
-            $poll = $statementDirector->makePoll($pollBuilder, $pollForm, $currentUser);
-            $this->pollRepository->add($poll, true);
-            return $this->redirectToRoute('show_poll', ['id' => $poll->getId()]);
+            //            $poll = $statementDirector->makePoll($pollBuilder, $pollForm, $currentUser);
+            //            $this->pollRepository->add($poll, true);
+
+            //            return $this->redirectToRoute('show_poll', [
+            //                'id' => $poll->getId(),
+            //            ]);
         }
 
         return $this->render('poll/new.html.twig', [
-            'pollForm' => $pollForm->createView()
+            'pollForm' => $pollForm->createView(),
         ]);
     }
 
     #[Route(path: '/delete/poll/{id}', name: 'delete_poll')]
-    public function delete(Poll $poll) : Response
+    public function delete(Poll $poll): Response
     {
-//        $this->denyAccessUnlessGranted('', $poll);
+        //        $this->denyAccessUnlessGranted('', $poll);
         $this->pollRepository->remove($poll, true);
-        return $this->redirectToRoute('profile', ['id' => $this->getUser()->getId()]);
+
+        $user = $this->getUser();
+        if (! $user instanceof User) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->redirectToRoute('profile', [
+            'id' => $user->getId(),
+        ]);
     }
 }

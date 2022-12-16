@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Builder;
 
 use App\Builder\Contract\StatementBuilderInterface;
@@ -16,32 +18,31 @@ class StatementBuilder implements StatementBuilderInterface, StatementInterface
         $this->reset();
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->statement = new Statement();
     }
-
 
     public function getResult(): Statement
     {
         $result = $this->statement;
         $this->reset();
+
         return $result;
     }
 
-    public function setPhoto(null|string $photo)
+    public function setPhoto(null|string $photo): void
     {
         $this->statement->setPhoto($photo);
     }
 
-    public function setContent(string $content)
+    public function setContent(string $content): void
     {
         $this->statement->setContent($content);
     }
 
-    public function setOwner(User $user)
+    public function setOwner(User $user): void
     {
         $this->statement->setOwner($user);
     }
-
 }

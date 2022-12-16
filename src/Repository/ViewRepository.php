@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -7,9 +9,7 @@ use App\Entity\View;
 use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<View>
@@ -28,23 +28,27 @@ class ViewRepository extends ServiceEntityRepository
 
     public function add(View $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(View $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
-    public function findByCurrentUser(User $user)
+    public function findByCurrentUser(User $user): mixed
     {
         $qb = $this->createQueryBuilder('v');
         $qb->innerJoin('v.owner', 'o');
@@ -52,18 +56,19 @@ class ViewRepository extends ServiceEntityRepository
 
         $qb->select('u.id, o.id as owner, o.firstName, o.lastName, o.avatar, COUNT(o.id) as view_count');
 
-        $qb->andWhere(
-            $qb->expr()->eq('u.id', ':userId')
-        )->setParameter('userId', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('u.id', ':userId'))
+            ->setParameter('userId', $user->getId(), 'uuid');
 
         $qb->groupBy('u.id', 'o.firstName', 'o.lastName', 'o.avatar', 'owner');
 
         $qb->andWhere(
-            $qb->expr()->between('v.createdAt', ':startDate', ':endDate')
+            $qb->expr()
+                ->between('v.createdAt', ':startDate', ':endDate')
         )->setParameter('startDate', Carbon::now()->subDay()->toDateTime())
             ->setParameter('endDate', Carbon::now()->toDateTime());
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 
     public function createAvgUserViewsCountCriteria(User $user): mixed
@@ -71,24 +76,25 @@ class ViewRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('v');
         $qb->innerJoin('v.user', 'u');
         $qb->innerJoin('v.owner', 'o');
-        $qb->select([
-            'COUNT(u.id) as user_count',
-        ]);
+        $qb->select(['COUNT(u.id) as user_count']);
 
-        $qb->andWhere(
-            $qb->expr()->eq('v.owner', ':userId')
-        )->setParameter('userId', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('v.owner', ':userId'))
+            ->setParameter('userId', $user->getId(), 'uuid');
 
         $qb->groupBy('u.id');
-        return $qb->getQuery()->getScalarResult();
+
+        return $qb->getQuery()
+            ->getScalarResult();
     }
 
     public static function createViewsByUserCriteria(User $user): Criteria
     {
         $expressionBuilder = Criteria::expr();
+
         return Criteria::create()
-            ->andWhere(
-                $expressionBuilder->eq('user', $user)
-            )->orderBy(['createdAt' => 'DESC']);
+            ->andWhere($expressionBuilder->eq('user', $user))
+            ->orderBy([
+                'createdAt' => 'DESC',
+            ]);
     }
 }

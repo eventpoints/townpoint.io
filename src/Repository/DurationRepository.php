@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\Duration;
@@ -25,19 +27,23 @@ class DurationRepository extends ServiceEntityRepository
 
     public function add(Duration $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(Duration $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
@@ -47,12 +53,12 @@ class DurationRepository extends ServiceEntityRepository
         $endOfDay = Carbon::today()->endOfDay();
 
         $qb = $this->createQueryBuilder('d');
-        $qb->andWhere(
-            $qb->expr()->eq('d.owner', ':user')
-        )->setParameter('user', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('d.owner', ':user'))
+            ->setParameter('user', $user->getId(), 'uuid');
 
         $qb->andWhere(
-            $qb->expr()->between('d.createdAt',  ":startOfDay", ":endOfDay")
+            $qb->expr()
+                ->between('d.createdAt', ':startOfDay', ':endOfDay')
         )->setParameter('startOfDay', $startOfDay->toDateTimeImmutable())
             ->setParameter('endOfDay', $endOfDay->toDateTimeImmutable());
 

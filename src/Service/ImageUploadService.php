@@ -12,20 +12,26 @@ final class ImageUploadService
 {
     public function processAvatar(UploadedFile $file): Image
     {
-        $manager = new ImageManager(['driver' => 'gd']);
+        $manager = new ImageManager([
+            'driver' => 'gd',
+        ]);
         $image = $manager->make($file->getRealPath());
         $image->fit(400, 400);
         $image->iptc('');
+
         return $image->encode('data-url');
     }
 
     public function processStatementPhoto(UploadedFile $file): Image
     {
-        $manager = new ImageManager(['driver' => 'gd']);
+        $manager = new ImageManager([
+            'driver' => 'gd',
+        ]);
         $image = $manager->make($file->getRealPath());
-        $image->resize(800, null, function ($constraint) {
+        $image->resize(800, null, function ($constraint): void {
             $constraint->aspectRatio();
         });
+
         return $image->encode('data-url');
     }
 }

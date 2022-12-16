@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\Entity\User;
 use App\Form\UserAccountFormType;
-use App\Repository\PollRepository;
 use App\Repository\PostRepository;
-use App\Repository\StatementRepository;
 use App\Repository\UserRepository;
 use App\Repository\ViewRepository;
 use App\Service\CurrentUserService;
@@ -26,26 +26,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
 {
-
-
     public function __construct(
-        private readonly StatementRepository   $statementRepository,
-        private readonly UserRepository        $userRepository,
-        private readonly ImageUploadService    $imageUploadService,
-        private readonly ProfileViewService    $profileViewService,
-        private readonly ViewRepository        $viewRepository,
-        private readonly PollRepository        $pollRepository,
-        private InteractorService              $interactorService,
-        private readonly PostRepository        $postRepository,
+        private readonly UserRepository $userRepository,
+        private readonly ImageUploadService $imageUploadService,
+        private readonly ProfileViewService $profileViewService,
+        private readonly ViewRepository $viewRepository,
+        private readonly PostRepository $postRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly TranslatorInterface   $translator,
-        private readonly CurrentUserService    $currentUserService
-    )
-    {
+        private readonly CurrentUserService $currentUserService
+    ) {
     }
 
     #[Route(path: '/insights', name: 'insights')]
@@ -56,13 +48,10 @@ class UserController extends AbstractController
         $views = $this->viewRepository->findByCurrentUser($currentUser);
 
         return $this->render('user/insights.html.twig', [
-            'views' => $views
+            'views' => $views,
         ]);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[Route(path: '/dashboard', name: 'dashboard')]
     public function dashboard(): Response
     {
@@ -71,7 +60,9 @@ class UserController extends AbstractController
         $qr = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
-            ->data($this->urlGenerator->generate('profile', ['id' => $currentUser->getId()], UrlGeneratorInterface::ABSOLUTE_URL))
+            ->data($this->urlGenerator->generate('profile', [
+                'id' => $currentUser->getId(),
+            ], UrlGeneratorInterface::ABSOLUTE_URL))
             ->encoding(new Encoding('UTF-8'))
             ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
             ->size(500)
@@ -81,7 +72,7 @@ class UserController extends AbstractController
             ->build();
 
         return $this->render('user/dashboard.html.twig', [
-            'qr' => $qr->getDataUri()
+            'qr' => $qr->getDataUri(),
         ]);
     }
 
@@ -93,13 +84,13 @@ class UserController extends AbstractController
 
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-
             /** @var UploadedFile $file */
-            $file = $userForm->get('avatar')->getData();
+            $file = $userForm->get('avatar')
+                ->getData();
 
-            if ($file) {
+            if ($file instanceof UploadedFile) {
                 $base64Image = $this->imageUploadService->processAvatar($file);
-                $currentUser->setAvatar($base64Image);
+                $currentUser->setAvatar($base64Image->getEncoded());
             }
 
             $this->userRepository->add($currentUser, true);
@@ -116,24 +107,21 @@ class UserController extends AbstractController
     #[Route(path: '/profile/{id}', name: 'profile')]
     public function profile(User $user, Request $request): Response
     {
-
         $this->profileViewService->view($user);
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
-//        $this->interactorService->check($currentUser, $user);
+        //        $this->interactorService->check($currentUser, $user);
 
         $posts = $this->postRepository->findPostsByUser($user);
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,
-            'posts' => $posts
+            'posts' => $posts,
         ]);
     }
-
 
     #[Route(path: '/menu/profile', name: 'profile_menu')]
     public function profileMenu(): Response
     {
         return $this->render('user/_profile-post-menu.html.twig');
     }
-
 }

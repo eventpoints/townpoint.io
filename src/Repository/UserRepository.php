@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -7,8 +9,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -23,28 +23,30 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(
-        ManagerRegistry $registry
-    )
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
 
     public function add(User $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(User $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
@@ -53,7 +55,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
@@ -67,36 +69,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb = $this->createQueryBuilder('u');
         $qb->innerJoin('u.viewed', 'v');
         $qb->select(
-            $qb->expr()->quot(
-                $qb->expr()->count('v.user'),
-                $user->getViewed()->count()
-            ) . 'as average_count'
+            $qb->expr()
+                ->quot($qb->expr() ->count('v.user'), $user->getViewed() ->count()) . 'as average_count'
         );
 
-        $qb->andWhere(
-            $qb->expr()->eq('v.owner', ':userId')
-        )->setParameter('userId', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('v.owner', ':userId'))
+            ->setParameter('userId', $user->getId(), 'uuid');
 
-        return $qb->getQuery()->getScalarResult();
+        return $qb->getQuery()
+            ->getScalarResult();
     }
 
-    public function findPostsByUser(User $user)
+    public function findPostsByUser(User $user): mixed
     {
         $qb = $this->createQueryBuilder('u');
         $qb->join('u.polls', 'p');
         $qb->join('u.statements', 's');
 
-        $qb->andWhere(
-            $qb->expr()->eq('s.owner', ':user')
-        )->setParameter('user', $user);
+        $qb->andWhere($qb->expr() ->eq('s.owner', ':user'))
+            ->setParameter('user', $user);
 
-        $qb->andWhere(
-            $qb->expr()->eq('p.owner', ':user')
-        )->setParameter('user', $user);
+        $qb->andWhere($qb->expr() ->eq('p.owner', ':user'))
+            ->setParameter('user', $user);
 
-        dd($qb->getQuery()->getResult());
-
-        $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 
     public function findByFilters(
@@ -105,34 +102,33 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         null|int $minAge,
         null|int $maxAge,
         null|string $gender
-    ) : Query
-    {
-
+    ): Query {
         $qb = $this->createQueryBuilder('u');
 
-        if($firstName){
+        if ($firstName) {
             $qb->andWhere(
-                $qb->expr()->like('u.firstName', ':firstName')
-            )->setParameter('firstName', '%'.$firstName.'%');
+                $qb->expr()
+                    ->like('u.firstName', ':firstName')
+            )->setParameter('firstName', '%' . $firstName . '%');
         }
 
-        if($lastName){
+        if ($lastName) {
             $qb->andWhere(
-                $qb->expr()->like('u.lastName', ':lastName')
-            )->setParameter('lastName', '%'.$lastName.'%');
+                $qb->expr()
+                    ->like('u.lastName', ':lastName')
+            )->setParameter('lastName', '%' . $lastName . '%');
         }
 
         if ($minAge && $maxAge) {
             $qb->andWhere(
-                $qb->expr()->between('u.age', ':minAge', ':maxAge')
+                $qb->expr()
+                    ->between('u.age', ':minAge', ':maxAge')
             )->setParameter('minAge', $minAge, Types::INTEGER)
                 ->setParameter('maxAge', $maxAge, Types::INTEGER);
         }
 
         if ($gender) {
-            $qb->andWhere(
-                $qb->expr()->eq('u.gender', ':gender')
-            )
+            $qb->andWhere($qb->expr() ->eq('u.gender', ':gender'))
                 ->setParameter('gender', $gender, Types::STRING);
         }
 

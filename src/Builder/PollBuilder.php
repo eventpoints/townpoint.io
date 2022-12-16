@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Builder;
 
 use App\Builder\Contract\PollBuilderInterface;
@@ -17,39 +19,38 @@ class PollBuilder implements StatementBuilderInterface, PollBuilderInterface
         $this->reset();
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->poll = new Poll();
     }
-
 
     public function getResult(): Poll
     {
         $result = $this->poll;
         $this->reset();
+
         return $result;
     }
 
-    public function setMotion(string $motion)
+    public function setMotion(string $motion): void
     {
         $this->poll->setMotion($motion);
     }
 
-    public function setEndAt(DateTimeImmutable $endAt)
+    public function setEndAt(DateTimeImmutable $endAt): void
     {
         $this->poll->setEndAt($endAt);
     }
 
-    public function setOptions(array $pollOptions)
+    public function setOptions(array $pollOptions): void
     {
         foreach ($pollOptions as $option) {
             $this->poll->addPollOption($option);
         }
     }
 
-    public function setOwner(User $user)
+    public function setOwner(User $user): void
     {
         $this->poll->setOwner($user);
     }
-
 }

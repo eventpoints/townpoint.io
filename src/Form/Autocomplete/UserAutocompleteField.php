@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form\Autocomplete;
 
-use App\Entity\Address;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,25 +13,25 @@ use Symfony\UX\Autocomplete\Form\ParentEntityAutocompleteType;
 #[AsEntityAutocompleteField]
 class UserAutocompleteField extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'label' => false,
             'row_attr' => [
-                'class' => 'm-0 w-100'
+                'class' => 'm-0 w-100',
             ],
             'attr' => [
-                'class' => 'rounded-pill form-control-lg'
+                'class' => 'rounded-pill form-control-lg',
             ],
             'class' => User::class,
             'placeholder' => 'Search',
             'tom_select_options' => [
                 'options' => [
                     'render' => [
-                        'loading' => '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        'loading' => '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>',
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
