@@ -1,0 +1,54 @@
+{% macro collection_item(form) %}
+    <div class="list-group-item" data-form-collection-target="field">
+        <div class="input-group">
+            {{ form_widget(form.content) }}
+            <button type="button"
+                    class="btn btn-primary"
+                    data-action="form-collection#removeItem">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    </div>
+{% endmacro %}
+
+    {% import _self as formMacros %}
+
+    {{ form_start(pollForm, {
+        action: path('create_poll')
+    }) }}
+
+<div class="input-group">
+    {{ form_widget(pollForm.motion) }}
+    {{ form_widget(pollForm.endAt) }}
+</div>
+<div class="list-group no-bg"
+     data-controller="form-collection"
+     data-form-collection-min-items-value="2"
+     data-form-collection-max-items-value="5"
+     data-form-collection-prototype-value="{{ formMacros.collection_item(pollForm.pollOptions.vars.prototype)|json_encode }}">
+    <div data-form-collection-target="fields">
+        {% do pollForm.pollOptions.setRendered %}
+        {% for option in pollForm.pollOptions %}
+            {{ formMacros.collection_item(option) }}
+        {% endfor %}
+    </div>
+    <div class="text-center my-2">
+        <button
+                class="btn btn-primary"
+                type="button"
+                data-action="form-collection#addItem"
+                data-form-collection-target="addButton">
+            {{ 'add-option'|trans }}
+        </button>
+    </div>
+    <div class="card-footer text-end">
+        <button
+                class="btn btn-primary"
+                type="submit"
+                data-form-collection-target="submitButton"
+        >
+            {{ 'create-poll'|trans }}
+        </button>
+    </div>
+</div>
+{{ form_end(pollForm) }}

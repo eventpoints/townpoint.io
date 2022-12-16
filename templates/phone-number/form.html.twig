@@ -1,0 +1,25 @@
+{{ form_start(phoneNumberForm, {
+    action: path,
+    attr: {
+        'data-turbo-frame' : 'phone-number-show-frame-{{ phoneNumber.id }}'
+    }
+}) }}
+<div class="row">
+    <div class="input-group">
+        {{ form_widget(phoneNumberForm.countryCode, {'attr': {'class': 'w-25'}}) }}
+        {{ form_widget(phoneNumberForm.content,  {'attr': {'class': 'w-75'}}) }}
+    </div>
+    {{ form_row(phoneNumberForm.isDefault) }}
+    <div class="btn-group">
+        {% if edit %}
+            <a href="{{ path('show_phone_number', {id: phoneNumber.id}) }}" class="btn btn-outline-secondary" data-turbo-frame="_self">
+                {{ 'cancel'|trans }}
+            </a>
+        {% endif %}
+        <button type="submit" class="btn btn-outline-primary">
+            {{ 'save'|trans }}
+        </button>
+    </div>
+</div>
+
+{{ form_end(phoneNumberForm) }}

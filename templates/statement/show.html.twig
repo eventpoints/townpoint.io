@@ -1,0 +1,51 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <turbo-frame id="statement_show_frame-{{ statement.id }}">
+        <div class="card mb-2">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="d-flex">
+                        <img src="{{ statement.owner.avatar }}" height="35" class="rounded-circle me-2"/>
+                        <div>
+                            <div class="lh-1 text-black fw-normal">{{ statement.owner.fullName }}</div>
+                            <div class="small text-black fw-normal">{{ statement.createdAt|format_date }}</div>
+                        </div>
+                    </div>
+                    <div>
+                        {% if app.user == statement.owner %}
+                            <div class="dropdown">
+                                <button class="btn btn-light p-1" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="mdi mdi-dots-vertical fs-5 m-0"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item text-danger"
+                                           href="{{ path('delete_statement', {id: statement.id}) }}">{{ 'delete'|trans }}</a></li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if statement.photo %}
+                <img alt="statement-photo" class="card-img-top object-fit-cover" height="400"
+                     src="{{ statement.photo }}"/>
+            {% endif %}
+            <div class="my-1 d-flex justify-content-between align-items-start">
+                <div class="card-body">
+                    <figure class="text-center m-0">
+                        <blockquote class="blockquote m-0">
+                            {{ statement.content }}
+                        </blockquote>
+                        <figcaption class="blockquote-footer  m-0">
+                            {{ statement.owner.fullName }} @{{ statement.createdAt|date }}
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </turbo-frame>
+{% endblock %}

@@ -1,0 +1,95 @@
+//$font-family-sans-serif:
+//  // Cross-platform generic font family (default user interface font)
+//        system-ui,
+//          // Safari for macOS and iOS (San Francisco)
+//        -apple-system,
+//          // Windows
+//        "Segoe UI",
+//          // Android
+//        Roboto,
+//          // older macOS and iOS
+//        "Helvetica Neue"
+//          // Linux
+//        "Noto Sans",
+//        "Liberation Sans",
+//          // Basic web fallback
+//        Arial,
+//          // Sans serif fallback
+//        sans-serif,
+//          // Emoji fonts
+//        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+//
+
+
+$green: #81c784;
+$green-light: #e8f5e9;
+$yellow: #ffee58;
+$yellow-light: #fffde7;
+$orange: #ff7043;
+$orange-light: #fff3e0;
+$red: #c62828;
+$red-light: #ffebee;
+$purple: #6a1b9a;
+$purple-light: #ede7f6;
+$indigo: #5c6bc0;
+$indigo-light: #e8eaf6;
+$blue: #1976d2;
+$blue-light: #e3f2fd;
+$teal: #26a69a;
+$teal-light: #e0f2f1;
+$cyan: #26c6da;
+$cyan-light: #e0f7fa;
+$white: #ffffff;
+$black: #000000;
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
+$badge-pill-border-radius: 0.3rem;
+$pink: #f8bbd0;
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+$spacer: 1rem;
+$border-width: 1px;
+$secondary: $gray-500;
+$primary: $purple;
+$kbd-padding-y: 0.2rem;
+$grid-gutter-width: 20px;
+$navbar-padding-x: $spacer;
+$light: $white;
+$input-btn-border-width: $border-width;
+$toast-background-color: rgba(white, 0.75);;
+$input-border-color: $gray-400;
+$input-btn-padding-y-sm: 0.2rem;
+$headings-font-weight: 900;
+$nav-link-font-weight: 900;
+
+$prefix: --bs-;
+
+// import functions and vars
+@import "bootstrap/scss/_functions";
+@import "bootstrap/scss/_variables";
+
+$custom-theme-colours: (
+"primary-light": $purple-light,
+"success-light": $green-light,
+"secondary-light": $gray-100,
+"danger-light": $red-light,
+"info-light": $blue-light,
+"warning-light": $yellow-light
+);
+
+$theme-colors: map-merge($custom-theme-colours, $theme-colors);
+
+$font-size-root:              null !default;
+$font-size-base:              .8rem !default; // Assumes the browser default, typically `16px`
+$font-size-sm:                $font-size-base * .55 !default;
+$font-size-lg:                $font-size-base * .85 !default;

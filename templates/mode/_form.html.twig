@@ -1,0 +1,6 @@
+{{ form_start(modeForm, {action: path('set_mode')}) }}
+<div class="input-group">
+    {{ form_widget(modeForm.mode) }}
+    <button type="submit" class="btn btn-outline-primary">{{ 'save'|trans }}</button>
+</div>
+{{ form_end(modeForm) }}

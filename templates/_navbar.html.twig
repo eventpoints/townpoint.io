@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand border-bottom mb-3">
+    <div class="container py-2">
+        <a class="navbar-brand fw-bold me-5" href="{{ path('index') }}">
+            <span class="fw-bolder">T</span><span class="fw-bolder text-primary">P</span>
+        </a>
+        <div class="navbar-collapse align-items-center" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {% if app.user %}
+                    <li class="nav-item me-2">
+                        <a class="nav-link {% if app.request.attributes.get('_route') == 'dashboard' %}active{% endif %}"
+                           href="{{ path('dashboard') }}">
+                            {{ app.user.firstName }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav w-25 mx-auto mb-2 mb-lg-0">
+            <turbo-frame src="{{ path('_user_search') }}" class="w-100" id="user-search-form-frame">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </turbo-frame>
+            </ul>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if app.user %}
+                    <li class="nav-item dropdown">
+                        {% if mode.mode == 'WORK' %}
+                            <a class="nav-link bg-grey text-info rounded-pill" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">{{ mode.mode }}</a>
+                        {% elseif mode.mode == 'PLAY' %}
+                            <a class="nav-link bg-grey text-danger rounded-pill" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">{{ mode.mode }}</a>
+                        {% else %}
+                            <a class="nav-link bg-grey text-success rounded-pill" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">{{ mode.mode }}</a>
+                        {% endif %}
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item text-danger" href="#">{{ 'PLAY' }}</a></li>
+                            <li><a class="dropdown-item text-success" href="#">{{ 'LEARN' }}</a></li>
+                            <li><a class="dropdown-item text-info" href="#">{{ 'WORK' }}</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>
+

@@ -20,5 +20,8 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Builder\PollBuilder: ~
+    App\Builder\StatementBuilder: ~
+
+    App\Builder\Contract\StatementBuilderInterface $pollBuilder: '@App\Builder\PollBuilder'
+    App\Builder\Contract\StatementBuilderInterface: '@App\Builder\StatementBuilder'

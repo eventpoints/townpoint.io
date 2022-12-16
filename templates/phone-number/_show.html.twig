@@ -1,0 +1,14 @@
+<div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center
+{% if phoneNumber.isDefault %} active {% endif %}
+">
+    <a href="{{ path('edit_phone_number', {id: phoneNumber.id }) }}">
+        <span class="mdi mdi-pencil-circle fs-3"></span>
+    </a>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <div>{{ phoneNumber.countryCode }} {{ phoneNumber.content }}</div>
+            <div class="small text-end">{{ phoneNumber.createdAt|format_date }}</div>
+        </div>
+
+    </div>
+</div>

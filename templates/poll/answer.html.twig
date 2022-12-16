@@ -1,0 +1,56 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4">
+                <turbo-frame id="poll_answer_form_frame-{{ poll.id }}">
+                    <div class="card mb-2">
+
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex">
+                                    <img src="{{ poll.owner.avatar }}" height="35" class="rounded-circle me-2"/>
+                                    <div>
+                                        <div class="lh-1 text-black fw-normal">{{ poll.owner.fullName }}</div>
+                                        <div class="small text-black fw-normal">{{ poll.createdAt|format_date }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    {% if app.user == poll.owner and not poll.hasEnded %}
+                                        <div class="dropdown">
+                                            <button class="btn btn-light p-1" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="mdi mdi-dots-vertical fs-5"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item text-danger"
+                                                       href="{{ path('delete_poll', {id: poll.id}) }}">{{ 'delete'|trans }}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="text-black fw-normal">{{ poll.motion }}</h5>
+                            {{ form_start(pollAnswerForm, {
+                                attr: {'data-turbo-frame': 'poll_answer_form_frame-'~poll.id },
+                                action: path('answer_poll', {id: poll.id})
+                            },
+                            ) }}
+
+                            {{ form_row(pollAnswerForm.options) }}
+                            <button type="submit" class="btn btn-primary w-100">save</button>
+                            {{ form_end(pollAnswerForm) }}
+                        </div>
+                    </div>
+                </turbo-frame>
+            </div>
+        </div>
+    </div>
+{% endblock %}

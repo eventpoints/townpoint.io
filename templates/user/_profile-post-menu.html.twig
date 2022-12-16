@@ -1,0 +1,22 @@
+<turbo-frame id="profile_post_menu_frame">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <a class="btn btn-outline-primary w-100" href="{{ path('create_poll') }}"
+                       data-turbo-frame="_self">
+                        <i class="mdi mdi-poll fs-3"></i>
+                        <div>{{ 'create-poll'|trans }}</div>
+                    </a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <a class="btn btn-outline-primary w-100" href="{{ path('create_statement') }}"
+                       data-turbo-frame="_self">
+                        <i class="mdi mdi-text fs-3"></i>
+                        <div>{{ 'create-statement'|trans }}</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</turbo-frame>

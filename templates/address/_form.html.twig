@@ -1,0 +1,14 @@
+{{ form_start(addressForm) }}
+{{ form_row(addressForm.title) }}
+{{ form_row(addressForm.lineOne) }}
+{{ form_row(addressForm.lineTwo) }}
+{{ form_row(addressForm.postCode) }}
+{{ form_row(addressForm.townOrCity) }}
+{{ form_row(addressForm.country) }}
+{{ form_row(addressForm.isDefault) }}
+<div class="text-end">
+    <button type="submit" class="btn btn-outline-primary w-25">
+        {{ 'save'|trans }}
+    </button>
+</div>
+{{ form_end(addressForm) }}

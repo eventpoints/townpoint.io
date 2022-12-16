@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{# where the phone numbers are displayed #}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-3">
+                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
+                       data-bs-target="#account" href="#account" type="button" role="tab" aria-controls="v-pills-home"
+                       aria-selected="true">{{ 'account'|trans|upper }}</a>
+
+                    <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#addresses"
+                       href="#addresses"
+                       type="button" role="tab" aria-controls="v-pills-settings"
+                       aria-selected="false">{{ 'addresses'|trans|upper }}</a>
+
+                    <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
+                       data-bs-target="#phone-numbers" href="#phone-numbers" type="button" role="tab"
+                       aria-controls="v-pills-settings"
+                       aria-selected="false">{{ 'phone-numbers'|trans|upper }}</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="account" role="tabpanel"
+                         aria-labelledby="v-pills-home-tab" tabindex="0">
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <img class="img-fluid rounded w-100 mb-3" src="{{ app.user.avatar }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                {{ form_start(userForm) }}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5>{{ 'account-information'|trans }}</h5>
+
+                                        <div class="input-group">
+                                            {{ form_row(userForm.firstName) }}
+                                            {{ form_row(userForm.lastName) }}
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-12 col-md-8">
+                                                {{ form_row(userForm.email) }}
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                {{ form_row(userForm.age) }}
+                                            </div>
+                                        </div>
+
+                                        {{ form_row(userForm.avatar) }}
+
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                {{ form_row(userForm.language) }}
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                {{ form_row(userForm.timezone) }}
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                {{ form_row(userForm.currency) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group">
+                                            {{ form_row(userForm.countryOfOrigin) }}
+                                            {{ form_row(userForm.currentCountry) }}
+                                        </div>
+
+                                        {{ form_row(userForm.description) }}
+
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-outline-danger w-25">{{ 'delete-account'|trans }}</button>
+                                            <button class="btn btn-outline-primary w-25"
+                                                    type="submit">{{ 'save'|trans }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form_end(userForm) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="addresses" role="tabpanel"
+                         aria-labelledby="v-pills-home-tab" tabindex="0">
+                        <div class="card-body row g-2">
+                            <div class="col-12 col-md-6">
+                                <div class="card h-100 border border-2 border-dashed">
+                                    <div class="card-body d-flex justify-content-center align-items-center my-3">
+                                        <div class="h5 m-0">{{ 'add-address'|trans }}</div>
+                                    </div>
+                                    <a href="{{ path('create_address') }}" class="stretched-link"></a>
+                                </div>
+                            </div>
+                            {% for address in app.user.addresses %}
+                                <div class="col-12 col-md-6">
+                                    {{ include('address/_show.html.twig') }}
+                                </div>
+                            {% else %}
+                                <div class="col-12 col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body text-center">
+                                            <div class="h5 m-0 text-muted">{{ 'no-addresses-found'|trans }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+
+                    </div>
+                    <div class="tab-pane fade" id="phone-numbers" role="tabpanel" aria-labelledby="v-pills-profile-tab"
+                         tabindex="0">
+                        <div class="card-body row g-2">
+                            <div class="col-12 col-md-6">
+                                <div class="card h-100 mb-3">
+                                    <div class="h5 m-0 card-header">
+                                        {{ 'add-phone-number'|trans }}
+                                    </div>
+                                    <div class="card-body">
+                                        <turbo-frame id="new-phone-number-frame" src="{{ path('create_phone_number') }}"
+                                                     targe="_top" loading="lazy">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="spinner-border" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </turbo-frame>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {% for phone in app.user.phoneNumbers %}
+                                <div class="col-12 col-md-6">
+                                    <turbo-frame id="phone-number-{{ phone.id }}-frame"
+                                                 src="{{ path('show_phone_number', {id: phone.id}) }}"
+                                                 target="_top" loading="lazy"
+                                    >
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </turbo-frame>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

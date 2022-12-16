@@ -1,0 +1,24 @@
+{{ form_start(statementForm, {
+    action: path('create_statement')
+}) }}
+<div class="input-group">
+    <div {{ stimulus_controller('file-input') }}>
+        <button
+                class="btn btn-primary" {{ stimulus_action('file-input', 'select') }}>
+            <i class="bi bi-image"></i>
+        </button>
+        {{ form_widget(statementForm.photo) }}
+    </div>
+    {{ form_widget(statementForm.content, {
+        attr: {
+            'data-controller': 'symfony/ux-autocomplete/autocomplete',
+            'data-autocomplete-url-value': path('ux_entity_autocomplete', { alias: 'handle-autocomplete' })
+        }
+    }) }}
+    <div class="text-end">
+        <button type="submit" class="btn btn-secondary">
+            {{ 'post'|trans }}
+        </button>
+    </div>
+</div>
+{{ form_end(statementForm) }}

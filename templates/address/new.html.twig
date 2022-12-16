@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <turbo-frame id="address-form-frame" target="_top">
+                <div class="card">
+                    <div class="card-header">
+                        <a class="btn btn-outline-primary" href="{{ path('account', {'_fragment': 'addresses'}) }}" data-turbo-frame="_top">
+                            <span class="mdi mdi-arrow-left"></span>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ 'new-address'|trans }}</h5>
+                        {{ include('address/_form.html.twig') }}
+                    </div>
+                </div>
+            </turbo-frame>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% import 'macro/audio.macro.twig' as audio %}
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                {{ audio.newPlayer }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

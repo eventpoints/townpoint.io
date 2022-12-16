@@ -1,0 +1,17 @@
+<turbo-frame id="profile_post_menu_frame">
+    <div class="card mb-3">
+        <div class="card-header">
+            <a class="link-primary" href="{{ path('profile_menu') }}" data-turbo-frame="_self">
+                <i class="bi bi-arrow-left-short fs-2"></i>
+            </a>
+        </div>
+        {% if app.user.statements.count == 0 %}
+        <div class="text-center my-1 small">
+            A statement is short piece of text informing people what you have finished or learnt recently.
+        </div>
+        {% endif %}
+        <div class="card-body">
+            {{ include('statement/_form.html.twig') }}
+        </div>
+    </div>
+</turbo-frame>

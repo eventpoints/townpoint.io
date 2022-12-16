@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <div>{{ address.lineOne }}</div>
+                <div>{{ address.lineTwo }}</div>
+                <div>{{ address.townOrCity }}</div>
+                <div>{{ address.postCode }}</div>
+                <div>{{ address.country|country_name }}</div>
+            </div>
+            <div>
+                <span class="mdi mdi-check-circle fs-3 text-primary"></span>
+            </div>
+        </div>
+        <hr/>
+        <div class="small">{{ address.createdAt|format_date }}</div>
+    </div>
+    <div class=" card-footer d-flex justify-content-end align-items-center">
+        <div>
+            <a class="btn btn-outline-primary"
+               href="#" data-turbo-frame="_self">
+                <span class="mdi mdi-pencil"></span>
+            </a>
+            <a class="btn btn-outline-danger"
+               href="#" data-turbo-frame="_self">
+                <span class="mdi mdi-delete"></span>
+            </a>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+            </div>
+
+        </div>
+    </div>
+</div>

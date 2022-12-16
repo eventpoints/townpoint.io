@@ -1,19 +1,53 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body {{ stimulus_controller('dark-theme') }}>
+
+{% include '_navbar.html.twig' %}
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div id="toast-container" class="toast-container top-0 end-0 p-3 position-fixed">
+        {% for message in app.session.flashbag.get('error') %}
+            {{ include('partials/_toast.html.twig', {
+                message: message,
+                type: 'danger'
+            }) }}
+        {% endfor %}
+
+        {% for message in app.session.flashbag.get('info') %}
+            {{ include('partials/_toast.html.twig', {
+                message: message,
+                type: 'info'
+            }) }}
+        {% endfor %}
+
+        {% for message in app.session.flashbag.get('warning') %}
+            {{ include('partials/_toast.html.twig', {
+                message: message,
+                type: 'warning'
+            }) }}
+        {% endfor %}
+
+        {% for message in app.session.flashbag.get('success') %}
+            {{ include('partials/_toast.html.twig', {
+                message: message,
+                type: 'primary'
+            }) }}
+        {% endfor %}
+    </div>
+</div>
+{% block body %}{% endblock %}
+</body>
 </html>

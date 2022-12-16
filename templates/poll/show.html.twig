@@ -1,0 +1,62 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4">
+                <turbo-frame id="poll_show_frame-{{ poll.id }}">
+                    <div class="card mb-2 {% if poll.hasEnded %} bg-secondary-light {% endif %} ">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex">
+                                    <img src="{{ poll.owner.avatar }}" height="35" class="rounded-circle me-2"/>
+                                    <div>
+                                        <div class="lh-1 text-black fw-normal">{{ poll.owner.fullName }}</div>
+                                        <div class="small text-black fw-normal">{{ poll.createdAt|format_date }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    {% if app.user == poll.owner and not poll.hasEnded %}
+                                        <div class="dropdown">
+                                            <button class="btn btn-light p-1" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="mdi mdi-dots-vertical fs-5"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item text-danger"
+                                                       href="{{ path('delete_poll', {id: poll.id}) }}">{{ 'delete'|trans }}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="text-black fw-normal">{{ poll.motion }}</h5>
+                            {% for option in options %}
+                                <div class="mb-1">
+                                    <input type="radio" class="btn-check" disabled name="{{ poll.id }}-options"
+                                           id="input-{{ option.0.id }}" autocomplete="off"
+                                            {% if option.0.isUserAnswer(app.user) %} checked{% endif %} />
+                                    <label class="btn btn-light w-100 d-flex justify-content-between"
+                                           for="input-{{ option.0.id }}">
+                                    <span>
+                                        <span>{{ option.0.content }}</span>
+                                    </span>
+                                        <span>
+                                        <span class="me-2">{{ option.percentage|number_format }}%</span>
+                                        <span class="badge rounded-pill text-bg-primary">{{ option.option_as_answer_count }}</span>
+                                    </span>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </turbo-frame>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+<turbo-frame id="phone-number-{{ phoneNumber.id }}-frame">
+    <div class="card">
+        <div class="card-body">
+            {{ include('/phone-number/form.html.twig', {
+                path: path('edit_phone_number', {id: phoneNumber.id}),
+                edit: true
+            }) }}
+        </div>
+    </div>
+</turbo-frame>

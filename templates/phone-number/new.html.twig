@@ -1,0 +1,6 @@
+<turbo-frame id="new-phone-number-frame">
+    <div>{{ include('phone-number/form.html.twig', {
+            path: path('create_phone_number', {id: phoneNumber.id}),
+            edit: false
+        }) }}</div>
+</turbo-frame>

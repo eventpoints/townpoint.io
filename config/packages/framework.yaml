@@ -1,5 +1,13 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
+    http_client:
+        default_options:
+            verify_peer: false
+        scoped_clients:
+            wikipedia.api.client:
+                base_uri: 'https://en.wikipedia.org/w/api.php'
+                headers:
+                    Accept: 'application/json'
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
     http_method_override: false

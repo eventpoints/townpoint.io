@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center mb-3">
+            <div class="col-12 col-md-6">
+                <div class="h5">{{ 'conversations'|trans }}</div>
+                <div class="list-group">
+                    {% for conversation in pagination %}
+                        <a href="{{ path('conversation', {id: conversation.id}) }}"
+                           class="list-group-item list-group-item-action">
+                            {% for user in conversation.users %}
+                                {% if user != app.user %}
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ user.avatar }}" width="40" class="rounded-circle me-2"/>
+                                        <div>
+                                            <div class="h5 m-0">{{ user.fullName }}</div>
+                                            {% if conversation.messages.last %}
+                                                <div class="text-muted">{{ conversation.messages.last.content|slice(0,50) }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                    {% else %}
+                        <div class="list-group-item">
+                            {{ 'no-conversations'|trans }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+{% endblock %}

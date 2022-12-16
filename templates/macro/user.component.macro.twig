@@ -1,0 +1,26 @@
+{% macro userlistItem(
+    user
+    ) %}
+    <a href="{{ path('profile', {id: user.id}) }}" class="list-group-item list-group-item-action">
+        <div class="d-flex align-items-center">
+            <img src="{{ user.avatar }}" width="40" class="rounded-circle me-2"/>
+            <div>
+                <div class="h5 m-0">{{ user.fullName }}</div>
+            </div>
+        </div>
+    </a>
+{% endmacro %}
+
+{% macro userPostHeader(user, post) %}
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div>
+                <img src="{{ user.avatar }}" height="35" class="rounded-circle me-2"/>
+            </div>
+            <div>
+                <div class="lh-1 text-black fw-normal">{{ user.fullName }}</div>
+                <div class="small text-black fw-normal">{{ post.createdAt|format_date }}</div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

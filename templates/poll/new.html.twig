@@ -1,0 +1,17 @@
+<turbo-frame id="profile_post_menu_frame">
+    <div class="card mb-3">
+        <div class="card-header">
+            <a class="link-primary" href="{{ path('profile_menu') }}" data-turbo-frame="_self">
+                <i class="bi bi-arrow-left-short fs-2"></i>
+            </a>
+        </div>
+        {% if app.user.polls.count == 0 %}
+            <div class="text-center my-1 small">
+                Get some feedback on an idea or question with a poll
+            </div>
+        {% endif %}
+        <div class="card-body">
+            {{ include('poll/_form.html.twig') }}
+        </div>
+    </div>
+</turbo-frame>

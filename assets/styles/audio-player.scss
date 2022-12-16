@@ -1,0 +1,57 @@
+
+.player-wrapper {
+  position: relative;
+  //overflow: hidden;
+  border-radius: 3rem;
+}
+
+.player {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eeeeee;
+  border-radius: 3rem;
+}
+
+.player .play-btn {
+  padding: 0 0.5rem;
+  z-index: 10;
+}
+
+.player .play-btn:hover {
+  background-color: #dddddd;
+  border-top-left-radius: 3rem;
+  border-bottom-left-radius: 3rem;
+}
+
+.player .seek {
+  z-index: 10;
+}
+
+.player .audio-player-time {
+  margin-right: 1rem;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.visualiser-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  background-color: transparent;
+}
+
+//.visualiser-wrapper .visualiser {
+//  position: absolute;
+//  bottom: 0;
+//  left: 0;
+//  width: 100%;
+//  height: 5px;
+//  background-color: #dddddd;
+//}
