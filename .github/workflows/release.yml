@@ -105,7 +105,7 @@ jobs:
                 with:
                     switches: -azvr --exclude='docker-compose.production-template.yml'
                     path: ./.deployment/
-                    remote_path: /app/
+                    remote_path: /townpoint.io
                     remote_host: ${{ secrets.DEPLOY_HOST }}
                     remote_user: ${{ secrets.DEPLOY_USERNAME }}
                     remote_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
@@ -117,6 +117,6 @@ jobs:
                     key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
                     script_stop: true
                     script: |
-                        cd /app
+                        cd /townpoint.io
                         docker-compose pull
                         docker-compose up -d
