@@ -35,7 +35,7 @@ class RegistrationController extends AbstractController
     ): ?Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user, [
-            'suggestions' => $this->availableHandleGenerator->generate()
+            'suggestions' => $this->availableHandleGenerator->generate(),
         ]);
         $form->handleRequest($request);
 
@@ -46,7 +46,7 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword') ->getData()));
 
-            $user->setHandle(trim($form->get('handle')->getData()));
+            $user->setHandle(trim((string) $form->get('handle')->getData()));
 
             $entityManager->persist($user);
             $entityManager->flush();

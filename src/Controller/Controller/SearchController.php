@@ -17,10 +17,13 @@ class SearchController extends AbstractController
     {
         $searchForm = $this->createForm(UserSearchFormType::class);
 
-        if($searchForm->isSubmitted() && $searchForm->isValid()){
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             /** @var User $user */
             $user = $searchForm->getData();
-            return $this->redirectToRoute('profile', ['id'=> $user->getId()]);
+
+            return $this->redirectToRoute('profile', [
+                'id' => $user->getId(),
+            ]);
         }
 
         return $this->render('user/search.html.twig', [

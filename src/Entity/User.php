@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity;
 
@@ -312,7 +312,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addConversation(Conversation $conversation): self
     {
-        if (!$this->conversations->contains($conversation)) {
+        if (! $this->conversations->contains($conversation)) {
             $this->conversations->add($conversation);
             $conversation->addUser($this);
         }
@@ -363,7 +363,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addStatement(Statement $statement): self
     {
-        if (!$this->statements->contains($statement)) {
+        if (! $this->statements->contains($statement)) {
             $this->statements->add($statement);
             $statement->setOwner($this);
         }
@@ -391,7 +391,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addFriend(Interactor $friend): self
     {
-        if (!$this->interactors->contains($friend)) {
+        if (! $this->interactors->contains($friend)) {
             $this->interactors->add($friend);
             $friend->setOwner($this);
         }
@@ -431,7 +431,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addFriendsWithMe(Interactor $friendsWithMe): self
     {
-        if (!$this->friendsWithMe->contains($friendsWithMe)) {
+        if (! $this->friendsWithMe->contains($friendsWithMe)) {
             $this->friendsWithMe->add($friendsWithMe);
             $friendsWithMe->setUser($this);
         }
@@ -507,7 +507,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addAuthoredReaction(Reaction $authoredReaction): self
     {
-        if (!$this->authoredReactions->contains($authoredReaction)) {
+        if (! $this->authoredReactions->contains($authoredReaction)) {
             $this->authoredReactions->add($authoredReaction);
             $authoredReaction->setOwner($this);
         }
@@ -547,7 +547,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addReaction(Reaction $reaction): self
     {
-        if (!$this->reactions->contains($reaction)) {
+        if (! $this->reactions->contains($reaction)) {
             $this->reactions->add($reaction);
             $reaction->setUser($this);
         }
@@ -575,7 +575,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addViewed(View $viewed): self
     {
-        if (!$this->viewed->contains($viewed)) {
+        if (! $this->viewed->contains($viewed)) {
             $this->viewed->add($viewed);
             $viewed->setOwner($this);
         }
@@ -603,7 +603,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addView(View $view): self
     {
-        if (!$this->views->contains($view)) {
+        if (! $this->views->contains($view)) {
             $this->views->add($view);
             $view->setUser($this);
         }
@@ -631,7 +631,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPoll(Poll $poll): self
     {
-        if (!$this->polls->contains($poll)) {
+        if (! $this->polls->contains($poll)) {
             $this->polls->add($poll);
             $poll->setOwner($this);
         }
@@ -659,7 +659,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPollAnswer(PollAnswer $pollAnswer): self
     {
-        if (!$this->pollAnswers->contains($pollAnswer)) {
+        if (! $this->pollAnswers->contains($pollAnswer)) {
             $this->pollAnswers->add($pollAnswer);
             $pollAnswer->setOwner($this);
         }
@@ -687,7 +687,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addDuration(Duration $duration): self
     {
-        if (!$this->durations->contains($duration)) {
+        if (! $this->durations->contains($duration)) {
             $this->durations->add($duration);
             $duration->setOwner($this);
         }
@@ -751,7 +751,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addListening(Listener $listening): self
     {
-        if (!$this->listening->contains($listening)) {
+        if (! $this->listening->contains($listening)) {
             $this->listening->add($listening);
             $listening->setOwner($this);
         }
@@ -779,7 +779,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addListener(Listener $listener): self
     {
-        if (!$this->listeners->contains($listener)) {
+        if (! $this->listeners->contains($listener)) {
             $this->listeners->add($listener);
             $listener->setTarget($this);
         }
@@ -807,7 +807,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPhoneNumber(PhoneNumber $phoneNumber): self
     {
-        if (!$this->phoneNumbers->contains($phoneNumber)) {
+        if (! $this->phoneNumbers->contains($phoneNumber)) {
             $this->phoneNumbers->add($phoneNumber);
             $phoneNumber->setOwner($this);
         }
@@ -829,7 +829,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->listening->exists(function ($key, Listener $element) use ($user): bool {
             return $user->getId() === $element->getTarget()
-                    ->getId();
+                ->getId();
         });
     }
 
@@ -843,7 +843,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addAddress(Address $address): self
     {
-        if (!$this->addresses->contains($address)) {
+        if (! $this->addresses->contains($address)) {
             $this->addresses->add($address);
             $address->setOwner($this);
         }
