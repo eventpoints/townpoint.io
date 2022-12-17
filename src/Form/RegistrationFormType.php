@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Form;
 
@@ -71,18 +71,17 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('countryOfOrigin', CountryType::class, [
                 'autocomplete' => true,
-                'attr' => [
-                    'placeholder' => 'E-mail address',
-                ],
+                'label' => false,
+                'placeholder' => 'Country of origin',
+                'data' => null,
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
             ])
             ->add('currentCountry', CountryType::class, [
                 'autocomplete' => true,
-                'attr' => [
-                    'placeholder' => 'E-mail address',
-                ],
+                'label' => false,
+                'placeholder' => 'Current country',
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
@@ -115,7 +114,8 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ]) ->add('handle', TextType::class, [
+            ])->add('handle', TextType::class, [
+                'label' => false,
                 'attr' => [
                     'placeholder' => 'Handle',
                 ],
