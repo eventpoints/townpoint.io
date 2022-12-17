@@ -53,7 +53,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/dashboard', name: 'dashboard')]
-    public function dashboard(): never
+    public function dashboard(): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
 
@@ -61,23 +61,21 @@ class UserController extends AbstractController
             'id' => $currentUser->getId(),
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        dd($url);
+        $qr = Builder::create()
+            ->writer(new PngWriter())
+            ->writerOptions([])
+            ->data($url)
+            ->encoding(new Encoding('UTF-8'))
+            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+            ->size(500)
+            ->margin(10)
+            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->validateResult(false)
+            ->build();
 
-        //        $qr = Builder::create()
-        //                    ->writer(new PngWriter())
-        //                    ->writerOptions([])
-        //                    ->data($url)
-        //                    ->encoding(new Encoding('UTF-8'))
-        //                    ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-        //                    ->size(500)
-        //                    ->margin(10)
-        //                    ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-        //                    ->validateResult(false)
-        //                    ->build();
-        //
-        //        return $this->render('user/dashboard.html.twig', [
-        //            //                        'qr' => $qr->getDataUri(),
-        //        ]);
+        return $this->render('user/dashboard.html.twig', [
+            'qr' => $qr->getDataUri(),
+        ]);
     }
 
     #[Route(path: '/account', name: 'account')]
