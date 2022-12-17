@@ -1,4 +1,4 @@
-<header class="p-3 text-bg-dark">
+<header class="p-3 text-bg-dark mb-3">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
@@ -7,7 +7,7 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 {% if app.user %}
-                    <li class="nav-item me-2">
+                    <li class="nav-item ms-3">
                         <a class="nav-link {% if app.request.attributes.get('_route') == 'dashboard' %}active{% endif %}"
                            href="{{ path('dashboard') }}">
                             {{ app.user.firstName }}
@@ -17,7 +17,7 @@
             </ul>
 
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <turbo-frame src="{{ path('_user_search') }}" class="w-100" id="user-search-form-frame">
+                <turbo-frame src="{{ path('_user_search') }}" class="w-100" id="user-search-form-frame" target="_top" >
                     <div class="d-flex justify-content-center">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -28,10 +28,15 @@
 
             {% if not app.user %}
                 <div class="text-end">
-                        <a class="btn btn-outline-primary text-white me-2" aria-current="page"
-                           href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
-                        <a class="btn btn-primary text-white" aria-current="page"
-                           href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
+                    <a class="btn btn-outline-primary text-white me-2" aria-current="page"
+                       href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
+                    <a class="btn btn-primary text-white" aria-current="page"
+                       href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
+                </div>
+            {% else %}
+                <div class="text-end">
+                    <a class="btn btn-outline-danger" aria-current="page"
+                       href="{{ path('app_logout') }}">{{ 'logout'|trans }}</a>
                 </div>
             {% endif %}
         </div>

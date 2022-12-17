@@ -6,40 +6,32 @@
         <div class="row justify-content-center g-3">
             <div class="col-12 col-md-4">
                 <div class="card mb-3 sticky-top">
-                    {% if user.avatar %}
-                        <img class="card-img-top" src="{{ user.avatar }}"/>
-                    {% endif %}
+
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="m-0 text-black me-1">{{ user.fullName }}
-                                </h4>
-                                <span class="h3 m-0 mdi mdi-check-decagram text-primary"></span>
-                            </div>
-
-                            <hr/>
-
-                            <div>
-                                {{ user.description }}
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="h5">
-                                        <div class="badge bg-primary">
-                                            <span class="mdi mdi-flag-outline"></span>
-                                            <span {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></span>
-                                        </div>
+                            <div class="d-flex align-items-start">
+                                <img class="rounded-circle me-3" height="70" src="{{ user.avatar }}"/>
+                                <div>
+                                    <h4 class="text-black me-1">
+                                        {{ user.fullName }}
+                                        <span class="mdi mdi-check-decagram text-primary"></span>
+                                    </h4>
+                                    <div class="badge bg-primary">
+                                        <span class="mdi mdi-flag-outline"></span>
+                                        <span {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></span>
+                                    </div>
+                                    <div class="badge bg-secondary">
+                                        <span class="mdi mdi-map-marker-outline"></span>
+                                        <span> {{ user.currentCountry|country_name }}</span>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="h5">
-                                        <div class="badge bg-secondary">
-                                            <span class="mdi mdi-map-marker-outline"></span>
-                                            <span> {{ user.currentCountry|country_name }}</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
                         </li>
+                        {% if user.description %}
+                            <li class="list-group-item">
+                                <div class="lead">{{ user.description }}</div>
+                            </li>
+                        {% endif %}
                         {% if app.user != user %}
                             <li class="list-group-item d-flex justify-content-between">
                                 {% if app.user.isListening(user) %}
@@ -77,45 +69,6 @@
             </div>
             <div class="col-12 col-md-6">
 
-                {% if app.user == user %}
-                    <turbo-frame id="profile_post_menu_frame" src="{{ path('profile_menu') }}" target="_top">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    </turbo-frame>
-                {% endif %}
-
-                {% for post in posts %}
-                    {% if post.motion is defined %}
-                        {% if post.hasEnded or post.hasUserVoted(app.user) %}
-                            <turbo-frame id="poll_show_frame-{{ post.id }}"
-                                         src="{{ path('show_poll', {id: post.id }) }}"
-                                         loading="lazy" target="_top">
-                                <div class="d-flex justify-content-center align-items-center min-vh-15 border mb-3 rounded">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            </turbo-frame>
-                        {% else %}
-                            <turbo-frame id="poll_answer_form_frame-{{ post.id }}"
-                                         src="{{ path('answer_poll', {id: post.id }) }}">
-                                LOADING ANSWER FRAME
-                            </turbo-frame>
-                        {% endif %}
-                    {% else %}
-                        <turbo-frame id="statement_show_frame-{{ post.id }}"
-                                     src="{{ path('show_statement', {id: post.id }) }}" loading="lazy">
-                            <div class="d-flex justify-content-center align-items-center min-vh-15 border mb-3 rounded">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </div>
-                        </turbo-frame>
-                    {% endif %}
-                {% endfor %}
 
             </div>
             <div class="col-8"></div>

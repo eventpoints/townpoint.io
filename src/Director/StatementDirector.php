@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormInterface;
 
 class StatementDirector
 {
-    public function makePoll(PollBuilderInterface $pollBuilder, FormInterface $form, User $user): Poll
+    public function makePoll(PostInterface $post, FormInterface $form, User $user): Poll
     {
         $pollBuilder->setMotion($form->get('motion')->getData());
         $pollBuilder->setOwner($user);

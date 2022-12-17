@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,11 +16,9 @@ class HandleSearchFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('users', EntityType::class, [
+            ->add('users', ChoiceType::class, [
                 'mapped' => false,
-                'label' => false,
-                'class' => User::class,
-                'choice_label' => 'fullName',
+                'choices' => $options['suggestions'],
                 'autocomplete' => true,
             ])
         ;
@@ -27,6 +26,9 @@ class HandleSearchFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $resolver->setRequired([
+            'suggestions'
+        ]);
         $resolver->setDefaults([
             'data_class' => null,
         ]);

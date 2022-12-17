@@ -122,11 +122,19 @@ class RegistrationFormType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
+                'autocomplete' => true,
+                'tom_select_options' =>[
+                    'create' => true,
+                    'createOnBlur' => true,
+                ]
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $resolver->setRequired([
+            'suggestions'
+        ]);
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);

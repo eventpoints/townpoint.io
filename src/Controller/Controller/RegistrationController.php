@@ -7,6 +7,7 @@ namespace App\Controller\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserWebAuthenticator;
+use App\Service\AvailableHandleGenerator;
 use App\Service\AvatarService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,8 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class RegistrationController extends AbstractController
 {
     public function __construct(
-        private readonly AvatarService $avatarService
+        private readonly AvatarService $avatarService,
+        private readonly AvailableHandleGenerator $availableHandleGenerator
     ) {
     }
 
@@ -32,7 +34,9 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager
     ): ?Response {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, $user, [
+            'suggestions' => $this->availableHandleGenerator->generate()
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,6 +45,8 @@ class RegistrationController extends AbstractController
 
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword') ->getData()));
+
+            $user->setHandle(trim($form->get('handle')->getData()));
 
             $entityManager->persist($user);
             $entityManager->flush();
