@@ -5,69 +5,39 @@
         <div class="row justify-content-center">
             <div class="col-8">
 
-                <div class="card bg-warning-light p-2 rounded mb-3">
+
+                <div class="card bg-white p-2 rounded mb-3">
                     <div class="card-body">
-                        <h1 class="display-1 fw-bold">Welcome to The Listening</h1>
+                        <h1 class="display-2">
+                            <span class="fw-light">Welcome to</span>
+                            <span class="text-black fw-bold">Town</span>
+                            <span class="text-primary fw-bold">Point</span></h1>
                         <p class="lead">
                             What would a social media platform look like if it was actually good for you?
                             And what if it was also good for society? What would that look like?
                         </p>
-                        <p>
-                            Imagine, if the platform wasn't stealing or selling your data, in order to make your
-                            stream an ad
-                            fest.
-                        </p>
                     </div>
                 </div>
 
-                <div class="row justify-content-between">
-                    <div class="col-md-3">
-                        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
-                             aria-orientation="vertical">
-                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
-                                    data-bs-target="#v-pills-home" type="button" role="tab"
-                                    aria-controls="v-pills-home"
-                                    aria-selected="true">Features
-                            </button>
-                            <button class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill"
-                                    data-bs-target="#v-pills-profile" type="button" role="tab"
-                                    aria-controls="v-pills-profile" aria-selected="true">Values
-                            </button>
+                <div class="card">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="h5 m-0">No adverts</div>
+                            <span class="h1 mdi mdi-check-circle-outline text-success"></span>
                         </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="tab-content" id="v-pills-tabContent">
-                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
-                                 aria-labelledby="v-pills-home-tab" tabindex="0">
-                                <ul class="list-group">
-                                    <li class="list-group-item bg-primary-light">Features</li>
-                                    <li class="list-group-item">Time limit (1 hour per day) / paid extension
-                                        (proceeds
-                                        go to a
-                                        charity
-                                        of the users choice)
-                                    </li>
-                                    <li class="list-group-item">Therefore, no ads.</li>
-                                    <li class="list-group-item">3 modes <b>Personal</b>, <b>Learning</b> and
-                                        <b>Working</b> each
-                                        mode
-                                        adapts the algorithm to
-                                        present relevant material
-                                    </li>
-                                </ul>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="h5 m-0">No creeping, spying or selling data</div>
+                            <span class="h1 mdi mdi-check-circle-outline text-success"></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="h5 m-0">we promote positive action, collaboration and healthy work/life
+                                balance
                             </div>
-                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                                 aria-labelledby="v-pills-profile-tab" tabindex="0">
-                                <ul class="list-group">
-                                    <li class="list-group-item bg-primary-light">Values</li>
-                                    <li class="list-group-item">Objective Truth</li>
-                                    <li class="list-group-item">Expertises over idiots</li>
-                                    <li class="list-group-item">promote learning, achievement and
-                                        collaboration
-                                    </li>
-                                    <li class="list-group-item">promote conversation / tolerance</li>
-                                </ul>
-                            </div>
+                            <span class="h1 mdi mdi-check-circle-outline text-success"></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="h5 m-0">Optomised for learn and self development</div>
+                            <div class="h1 mdi mdi-check-circle-outline text-success"></div>
                         </div>
                     </div>
                 </div>
@@ -75,4 +45,5 @@
             </div>
         </div>
     </div>
+    <canvas class="fireworks" {{ stimulus_controller('fireworks') }}></canvas>
 {% endblock %}

@@ -7,6 +7,16 @@
 @import "bootstrap-icons";
 @import "audio-player.scss";
 
+.fireworks{
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: white;
+}
+
 #canvas1 {
     z-index: 0;
     position: absolute;
