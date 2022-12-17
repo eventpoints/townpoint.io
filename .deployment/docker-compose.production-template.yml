@@ -1,5 +1,16 @@
 version: "3.4"
 
+networks:
+  traefik:
+    external: true
+  internal:
+    external: false
+
+volumes:
+  php_socket:
+  caddy_data:
+  caddy_config:
+
 services:
   php:
     image: ghcr.io/townpoint/townpoint.io-php:main
@@ -18,6 +29,8 @@ services:
       DATABASE_URL: "postgresql://__TOWNPOINT_POSTGRES_USER__:__TOWNPOINT_POSTGRES_PASSWORD__@database:5432/__TOWNPOINT_POSTGRES_DBNAME__?serverVersion=13&charset=utf8"
       MERCURE_JWT_SECRET: "__TOWNPOINT_MERCURE_JWT_SECRET__"
       APP_SECRET: "__TOWNPOINT_APP_SECRET__"
+    networks:
+      - internal
 
   caddy:
     image: ghcr.io/townpoint/townpoint.io-caddy:main
@@ -25,7 +38,7 @@ services:
       - php
     restart: unless-stopped
     environment:
-      SERVER_NAME: "townpoint.io, caddy:80"
+      SERVER_NAME: ":80"
       MERCURE_PUBLISHER_JWT_KEY: "__TOWNPOINT_MERCURE_JWT_SECRET__"
       MERCURE_SUBSCRIBER_JWT_KEY: "__TOWNPOINT_MERCURE_JWT_SECRET__"
     volumes:
@@ -33,19 +46,16 @@ services:
       - caddy_data:/data
       - caddy_config:/config
       - ./Caddyfile:/etc/caddy/Caddyfile
-    ports:
-      # HTTP
-      - target: 80
-        published: 80
-        protocol: tcp
-      # HTTPS
-      - target: 443
-        published: 443
-        protocol: tcp
-      # HTTP/3
-      - target: 443
-        published: 443
-        protocol: udp
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.townpoint.rule=Host(`townpoint.io`, `www.townpoint.io`)"
+      - "traefik.http.routers.townpoint.tls=true"
+      - "traefik.http.routers.townpoint.tls.certresolver=le"
+    networks:
+      - traefik
+      - internal
 
   database:
     image: postgres:13
@@ -56,18 +66,23 @@ services:
       POSTGRES_USER: "__TOWNPOINT_POSTGRES_USER__"
     volumes:
       - ./db-data:/var/lib/postgresql/data:rw
+    networks:
+      - internal
 
   adminer:
     image: adminer:4.8.0
-    ports:
-      - "8000:8080"
     restart: unless-stopped
     environment:
       ADMINER_DEFAULT_SERVER: database
     depends_on:
       - database
-
-volumes:
-  php_socket:
-  caddy_data:
-  caddy_config:
+    expose:
+      - "8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.townpoint-adminer.rule=Host(`adminer.townpoint.io`)"
+      - "traefik.http.routers.townpoint-adminer.tls=true"
+      - "traefik.http.routers.townpoint-adminer.tls.certresolver=le"
+    networks:
+      - internal
+      - traefik
