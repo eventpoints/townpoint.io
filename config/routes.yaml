@@ -1,4 +1,3 @@
 controllers:
     resource: ../src/Controller/Controller
     type: attribute
-    schemes: [https]
