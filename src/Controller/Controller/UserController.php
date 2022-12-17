@@ -35,6 +35,7 @@ class UserController extends AbstractController
         private readonly ProfileViewService $profileViewService,
         private readonly ViewRepository $viewRepository,
         private readonly PostRepository $postRepository,
+        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly CurrentUserService $currentUserService
     ) {
     }
@@ -52,27 +53,31 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/dashboard', name: 'dashboard')]
-    public function dashboard(): Response
+    public function dashboard(): never
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
 
-        //        $qr = Builder::create()
-        //            ->writer(new PngWriter())
-        //            ->writerOptions([])
-        //            ->data($this->urlGenerator->generate('profile', [
-        //                'id' => $currentUser->getId(),
-        //            ], UrlGeneratorInterface::ABSOLUTE_URL))
-        //            ->encoding(new Encoding('UTF-8'))
-        //            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-        //            ->size(500)
-        //            ->margin(10)
-        //            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-        //            ->validateResult(false)
-        //            ->build();
+        $url = $this->urlGenerator->generate('profile', [
+            'id' => $currentUser->getId(),
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return $this->render('user/dashboard.html.twig', [
-            //            'qr' => $qr->getDataUri(),
-        ]);
+        dd($url);
+
+        //        $qr = Builder::create()
+        //                    ->writer(new PngWriter())
+        //                    ->writerOptions([])
+        //                    ->data($url)
+        //                    ->encoding(new Encoding('UTF-8'))
+        //                    ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+        //                    ->size(500)
+        //                    ->margin(10)
+        //                    ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+        //                    ->validateResult(false)
+        //                    ->build();
+        //
+        //        return $this->render('user/dashboard.html.twig', [
+        //            //                        'qr' => $qr->getDataUri(),
+        //        ]);
     }
 
     #[Route(path: '/account', name: 'account')]
