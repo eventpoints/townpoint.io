@@ -57,9 +57,9 @@ class UserController extends AbstractController
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
 
-        $url = $this->urlGenerator->generate('profile', [
-            'id' => $currentUser->getId(),
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = str_replace('http:', 'https:', $this->generateUrl('profile', [
+            'id' => $currentUser->getId()
+        ], UrlGeneratorInterface::ABSOLUTE_URL));
 
         $qr = Builder::create()
             ->writer(new PngWriter())
