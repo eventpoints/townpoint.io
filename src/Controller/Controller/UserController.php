@@ -72,7 +72,7 @@ class UserController extends AbstractController
             ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->validateResult(false)
             ->build();
-        
+
         return $this->render('user/dashboard.html.twig', [
             'qr' => $qr->getDataUri(),
         ]);
