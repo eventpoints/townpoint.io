@@ -3,12 +3,53 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+    <canvas class="fireworks" {{ stimulus_controller('fireworks')}} ></canvas>
     <div class="container">
-        <div class="row justify-content-center g-0 mt-3">
-            <div class="col-md-6">
-                <div class="card shadow h-100">
+        <div class="row justify-content-center g-3 mt-3">
+            <div class="col-md-4">
+                <div class="card bg-white p-2 rounded mb-3 position-relative">
                     <div class="card-body">
-                        <h1>{{ 'sign-up'|trans }}</h1>
+                        <h1 class="display-2">
+                            <span class="fw-light">Welcome to</span>
+                            <span class="text-black fw-bold">Town</span>
+                            <span class="text-primary fw-bold">Point</span></h1>
+                        <p class="lead">
+                            What would a social media platform look like if it was actually good for you?
+                            And what if it was also good for society? What would that look like?
+                        </p>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="m-0">No adverts</div>
+                            <span class="h5 mdi mdi-check-circle"></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="m-0">open source code, no secret algorithms</div>
+                            <span class="h5 mdi mdi-check-circle"></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="m-0">No creeping, spying or selling data</div>
+                            <span class="h5 mdi mdi-check-circle"></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="m-0">we promote positive action, collaboration and healthy work/life
+                                balance
+                            </div>
+                            <span class="h5 mdi mdi-check-circle"></span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="m-0">Optomised for learn and self development</div>
+                            <div class="h5 mdi mdi-check-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>{{ 'sign-up'|trans }}</h5>
                         {{ form_start(registrationForm) }}
                         <div class="input-group">
                             {{ form_row(registrationForm.firstName) }}
@@ -27,7 +68,9 @@
                         {{ form_row(registrationForm.plainPassword) }}
                         {{ form_row(registrationForm.handle) }}
                         {{ form_row(registrationForm.agreeTerms) }}
-                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-outline-primary w-25">Register</button>
+                        </div>
                         {{ form_end(registrationForm) }}
                     </div>
                 </div>

@@ -21,7 +21,7 @@ class UserAutocompleteField extends AbstractType
                 'class' => 'm-0 w-100',
             ],
             'attr' => [
-                'class' => 'rounded-pill form-control-lg',
+                'class' => 'form-control',
             ],
             'class' => User::class,
             'placeholder' => 'Search',

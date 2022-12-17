@@ -8,7 +8,7 @@ export default class extends Controller {
 
         var canvasEl = this.element;
         var ctx = canvasEl.getContext('2d');
-        var numberOfParticules = 300;
+        var numberOfParticules = 150;
         var pointerX = 0;
         var pointerY = 0;
         var tap = ('ontouchstart' in window || navigator.msMaxTouchPoints) ? 'touchstart' : 'mousedown';

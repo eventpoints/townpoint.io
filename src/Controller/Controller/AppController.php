@@ -13,6 +13,6 @@ class AppController extends AbstractController
     #[Route(path: '/', name: 'index')]
     public function index(): Response
     {
-        return $this->render('app/index.html.twig');
+        return $this->redirectToRoute('app_register');
     }
 }
