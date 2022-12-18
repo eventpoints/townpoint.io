@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controller\Controller;
 
@@ -30,14 +30,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class UserController extends AbstractController
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly ImageUploadService $imageUploadService,
-        private readonly ProfileViewService $profileViewService,
-        private readonly ViewRepository $viewRepository,
-        private readonly PostRepository $postRepository,
+        private readonly UserRepository        $userRepository,
+        private readonly ImageUploadService    $imageUploadService,
+        private readonly ProfileViewService    $profileViewService,
+        private readonly ViewRepository        $viewRepository,
+        private readonly PostRepository        $postRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly CurrentUserService $currentUserService
-    ) {
+        private readonly CurrentUserService    $currentUserService
+    )
+    {
     }
 
     #[Route(path: '/insights', name: 'insights')]
@@ -108,9 +109,9 @@ class UserController extends AbstractController
     #[Route(path: '/profile/{id}', name: 'profile')]
     public function profile(User $user, Request $request): Response
     {
-        $this->profileViewService->view($user);
-        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
-        //        $this->interactorService->check($currentUser, $user);
+        if ($this->getUser() instanceof UserInterface) {
+            $this->profileViewService->view($user);
+        }
 
         $posts = $this->postRepository->findPostsByUser($user);
 

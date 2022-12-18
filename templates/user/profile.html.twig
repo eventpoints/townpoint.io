@@ -32,7 +32,7 @@
                                 <div class="lead">{{ user.description }}</div>
                             </li>
                         {% endif %}
-                        {% if app.user != user %}
+                        {% if app.user and app.user != user %}
                             <li class="list-group-item d-flex justify-content-between">
                                 {% if app.user.isListening(user) %}
                                     <a class="btn btn-secondary btn-lg"
@@ -56,7 +56,7 @@
                                 </a>
                             </li>
                         {% endif %}
-                        {% if app.user == user %}
+                        {% if app.user and app.user == user %}
                             <li class="list-group-item d-flex justify-content-between">
                                 <a class="btn btn-outline-primary"
                                    href="{{ path('account') }}">
