@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends AbstractController
@@ -34,6 +35,7 @@ class UserController extends AbstractController
         private readonly ProfileViewService $profileViewService,
         private readonly ViewRepository $viewRepository,
         private readonly PostRepository $postRepository,
+        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly CurrentUserService $currentUserService
     ) {
     }
@@ -54,11 +56,12 @@ class UserController extends AbstractController
     public function dashboard(): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+        $url = $this->urlGenerator->generate('profile', ['id' => $currentUser->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $qr = Builder::create()
             ->writer(new PngWriter())
             ->writerOptions([])
-            ->data('hi')
+            ->data($url)
             ->encoding(new Encoding('UTF-8'))
             ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
             ->size(500)
