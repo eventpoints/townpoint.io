@@ -74,6 +74,9 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'placeholder' => 'Country of origin',
                 'data' => null,
+                'attr' => [
+                    'autocomplete' => 'off',
+                ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
@@ -82,6 +85,9 @@ class RegistrationFormType extends AbstractType
                 'autocomplete' => true,
                 'label' => false,
                 'placeholder' => 'Current country',
+                'attr' => [
+                    'autocomplete' => 'off',
+                ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
@@ -118,6 +124,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Handle',
+                    'autocomplete' => 'off',
                 ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
