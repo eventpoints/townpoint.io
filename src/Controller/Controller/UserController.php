@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
@@ -11,7 +11,6 @@ use App\Repository\UserRepository;
 use App\Repository\ViewRepository;
 use App\Service\CurrentUserService;
 use App\Service\ImageUploadService;
-use App\Service\InteractorService;
 use App\Service\ProfileViewService;
 use App\ValueObject\FlashValueObject;
 use Endroid\QrCode\Builder\Builder;
@@ -30,15 +29,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class UserController extends AbstractController
 {
     public function __construct(
-        private readonly UserRepository        $userRepository,
-        private readonly ImageUploadService    $imageUploadService,
-        private readonly ProfileViewService    $profileViewService,
-        private readonly ViewRepository        $viewRepository,
-        private readonly PostRepository        $postRepository,
+        private readonly UserRepository $userRepository,
+        private readonly ImageUploadService $imageUploadService,
+        private readonly ProfileViewService $profileViewService,
+        private readonly ViewRepository $viewRepository,
+        private readonly PostRepository $postRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly CurrentUserService    $currentUserService
-    )
-    {
+        private readonly CurrentUserService $currentUserService
+    ) {
     }
 
     #[Route(path: '/insights', name: 'insights')]
