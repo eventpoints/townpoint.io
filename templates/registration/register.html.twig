@@ -3,7 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <canvas class="fireworks" {{ stimulus_controller('fireworks')}} ></canvas>
+    <canvas class="fireworks" {{ stimulus_controller('fireworks') }} ></canvas>
     <div class="container">
         <div class="row justify-content-center g-3 mt-3">
             <div class="col-md-4">
@@ -66,7 +66,11 @@
                             {{ form_row(registrationForm.currentCountry) }}
                         </div>
                         {{ form_row(registrationForm.plainPassword) }}
-                        {{ form_row(registrationForm.handle) }}
+                        <div {{ stimulus_controller('input-validity-checker', {
+                            path: path('handle_check')
+                        }) }} >
+                            {{ form_row(registrationForm.handle) }}
+                        </div>
                         {{ form_row(registrationForm.agreeTerms) }}
                         <div class="text-end">
                             <button type="submit" class="btn btn-outline-primary w-25">Register</button>

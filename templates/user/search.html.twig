@@ -1,5 +1,12 @@
-<turbo-frame id="user-search-form-frame">
-    {{ form_start(searchForm) }}
-    {{ form_row(searchForm.user) }}
+<turbo-frame id="user-search-form-frame" >
+    {{ form_start(searchForm, {
+        action: path('_user_search')
+    }) }}
+    <div class="input-group">
+        {{ form_widget(searchForm.user) }}
+        <button type="submit" class="btn btn-outline-primary">
+            <span class="mdi mdi-magnify"></span>
+        </button>
+    </div>
     {{ form_end(searchForm) }}
 </turbo-frame>

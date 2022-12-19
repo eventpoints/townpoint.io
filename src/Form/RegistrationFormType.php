@@ -120,20 +120,16 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])->add('handle', ChoiceType::class, [
-                'label' => false,
-                'choices' => $options['suggestions'],
+            ])->add('handle', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Handle',
                     'autocomplete' => 'off',
+                    'data-input-validity-checker-target' => 'input',
+                    'data-input-validity-checker-path-value' => '/handle/check',
+                    'data-action' => 'change->input-validity-checker#inputChange'
                 ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
-                ],
-                'autocomplete' => true,
-                'tom_select_options' => [
-                    'create' => true,
-                    'createOnBlur' => true,
                 ],
             ]);
     }
