@@ -20,6 +20,16 @@
             "turbo-core": {
                 "enabled": true,
                 "fetch": "eager"
+            },
+            "mercure-turbo-stream": {
+                "enabled": false,
+                "fetch": "eager"
+            }
+        },
+        "@symfony/ux-turbo-mercure": {
+            "turbo-stream": {
+                "enabled": true,
+                "fetch": "eager"
             }
         }
     },

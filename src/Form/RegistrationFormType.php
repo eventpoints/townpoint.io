@@ -120,8 +120,9 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])->add('handle', TextType::class, [
+            ])->add('handle', ChoiceType::class, [
                 'label' => false,
+                'choices' => $options['suggestions'],
                 'attr' => [
                     'placeholder' => 'Handle',
                     'autocomplete' => 'off',

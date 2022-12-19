@@ -1,0 +1,20 @@
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <canvas id="canvas1" {{ stimulus_controller('eyes') }}></canvas>
+    <div class="container">
+        <div class="row justify-content-center text-center align-items-center">
+            <div class="col-12 col-md-6">
+                <div class="card border-0 text-primary bg-gradient">
+                    <div class="card-body">
+                        <span class="display-1 m-0 mdi mdi-alert-circle-outline"></span>
+                        <div class="display-3 fw-bold">{{ 'page-not-found'|trans }}</div>
+                        <hr/>
+                        <div class="display-5">{{ 'hmm... we can\'t find what you\'re looking for'|trans }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

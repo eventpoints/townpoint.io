@@ -39,7 +39,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Penpalium Com');
+            ->setTitle('Town Point');
     }
 
     public function configureMenuItems(): Iterator

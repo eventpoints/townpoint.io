@@ -16,7 +16,7 @@ import './styles/app.scss';
 // start the Stimulus application
 import './bootstrap';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('turbo:load', function (e) {
 
     let tabs = document.querySelectorAll('a[role="tab"]')
 
