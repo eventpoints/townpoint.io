@@ -21,7 +21,8 @@ class SearchController extends AbstractController
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             /** @var User $user */
-            $user = $searchForm->get('user')->getData();
+            $user = $searchForm->get('user')
+                ->getData();
 
             return $this->redirectToRoute('profile', [
                 'id' => $user->getId(),

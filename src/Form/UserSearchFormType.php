@@ -1,14 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
 use App\Entity\User;
-use App\Form\Autocomplete\UserAutocompleteField;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,7 +25,7 @@ class UserSearchFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ]);
     }
 

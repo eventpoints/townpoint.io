@@ -126,7 +126,7 @@ class RegistrationFormType extends AbstractType
                     'autocomplete' => 'off',
                     'data-input-validity-checker-target' => 'input',
                     'data-input-validity-checker-path-value' => '/handle/check',
-                    'data-action' => 'change->input-validity-checker#inputChange'
+                    'data-action' => 'change->input-validity-checker#inputChange',
                 ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',

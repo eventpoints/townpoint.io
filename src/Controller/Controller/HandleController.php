@@ -35,15 +35,17 @@ class HandleController extends AbstractController
     public function check(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent());
-        $handle = $this->userRepository->findOneBy(['handle' => $data->value]);
+        $handle = $this->userRepository->findOneBy([
+            'handle' => $data->value,
+        ]);
 
         $isAvailable = true;
-        if($handle){
+        if ($handle !== null) {
             $isAvailable = false;
         }
 
         return $this->json([
-            'isAvailable' => $isAvailable
+            'isAvailable' => $isAvailable,
         ]);
     }
 }
