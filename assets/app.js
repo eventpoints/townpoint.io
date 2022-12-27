@@ -1,4 +1,4 @@
-import {Tab} from 'bootstrap'
+import {Tab, Tooltip} from 'bootstrap'
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -32,4 +32,12 @@ document.addEventListener('turbo:load', function (e) {
     let element = document.querySelector('a[href="' + hash + '"]');
     let tab = new Tab(element);
     tab.show();
+});
+
+document.addEventListener('turbo:load', function (e) {
+    // this enables bootstrap tooltips globally
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new Tooltip(tooltipTriggerEl)
+    });
 });
