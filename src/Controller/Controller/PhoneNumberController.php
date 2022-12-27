@@ -44,9 +44,7 @@ class PhoneNumberController extends AbstractController
             $isDefault = $phoneNumberForm->get('isDefault')
                 ->getData();
 
-
-            if ($currentUser->getPhoneNumbers()->count() > 1)
-            {
+            if ($currentUser->getPhoneNumbers()->count() > 1) {
                 $phoneNumber->setIsDefault(true);
                 $isDefault = true;
             }

@@ -167,6 +167,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     private string $handle;
 
+    /**
+     * @var Collection<int, Snippet>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Snippet::class)]
     private Collection $snippets;
 
@@ -809,15 +812,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->phoneNumbers;
     }
 
-    public function setDefaultPhoneNumber(PhoneNumber $phoneNumber) : void
-    {
-        $this->getPhoneNumbers()->filter(function (PhoneNumber $number){
-            return $number->isIsDefault() === true ?? $number->setIsDefault(false);
-        });
-
-        $phoneNumber->setIsDefault(true);
-    }
-
     public function addPhoneNumber(PhoneNumber $phoneNumber): self
     {
         if (! $this->phoneNumbers->contains($phoneNumber)) {
@@ -896,7 +890,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addSnippet(Snippet $snippet): self
     {
-        if (!$this->snippets->contains($snippet)) {
+        if (! $this->snippets->contains($snippet)) {
             $this->snippets->add($snippet);
             $snippet->setOwner($this);
         }
@@ -906,11 +900,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeSnippet(Snippet $snippet): self
     {
-        if ($this->snippets->removeElement($snippet)) {
-            // set the owning side to null (unless already changed)
-            if ($snippet->getOwner() === $this) {
-                $snippet->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->snippets->removeElement($snippet) && $snippet->getOwner() === $this) {
+            $snippet->setOwner(null);
         }
 
         return $this;

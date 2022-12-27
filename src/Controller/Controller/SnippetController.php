@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
-use App\Entity\Address;
 use App\Entity\Snippet;
-use App\Form\AddressFormType;
 use App\Form\SnippetFormType;
 use App\Service\CurrentUserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,11 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/snippet', name: '')]
 class SnippetController extends AbstractController
 {
-
     public function __construct(
         private readonly CurrentUserService $currentUserService
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/create', name: 'new_snippet')]
@@ -32,17 +30,13 @@ class SnippetController extends AbstractController
 
         $snippetForm->handleRequest($request);
         if ($snippetForm->isSubmitted() && $snippetForm->isValid()) {
-
-            $file = $snippetForm->get('content')->getData();
+            $file = $snippetForm->get('content')
+                ->getData();
             dd($file);
-
         }
 
         return $this->render('snippet/new.html.twig', [
-            'snippetForm' => $snippetForm->createView()
+            'snippetForm' => $snippetForm->createView(),
         ]);
-
     }
-
-
 }
