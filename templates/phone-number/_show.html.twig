@@ -1,14 +1,27 @@
-<div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center
-{% if phoneNumber.isDefault %} active {% endif %}
-">
-    <a href="{{ path('edit_phone_number', {id: phoneNumber.id }) }}">
-        <span class="mdi mdi-pencil-circle fs-3"></span>
-    </a>
-    <div class="d-flex justify-content-between align-items-center">
-        <div>
-            <div>{{ phoneNumber.countryCode }} {{ phoneNumber.content }}</div>
-            <div class="small text-end">{{ phoneNumber.createdAt|format_date }}</div>
+<div class="list-group-item d-flex justify-content-between align-items-center">
+    <div data-controller="copy"
+         data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
+        <div class="h5 m-0 d-flex align-items-center">
+            {% if phoneNumber.isDefault %}
+                <span class="mdi mdi-check-circle text-primary me-2"></span>
+            {% endif %}
+            <div class="me-2" data-copy-target="source" >
+                {{ phoneNumber.countryCode }}{{ phoneNumber.content }}
+            </div>
+            <a class="btn-link link-primary" type="button"
+               data-action="copy#copy"
+               data-copy-target="button">
+                <span class="mdi mdi-content-copy"></span>
+            </a>
         </div>
-
+        <div class="small text-muted">{{ phoneNumber.createdAt|format_date }}</div>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-outline-secondary" href="{{ path('edit_phone_number', {id: phoneNumber.id }) }}">
+            <span class="mdi mdi-pencil-circle"></span>
+        </a>
+        <a href="#" class="btn btn-outline-danger">
+            <span class="mdi mdi-delete"></span>
+        </a>
     </div>
 </div>

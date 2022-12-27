@@ -46,6 +46,26 @@ class AddressController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/edit/{id}', name: 'edit_address')]
+    public function edit(Address $address, Request $request): Response
+    {
+        $addressForm = $this->createForm(AddressFormType::class, $address);
+
+        $addressForm->handleRequest($request);
+        if ($addressForm->isSubmitted() && $addressForm->isValid()) {
+            $this->addressRepository->add($addressForm->getData(), true);
+            $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'changes saved');
+
+            return $this->redirectToRoute('account', [
+                '_fragment' => 'addresses',
+            ]);
+        }
+
+        return $this->render('address/edit.html.twig', [
+            'addressForm' => $addressForm->createView(),
+        ]);
+    }
+
     #[Route(path: '/show/{id}', name: 'show_address')]
     public function show(Address $address): void
     {

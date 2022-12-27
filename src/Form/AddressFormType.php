@@ -50,7 +50,9 @@ class AddressFormType extends AbstractType
                 ],
                 'autocomplete' => true,
             ])
-            ->add('isDefault', CheckboxType::class);
+            ->add('isDefault', CheckboxType::class,[
+                'required' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

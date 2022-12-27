@@ -167,6 +167,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     private string $handle;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Snippet::class)]
+    private Collection $snippets;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
@@ -184,6 +187,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->listeners = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->snippets = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -805,6 +809,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->phoneNumbers;
     }
 
+    public function setDefaultPhoneNumber(PhoneNumber $phoneNumber) : void
+    {
+        $this->getPhoneNumbers()->filter(function (PhoneNumber $number){
+            return $number->isIsDefault() === true ?? $number->setIsDefault(false);
+        });
+
+        $phoneNumber->setIsDefault(true);
+    }
+
     public function addPhoneNumber(PhoneNumber $phoneNumber): self
     {
         if (! $this->phoneNumbers->contains($phoneNumber)) {
@@ -869,6 +882,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setHandle(string $handle): self
     {
         $this->handle = $handle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Snippet>
+     */
+    public function getSnippets(): Collection
+    {
+        return $this->snippets;
+    }
+
+    public function addSnippet(Snippet $snippet): self
+    {
+        if (!$this->snippets->contains($snippet)) {
+            $this->snippets->add($snippet);
+            $snippet->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSnippet(Snippet $snippet): self
+    {
+        if ($this->snippets->removeElement($snippet)) {
+            // set the owning side to null (unless already changed)
+            if ($snippet->getOwner() === $this) {
+                $snippet->setOwner(null);
+            }
+        }
 
         return $this;
     }

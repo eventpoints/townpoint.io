@@ -1,0 +1,20 @@
+{{ form_start(snippetForm) }}
+{{ form_row(snippetForm.title) }}
+<div {{ stimulus_controller('audio-recorder') }} class="btn-group-lg">
+    <button class="btn btn-outline-primary pulse" {{ stimulus_action('audio-recorder', 'record') }}>
+        <span  {{ stimulus_target('audio-recorder', 'recordBtn') }} class="mdi mdi-microphone"></span>
+    </button>
+    <button disabled
+            class="btn btn-outline-primary" {{ stimulus_target('audio-recorder', 'playBtn') }}  {{ stimulus_action('audio-recorder', 'play') }}>
+        <span class="mdi mdi-play"></span>
+    </button>
+    {{ form_row(snippetForm.content, {
+        attr: {
+            'data-audio-recorder-target': 'content'
+        }
+    }) }}
+</div>
+<button class="btn btn-primary" type="submit">
+    save
+</button>
+{{ form_end(snippetForm) }}

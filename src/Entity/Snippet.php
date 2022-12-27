@@ -27,6 +27,9 @@ class Snippet
     #[ORM\Column(type: Types::TEXT)]
     private string $content;
 
+    #[ORM\ManyToOne(inversedBy: 'snippets')]
+    private ?User $owner = null;
+
     public function getId(): Uuid
     {
         return $this->id;
@@ -52,5 +55,17 @@ class Snippet
     public function setContent(string $content): void
     {
         $this->content = $content;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 }

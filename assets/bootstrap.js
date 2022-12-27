@@ -1,6 +1,7 @@
 import { startStimulusApp } from '@symfony/stimulus-bridge';
 import TextareaAutogrow from 'stimulus-textarea-autogrow'
 import ScrollProgress from 'stimulus-scroll-progress'
+import Clipboard from 'stimulus-clipboard'
 
 // Registers Stimulus controllers from controllers.json and in the controllers/ directory
 export const app = startStimulusApp(require.context(
@@ -12,3 +13,4 @@ export const app = startStimulusApp(require.context(
 // register any custom, 3rd party controllers here
 app.register('textarea-autogrow', TextareaAutogrow)
 app.register('scroll-progress', ScrollProgress)
+app.register('clipboard', Clipboard)

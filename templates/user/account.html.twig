@@ -97,30 +97,7 @@
                          aria-labelledby="v-pills-home-tab" tabindex="0">
                         <div class="list-group mb-3">
                             {% for address in app.user.addresses %}
-                                <div class="list-group-item d-flex justify-content-between">
-                                    <div>
-                                        <div>
-                                            <div>
-                                                {% if address.isDefault %}
-                                                    <span class="h5 me-2 mdi mdi-check-circle text-primary"></span>
-                                                {% endif %}
-                                                {{ address.lineOne }}, {{ address.lineTwo }}, {{ address.townOrCity }}
-                                                , {{ address.postCode }}
-                                                , {{ address.country|country_name }}</div>
-                                            <div class="small">{{ address.createdAt|format_date }}</div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="btn-group">
-                                            <a href="#" class="btn btn-outline-secondary">
-                                                <span class="h5 mdi mdi-pencil-circle"></span>
-                                            </a>
-                                            <a href="#" class="btn btn-outline-danger">
-                                                <span class="h5 mdi mdi-close-circle"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                {{ include('address/_show.html.twig') }}
                             {% endfor %}
                         </div>
                         <div class="text-center">
@@ -133,37 +110,17 @@
                     <div class="tab-pane fade" id="phone-numbers" role="tabpanel" aria-labelledby="v-pills-profile-tab"
                          tabindex="0">
                         <div class="card-body row g-2">
-                            <div class="col-12 col-md-6">
-                                <div class="card h-100 mb-3">
-                                    <div class="h5 m-0 card-header">
-                                        {{ 'add-phone-number'|trans }}
-                                    </div>
-                                    <div class="card-body">
-                                        <turbo-frame id="new-phone-number-frame" src="{{ path('create_phone_number') }}"
-                                                     targe="_top" loading="lazy">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="spinner-border" role="status">
-                                                    <span class="visually-hidden">Loading...</span>
-                                                </div>
-                                            </div>
-                                        </turbo-frame>
-                                    </div>
-                                </div>
+                            <div class="list-group mb-3">
+                                {% for phoneNumber in app.user.phoneNumbers %}
+                                    {{ include('phone-number/_show.html.twig') }}
+                                {% endfor %}
                             </div>
-
-
-                            {% for phone in app.user.phoneNumbers %}
-                                <div class="col-12 col-md-6">
-                                    <turbo-frame id="phone-number-{{ phone.id }}-frame"
-                                                 src="{{ path('show_phone_number', {id: phone.id}) }}"
-                                                 target="_top" loading="lazy"
-                                    >
-                                        <div class="spinner-border spinner-border-sm" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </turbo-frame>
-                                </div>
-                            {% endfor %}
+                            <div class="text-center">
+                                <turbo-frame id="new-phone-number-frame">
+                                    <a href="{{ path('create_phone_number') }}" class="btn btn-outline-primary">add
+                                        phone</a>
+                                </turbo-frame>
+                            </div>
                         </div>
                     </div>
                 </div>
