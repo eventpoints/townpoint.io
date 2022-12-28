@@ -171,6 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Snippet>
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Snippet::class)]
+    #[ORM\OrderBy(["createdAt" => "DESC"])]
     private Collection $snippets;
 
     public function __construct()

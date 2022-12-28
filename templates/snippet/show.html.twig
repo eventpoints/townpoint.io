@@ -1,0 +1,13 @@
+{% import 'macro/audio.macro.twig' as audio %}
+
+<turbo-frame id="show-snippet-frame">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="h5">{{ snippet.title }}</div>
+                <div class="small text-muted">{{ snippet.createdAt|format_date }}</div>
+            </div>
+            {{ audio.player(snippet.content, snippet.id) }}
+        </div>
+    </div>
+</turbo-frame>

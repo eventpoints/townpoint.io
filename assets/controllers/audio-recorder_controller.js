@@ -36,6 +36,7 @@ export default class extends Controller {
 
             this.mediaRecorder.addEventListener("dataavailable", (event) => {
                 this.audioChunks.push(event.data)
+
             })
 
             this.mediaRecorder.addEventListener("stop", (event) => {
@@ -43,6 +44,14 @@ export default class extends Controller {
                 let audioUrl = window.URL.createObjectURL(audioBlob);
                 this.audio = new Audio(audioUrl);
                 this.audio.loop = false
+
+                let reader = new FileReader()
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = () => {
+                    this.contentTarget.innerText = reader.result
+                }
+
+
             })
 
         })
@@ -61,7 +70,7 @@ export default class extends Controller {
         this.playBtn.disabled = false
     }
 
-     play() {
+    play() {
         this.audio.play()
     }
 

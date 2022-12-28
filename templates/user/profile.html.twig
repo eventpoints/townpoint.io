@@ -67,17 +67,29 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-8 col-md-8">
+            <div class="col-12 col-md-8">
 
                 {% if app.user == user %}
-                <turbo-frame src="{{ path('new_snippet') }}" id="new-snippet-form-frame">
-                    <div class="d-flex justify-content-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                    <turbo-frame class="mb-3" src="{{ path('new_snippet') }}" id="new-snippet-form-frame" target="_top">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
                         </div>
-                    </div>
-                </turbo-frame>
+                    </turbo-frame>
                 {% endif %}
+
+                <div class="mt-3">
+                    {% for snippet in app.user.snippets %}
+                        <turbo-frame id="show-snippet-frame" src="{{ path('show_snippet', { id: snippet.id }) }}">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </turbo-frame>
+                    {% endfor %}
+                </div>
 
             </div>
         </div>

@@ -1,39 +1,6 @@
-{% macro newPlayer(audio, id) %}
-
-    <style>
-        svg {
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate3d(-50%, -50%, 0)
-        }
-
-        polyline {
-            stroke-linecap: round;
-        }
-    </style>
-
-    <div {{ stimulus_controller('anime', {
-        file: asset(audio),
-        id: id
-    }) }}>
-        <div class="player" id="{{ id }}">
-            <div {{ stimulus_action('anime', 'play', 'click') }} class="mdi mdi-play fs-1 play-btn"></div>
-            <input {{ stimulus_action('anime', 'seeking', 'change') }}  {{ stimulus_target('anime', 'seek') }}
-                    type="range" step="0.01" class="form-range seek w-75" value="0" max=""/>
-            <div class="audio-player-time" {{ stimulus_target('anime', 'time') }}></div>
-        </div>
-        <div class="visualiser-wrapper">
-            <svg class="visualiser" {{ stimulus_target('anime', 'svg') }}></svg>
-        </div>
-
-    </div>
-{% endmacro %}
-
 {% macro player(audio, id) %}
-    <div class="player-wrapper shadow-sm" {{ stimulus_controller('audio-player', {
-        file: asset(audio),
+    <div class="player-wrapper" {{ stimulus_controller('audio-player', {
+        file: audio,
         id: id
     }) }} >
         <div class="player" id="{{ id }}">
