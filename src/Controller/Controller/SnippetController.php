@@ -35,6 +35,7 @@ class SnippetController extends AbstractController
         if ($snippetForm->isSubmitted() && $snippetForm->isValid()) {
             $this->snippetRepository->add($snippetForm->getData(), true);
             $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'snippet created');
+
             return $this->redirectToRoute('new_snippet');
         }
 
@@ -43,13 +44,11 @@ class SnippetController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/show/{id}', name: 'show_snippet')]
-    public function show(Snippet $snippet) : Response
+    public function show(Snippet $snippet): Response
     {
         return $this->render('snippet/show.html.twig', [
-            'snippet' => $snippet
+            'snippet' => $snippet,
         ]);
     }
-
 }
