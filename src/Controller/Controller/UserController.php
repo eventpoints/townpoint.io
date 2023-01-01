@@ -4,10 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
-use App\Email\RegistrationEmail;
 use App\Entity\User;
 use App\Form\UserAccountFormType;
-use App\Repository\PostRepository;
 use App\Repository\SnippetRepository;
 use App\Repository\UserRepository;
 use App\Repository\ViewRepository;
@@ -20,7 +18,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -32,10 +29,7 @@ class UserController extends AbstractController
         private readonly ImageUploadService $imageUploadService,
         private readonly ProfileViewService $profileViewService,
         private readonly ViewRepository $viewRepository,
-        private readonly PostRepository $postRepository,
-        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly CurrentUserService $currentUserService,
-        private readonly RegistrationEmail $registrationEmail,
         private readonly SnippetRepository $snippetRepository,
         private readonly SerializerInterface $serializer
     ) {
