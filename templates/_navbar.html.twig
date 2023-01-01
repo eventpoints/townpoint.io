@@ -28,14 +28,27 @@
 
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">{{ app.user.fullName }}</h5>
+    <div class="offcanvas-header text-end">
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body">
 
-        <div class="row g-2">
+    <div class="offcanvas-body">
+        <div class="row justify-content-center g-2">
             {% if app.user %}
+                <div class="col-12 text-center">
+                    <div class="d-flex justify-content-center">
+                        <div class="w-50">
+                            <turbo-frame id="user-account-qr-frame" src="{{ path('user_account_qr') }}" loading="lazy">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </turbo-frame>
+                        </div>
+                    </div>
+                    <h5 class="my-2">{{ app.user.fullName }}</h5>
+                </div>
                 <div class="col-6">
                     <a href="{{ path('profile', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-account-circle-outline fs-3"></div>
@@ -59,15 +72,6 @@
                         <div class="mdi mdi-exit-to-app fs-3"></div>
                         <div>{{ 'logout'|trans }}</div>
                     </a>
-                </div>
-                <div class="col-12">
-                    <turbo-frame id="user-account-qr-frame" src="{{ path('user_account_qr') }}" loading="lazy">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    </turbo-frame>
                 </div>
             {% else %}
                 <div class="col-6">
