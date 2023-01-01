@@ -5,17 +5,20 @@
     <div class="container">
     <div class="row justify-content-center g-3">
         <div class="col-12 col-md-4">
-            <div class="card mb-3 sticky-top">
-
+            <div class="card mb-3 sticky-top top-10">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="d-flex align-items-start">
                             <img class="rounded-circle me-3" height="70" src="{{ user.avatar }}"/>
-                            <div>
-                                <h4 class="text-black me-1">
+                            <div class="w-100">
+                                <h4 class="text-black mb-0 lh-1 me-1">
                                     {{ user.fullName }}
-                                    <span class="mdi mdi-check-decagram text-primary"></span>
+                                    {% if user.isEnabled %}
+                                        <span class="mdi mdi-check-decagram text-primary"></span>
+                                    {% endif %}
                                 </h4>
+                                <div class="text-muted">@{{ user.handle }}</div>
+                                <hr class="my-2"/>
                                 <div class="badge bg-primary">
                                     <span class="mdi mdi-flag-outline"></span>
                                     <span {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></span>
@@ -56,16 +59,18 @@
                             </a>
                         </li>
                     {% endif %}
-                    {% if app.user and app.user == user %}
-                        <li class="list-group-item d-flex justify-content-between">
-                            <a class="btn btn-outline-primary"
-                               href="{{ path('account') }}">
-                                edit profile
-                            </a>
-                        </li>
-                    {% endif %}
                 </ul>
             </div>
+
+            {% if app.user and app.user == user %}
+                <div class="text-center">
+                    <a class="link-primary"
+                       href="{{ path('account') }}">
+                        edit profile
+                    </a>
+                </div>
+            {% endif %}
+
         </div>
         <div class="col-12 col-md-8">
 

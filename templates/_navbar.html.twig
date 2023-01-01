@@ -16,6 +16,18 @@
             </div>
         {% endif %}
         <ul class="navbar-nav ml-auto align-items-center mb-2 mb-lg-0">
+            {% if not app.user %}
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ path('app_login') }}">
+                        {{ 'login'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ path('app_register') }}">
+                        {{ 'register'|trans }}
+                    </a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="#" data-bs-toggle="offcanvas"
                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
@@ -47,7 +59,7 @@
                             </turbo-frame>
                         </div>
                     </div>
-                    <h5 class="my-2">{{ app.user.fullName }}</h5>
+                    <div class="h4 my-2">{{ app.user.fullName }}</div>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('profile', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
@@ -69,17 +81,23 @@
                 </div>
                 <div class="col-6">
                     <a href="{{ path('app_logout') }}" class="btn btn-outline-danger w-100">
-                        <div class="mdi mdi-exit-to-app fs-3"></div>
+                        <div class="mdi mdi-logout-variant fs-3"></div>
                         <div>{{ 'logout'|trans }}</div>
                     </a>
                 </div>
             {% else %}
                 <div class="col-6">
-                    <a href="{{ path('app_login') }}" class="btn btn-lg btn-outline-dark w-100">{{ 'login'|trans }}</a>
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-login-variant fs-3"></div>
+                        <div>{{ 'login'|trans }}</div>
+                    </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('app_register') }}"
-                       class="btn btn-lg btn-outline-dark w-100">{{ 'register'|trans }}</a>
+                       class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-account-plus-outline fs-3"></div>
+                        <div>{{ 'register'|trans }}</div>
+                    </a>
                 </div>
             {% endif %}
         </div>
