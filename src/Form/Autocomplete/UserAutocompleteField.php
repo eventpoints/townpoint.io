@@ -21,17 +21,10 @@ class UserAutocompleteField extends AbstractType
                 'class' => 'm-0 w-100',
             ],
             'attr' => [
-                'class' => 'form-control',
+                'class' => 'form-control border-secondary',
             ],
             'class' => User::class,
             'placeholder' => 'Search',
-            'tom_select_options' => [
-                'options' => [
-                    'render' => [
-                        'loading' => '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>',
-                    ],
-                ],
-            ],
         ]);
     }
 

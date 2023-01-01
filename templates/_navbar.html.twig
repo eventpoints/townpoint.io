@@ -1,47 +1,85 @@
-<header class="p-3 mb-3">
+<nav class="navbar navbar-expand bg-light">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-                <img src="{{ asset('/images/logo.png') }}" height="20">
-            </a>
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                {% if app.user %}
-                    <li class="nav-item ms-3">
-                        <a class="nav-link {% if app.request.attributes.get('_route') == 'dashboard' %}active{% endif %}"
-                           href="{{ path('dashboard') }}">
-                            {{ app.user.firstName }}
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-
-            {% if app.user %}
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <turbo-frame src="{{ path('_user_search') }}" class="w-100" id="user-search-form-frame"
-                                 target="_top">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
+        <a class="navbar-brand" href="{{ path('app_register') }}">
+            <img src="{{ asset('/images/logo.png') }}" height="20">
+        </a>
+        {% if app.user %}
+            <div class="w-50">
+                <turbo-frame src="{{ path('_user_search') }}" class="w-100" id="user-search-form-frame"
+                             target="_top">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-                    </turbo-frame>
-                </form>
-            {% endif %}
+                    </div>
+                </turbo-frame>
+            </div>
+        {% endif %}
+        <ul class="navbar-nav ml-auto align-items-center mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#" data-bs-toggle="offcanvas"
+                   data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <span class="mdi mdi-menu fs-3"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-            {% if not app.user %}
-                <div class="text-end">
-                    <a class="btn btn-outline-primary text-white me-2" aria-current="page"
-                       href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
-                    <a class="btn btn-primary text-white" aria-current="page"
-                       href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">{{ app.user.fullName }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <div class="row g-2">
+            {% if app.user %}
+                <div class="col-6">
+                    <a href="{{ path('profile', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-account-circle-outline fs-3"></div>
+                        <div>{{ 'profile'|trans }}</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('conversations') }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-message-outline fs-3"></div>
+                        <div>{{ 'conversations'|trans }}</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('account') }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-bank-outline fs-3"></div>
+                        <div>{{ 'account'|trans }}</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-danger w-100">
+                        <div class="mdi mdi-exit-to-app fs-3"></div>
+                        <div>{{ 'logout'|trans }}</div>
+                    </a>
+                </div>
+                <div class="col-12">
+                    <div class="mt-3">
+                        <turbo-frame id="user-account-qr-frame" src="{{ path('user_account_qr') }}" loading="lazy">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </turbo-frame>
+                    </div>
                 </div>
             {% else %}
-                <div class="text-end">
-                    <a class="btn btn-outline-danger" aria-current="page"
-                       href="{{ path('app_logout') }}">{{ 'logout'|trans }}</a>
+                <div class="col-6">
+                    <a href="{{ path('app_login') }}" class="btn btn-lg btn-outline-dark w-100">{{ 'login'|trans }}</a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('app_register') }}"
+                       class="btn btn-lg btn-outline-dark w-100">{{ 'register'|trans }}</a>
                 </div>
             {% endif %}
         </div>
     </div>
-</header>
+</div>

@@ -4,20 +4,17 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
+use App\Email\RegistrationEmail;
 use App\Entity\User;
 use App\Form\UserAccountFormType;
 use App\Repository\PostRepository;
+use App\Repository\SnippetRepository;
 use App\Repository\UserRepository;
 use App\Repository\ViewRepository;
 use App\Service\CurrentUserService;
 use App\Service\ImageUploadService;
 use App\Service\ProfileViewService;
 use App\ValueObject\FlashValueObject;
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
-use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
 {
@@ -35,7 +34,10 @@ class UserController extends AbstractController
         private readonly ViewRepository $viewRepository,
         private readonly PostRepository $postRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly CurrentUserService $currentUserService
+        private readonly CurrentUserService $currentUserService,
+        private readonly RegistrationEmail $registrationEmail,
+        private readonly SnippetRepository $snippetRepository,
+        private readonly SerializerInterface $serializer
     ) {
     }
 
@@ -54,26 +56,7 @@ class UserController extends AbstractController
     #[Route(path: '/dashboard', name: 'dashboard')]
     public function dashboard(): Response
     {
-        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
-        $url = $this->urlGenerator->generate('profile', [
-            'id' => $currentUser->getId(),
-        ], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        $qr = Builder::create()
-            ->writer(new PngWriter())
-            ->writerOptions([])
-            ->data($url)
-            ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
-            ->size(500)
-            ->margin(10)
-            ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
-            ->validateResult(false)
-            ->build();
-
-        return $this->render('user/dashboard.html.twig', [
-            'qr' => $qr->getDataUri(),
-        ]);
+        return $this->render('user/dashboard.html.twig');
     }
 
     #[Route(path: '/account', name: 'account')]
@@ -111,11 +94,17 @@ class UserController extends AbstractController
             $this->profileViewService->view($user);
         }
 
-        $posts = $this->postRepository->findPostsByUser($user);
+        $snippets = $this->snippetRepository->findBy([
+            'owner' => $this->getUser(),
+        ], [
+            'createdAt' => 'DESC',
+        ]);
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,
-            'posts' => $posts,
+            'snippets' => $this->serializer->serialize($snippets, 'json', [
+                AbstractNormalizer::IGNORED_ATTRIBUTES => ['owner'],
+            ]),
         ]);
     }
 
@@ -123,5 +112,14 @@ class UserController extends AbstractController
     public function profileMenu(): Response
     {
         return $this->render('user/_profile-post-menu.html.twig');
+    }
+
+    #[Route(path: '/email/render', name: 'test_email_render')]
+    public function email(): Response
+    {
+        return $this->render('email/registration.email.html.twig', [
+            'user' => $this->getUser(),
+            'path' => 'something',
+        ]);
     }
 }

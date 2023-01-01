@@ -33,12 +33,10 @@ export default class extends Controller {
 
         this.seek = this.seekTarget;
         this.time = this.timeTarget;
-        this.setup()
     }
 
     connect() {
         this.audio.addEventListener("loadeddata", () => {
-            this.seek.setAttribute('value', 0);
             this.time.textContent = this.fmtTime(this.audio.duration);
         });
 
@@ -72,10 +70,6 @@ export default class extends Controller {
         this.visualiser.seek(this.visualiser.duration * (this.seek.value / 100));
     }
 
-    setup() {
-        this.time.textContent = this.fmtTime(this.audio.duration)
-    }
-
     graphic() {
         let freqArray = new Uint8Array(this.analyser.frequencyBinCount);
         this.analyser.getByteTimeDomainData(freqArray);
@@ -102,16 +96,15 @@ export default class extends Controller {
             x = (100 - (40 * 2)) * freqRatio,
             y = 60 / 2;
 
-        // this.visualiser = anime({
-        //     targets: `.circle`,
-        //     easing: 'easeOutInCirc',
-        // });
-        // this.visualiser.set( `.circle`,{
-        //     scale: function() { return freqRatio; }
-        // })
+        this.visualiser = anime({
+            targets: `.visualiser-${this.audioId}`,
+            easing: 'easeOutInCirc',
+        });
+        this.visualiser.set( `.visualiser-${this.audioId}`,{
+            scaleY:  freqCount / freqValue
+        })
     }
 
     padTime = (n) => (~~(n) + "").padStart(2, "0");
     fmtTime = (s) => s < 1 ? "00:00" : `${this.padTime(s / 60)}:${this.padTime(s % 60)}`;
-
 }

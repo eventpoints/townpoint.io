@@ -79,7 +79,13 @@
             <div class="col-12 col-md-3">
                 <div class="card">
                     <div class="card-body text-center">
-                        <img class="img-fluid" src="{{ qr }}" width="100%"/>
+                        <turbo-frame id="user-account-qr-frame" src="{{ path('user_account_qr') }}" loading="lazy">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </turbo-frame>
                     </div>
                 </div>
             </div>

@@ -3,92 +3,121 @@
 {% block body %}
 
     <div class="container">
-        <div class="row justify-content-center g-3">
-            <div class="col-12 col-md-4">
-                <div class="card mb-3 sticky-top">
+    <div class="row justify-content-center g-3">
+        <div class="col-12 col-md-4">
+            <div class="card mb-3 sticky-top">
 
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-start">
-                                <img class="rounded-circle me-3" height="70" src="{{ user.avatar }}"/>
-                                <div>
-                                    <h4 class="text-black me-1">
-                                        {{ user.fullName }}
-                                        <span class="mdi mdi-check-decagram text-primary"></span>
-                                    </h4>
-                                    <div class="badge bg-primary">
-                                        <span class="mdi mdi-flag-outline"></span>
-                                        <span {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></span>
-                                    </div>
-                                    <div class="badge bg-secondary">
-                                        <span class="mdi mdi-map-marker-outline"></span>
-                                        <span> {{ user.currentCountry|country_name }}</span>
-                                    </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="d-flex align-items-start">
+                            <img class="rounded-circle me-3" height="70" src="{{ user.avatar }}"/>
+                            <div>
+                                <h4 class="text-black me-1">
+                                    {{ user.fullName }}
+                                    <span class="mdi mdi-check-decagram text-primary"></span>
+                                </h4>
+                                <div class="badge bg-primary">
+                                    <span class="mdi mdi-flag-outline"></span>
+                                    <span {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></span>
                                 </div>
-                            </div>
-                        </li>
-                        {% if user.description %}
-                            <li class="list-group-item">
-                                <div class="lead">{{ user.description }}</div>
-                            </li>
-                        {% endif %}
-                        {% if app.user and app.user != user %}
-                            <li class="list-group-item d-flex justify-content-between">
-                                {% if app.user.isListening(user) %}
-                                    <a class="btn btn-secondary btn-lg"
-                                       href="{{ path('unlisten', {id: user.id}) }}">
-                                        <span class="mdi mdi-ear-hearing-off"></span>
-                                    </a>
-                                {% else %}
-                                    <a class="btn btn-outline-primary btn-lg"
-                                       href="{{ path('listen', {id: user.id}) }}">
-                                        <span class="mdi mdi-ear-hearing"></span>
-                                    </a>
-                                {% endif %}
-                                <a class="btn btn-outline-primary btn-lg"
-                                   href="{{ path('new_conversation', {id: user.id}) }}">
-                                    <span class="mdi mdi-send"></span>
-                                </a>
-
-                                <a class="btn btn-outline-danger btn-lg"
-                                   href="{{ path('new_conversation', {id: user.id}) }}">
-                                    <span class="mdi mdi-alert-outline"></span>
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if app.user and app.user == user %}
-                            <li class="list-group-item d-flex justify-content-between">
-                                <a class="btn btn-outline-primary"
-                                   href="{{ path('account') }}">
-                                    edit profile
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-            <div class="col-12 col-md-8">
-
-                {% if app.user == user %}
-                    <turbo-frame class="mb-3" src="{{ path('new_snippet') }}" id="new-snippet-form-frame" target="_top">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                                <div class="badge bg-secondary">
+                                    <span class="mdi mdi-map-marker-outline"></span>
+                                    <span> {{ user.currentCountry|country_name }}</span>
+                                </div>
                             </div>
                         </div>
-                    </turbo-frame>
-                {% endif %}
+                    </li>
+                    {% if user.description %}
+                        <li class="list-group-item">
+                            <div class="lead">{{ user.description }}</div>
+                        </li>
+                    {% endif %}
+                    {% if app.user and app.user != user %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            {% if app.user.isListening(user) %}
+                                <a class="btn btn-secondary btn-lg"
+                                   href="{{ path('unlisten', {id: user.id}) }}">
+                                    <span class="mdi mdi-ear-hearing-off"></span>
+                                </a>
+                            {% else %}
+                                <a class="btn btn-outline-primary btn-lg"
+                                   href="{{ path('listen', {id: user.id}) }}">
+                                    <span class="mdi mdi-ear-hearing"></span>
+                                </a>
+                            {% endif %}
+                            <a class="btn btn-outline-primary btn-lg"
+                               href="{{ path('new_conversation', {id: user.id}) }}">
+                                <span class="mdi mdi-send"></span>
+                            </a>
 
-                <div class="mt-3">
-                    {% for snippet in app.user.snippets %}
-                        <turbo-frame id="show-snippet-frame" src="{{ path('show_snippet', { id: snippet.id }) }}">
-                            <div class="d-flex justify-content-center">
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
+                            <a class="btn btn-outline-danger btn-lg"
+                               href="{{ path('new_conversation', {id: user.id}) }}">
+                                <span class="mdi mdi-alert-outline"></span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if app.user and app.user == user %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <a class="btn btn-outline-primary"
+                               href="{{ path('account') }}">
+                                edit profile
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-12 col-md-8">
+
+            {% if app.user == user %}
+                <turbo-frame class="mb-3" src="{{ path('new_snippet') }}" id="new-snippet-form-frame" target="_self">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </turbo-frame>
+            {% endif %}
+
+            <div class="mt-3">
+                {#                    {% for snippet in snippets %} #}
+                {#                        <turbo-frame id="show-snippet-frame" src="{{ path('show_snippet', { id: snippet.id }) }}"> #}
+                {#                            <div class="d-flex justify-content-center"> #}
+                {#                                <div class="spinner-border" role="status"> #}
+                {#                                    <span class="visually-hidden">Loading...</span> #}
+                {#                                </div> #}
+                {#                            </div> #}
+                {#                        </turbo-frame> #}
+                {#                    {% else %} #}
+                {#                        <div class="h5 text-center text-muted"> #}
+                {#                            {{ 'no-snippets-found'|trans }} #}
+                {#                        </div> #}
+                {#                    {% endfor %} #}
+
+                <div {{ stimulus_controller('multi-audio-player', {
+                    files: snippets
+                }) }}>
+                    <div class="list-group" {{ stimulus_target('multi-audio-player', 'trackList') }}>
+                        <div class="list-group-item p-0 position-relative">
+                            <canvas class="w-100 h-25 m-0" {{ stimulus_target('multi-audio-player', 'canvas') }}></canvas>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <a {{ stimulus_action('multi-audio-player', 'playPause', 'click') }}
+                                        class="btn btn-outline-primary disabled">
+                                    <span {{ stimulus_target('multi-audio-player', 'playPauseBtn') }} class="h3 m-0 mdi mdi-play"></span>
+                                </a>
                             </div>
-                        </turbo-frame>
-                    {% endfor %}
+                            <div class="w-75">
+                                <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'currentTrack') }}></div>
+                                <div min="0" max="100" step="0.001" class="form-range"
+                                     type="range" {{ stimulus_action('multi-audio-player', 'seeking', 'change') }} {{ stimulus_target('multi-audio-player', 'seek') }}>
+                                </div>
+                                <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'trackTime') }}></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

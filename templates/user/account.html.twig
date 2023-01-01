@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-3">
-                <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <div class="nav flex-column nav-pills me-3 mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
                        data-bs-target="#account" href="#account" type="button" role="tab" aria-controls="v-pills-home"
                        aria-selected="true">{{ 'account'|trans|upper }}</a>
@@ -28,10 +28,8 @@
                          aria-labelledby="v-pills-home-tab" tabindex="0">
                         <div class="row justify-content-center">
                             <div class="col-12 col-md-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img class="img-fluid rounded w-100 mb-3" src="{{ app.user.avatar }}"/>
-                                    </div>
+                                <div class="card mb-3">
+                                        <img class="img-fluid rounded w-100" src="{{ app.user.avatar }}"/>
                                 </div>
                             </div>
                             <div class="col-12 col-md-8">
