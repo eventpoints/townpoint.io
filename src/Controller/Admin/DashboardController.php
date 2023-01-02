@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Controller\Admin;
 
+use App\Entity\Conversation;
 use App\Entity\Snippet;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -48,5 +49,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Snippet', 'fas fa-audio', Snippet::class);
+        yield MenuItem::linkToCrud('Conversations', 'fas fa-chat', Conversation::class);
     }
 }

@@ -11,6 +11,10 @@
     top: .8rem;
 }
 
+.form-control:focus{
+    box-shadow: none!important;
+}
+
 .fireworks{
     z-index: -1;
     position: absolute;

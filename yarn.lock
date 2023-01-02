@@ -4061,10 +4061,10 @@ stimulus-scroll-progress@^4.0.0:
   dependencies:
     lodash.throttle "^4.1.1"
 
-stimulus-textarea-autogrow@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/stimulus-textarea-autogrow/-/stimulus-textarea-autogrow-4.0.0.tgz#dc8da67dc078c48a28fc517d8e208f383f3452fe"
-  integrity sha512-hsL8vewadJAeth0YWRbsGOM9pwhAh+5JoY1SDC+gKorkSyFNe1dH0CaRcbZxkySXQ/04CaLhGILVjWHvQT+0Og==
+stimulus-textarea-autogrow@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/stimulus-textarea-autogrow/-/stimulus-textarea-autogrow-4.1.0.tgz#faa2f7952062c4508b1566478dc203af7f24f632"
+  integrity sha512-hYz+xN3VZiO+eLl+zok4yvhH+mW5WkvOJEExyVP3J97dWQzc/qPDFdAM1EDJvfUIuRzJVq/WJynqqQwiied5iw==
 
 string-width@^4.2.3:
   version "4.2.3"

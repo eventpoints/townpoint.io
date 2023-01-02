@@ -26,7 +26,7 @@ class Message
     #[ORM\ManyToOne]
     private User $user;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'messages')]
     private ?Conversation $conversation = null;
 
     #[ORM\Column]

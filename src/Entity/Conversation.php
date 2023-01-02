@@ -27,17 +27,20 @@ class Conversation
     /**
      * @var Collection<int, Message> $messages
      */
-    #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, cascade: ['persist', 'remove'])]
     private Collection $messages;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt;
 
     /**
      * @var Collection<int, User> $users
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'conversations')]
     private Collection $users;
+
+    #[ORM\ManyToOne]
+    private User $owner;
 
     public function __construct()
     {
@@ -123,6 +126,18 @@ class Conversation
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

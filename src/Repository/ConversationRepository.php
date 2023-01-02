@@ -47,11 +47,29 @@ class ConversationRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByTwoUsers(User $currentUser, User $user): Conversation|null
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->innerJoin('c.users', 'users');
+
+        $qb->andWhere(
+            $qb->expr()
+                ->eq('c.owner', ':currentUser')
+        )->setParameter('currentUser', $currentUser->getId(), 'uuid');
+
+        $qb->andWhere($qb->expr() ->eq('users', ':user'))
+            ->setParameter('user', $user->getId(), 'uuid');
+
+        return $qb->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findByUser(User $user): Query
     {
         $qb = $this->createQueryBuilder('c');
         $qb->innerJoin('c.users', 'users');
-        $qb->andWhere($qb->expr() ->in(':user', 'users'))
+
+        $qb->andWhere($qb->expr()->in(':user', 'users'))
             ->setParameter('user', $user->getId(), 'uuid');
 
         return $qb->getQuery();

@@ -10,23 +10,28 @@ use App\Entity\User;
 use App\Form\MessageFormType;
 use App\Repository\ConversationRepository;
 use App\Service\CurrentUserService;
+use App\ValueObject\FlashValueObject;
+use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[Route(path: '/conversations')]
 class ConversationController extends AbstractController
 {
     public function __construct(
         private readonly ConversationRepository $conversationRepository,
         private readonly PaginatorInterface $paginator,
-        private readonly CurrentUserService $currentUserService
+        private readonly CurrentUserService $currentUserService,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
-    #[Route(path: '/conversations', name: 'conversations')]
+    #[Route(path: '/', name: 'conversations')]
     public function index(Request $request): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
@@ -39,15 +44,45 @@ class ConversationController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'new/conversation/user/{id}', name: 'new_conversation')]
+    #[Route(path: '/remove/{id}', name: 'conversation_delete', methods: ['POST'])]
+    public function delete(Request $request, Conversation $conversation): Response
+    {
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+        $criteria = Criteria::create()->andWhere(Criteria::expr()->in('id', [$currentUser->getId()]));
+        $exists = $conversation->getUsers()
+            ->matching($criteria);
+
+        if ($exists) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $conversation->getId(), (string)$request->request->get('_token'))) {
+            $this->conversationRepository->remove($conversation, true);
+        }
+
+        $this->addFlash(FlashValueObject::TYPE_SUCCESS, $this->translator->trans('conversation-deleted'));
+
+        return $this->redirectToRoute('conversations', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route(path: '/create/{id}', name: 'new_conversation')]
     public function create(User $user): Response
     {
         $currentUser = $this->getUser();
         assert($currentUser instanceof User && $currentUser instanceof UserInterface);
+
+        $conversation = $this->conversationRepository->findByTwoUsers($currentUser, $user);
+
+        if ($conversation instanceof Conversation) {
+            return $this->redirectToRoute('conversation', [
+                'id' => $conversation->getId(),
+            ]);
+        }
+
         $conversation = new Conversation();
+        $conversation->setOwner($currentUser);
         $conversation->addUser($currentUser);
         $conversation->addUser($user);
-
         $this->conversationRepository->add($conversation, true);
 
         return $this->redirectToRoute('conversation', [
@@ -55,7 +90,7 @@ class ConversationController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/conversation/{id}', name: 'conversation')]
+    #[Route(path: '/show/{id}', name: 'conversation')]
     public function show(Conversation $conversation, Request $request): Response
     {
         $currentUser = $this->getUser();

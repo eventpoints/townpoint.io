@@ -39,6 +39,6 @@
         "i18n-nationality": "^1.2.0",
         "stimulus-clipboard": "^3.2.2",
         "stimulus-scroll-progress": "^4.0.0",
-        "stimulus-textarea-autogrow": "^4.0.0"
+        "stimulus-textarea-autogrow": "^4.1.0"
     }
 }

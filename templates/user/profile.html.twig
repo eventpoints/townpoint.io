@@ -6,11 +6,14 @@
     <div class="row justify-content-center g-3">
         <div class="col-12 col-md-4">
             <div class="card mb-3 sticky-top top-10">
+
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="d-flex align-items-start">
-                            <img class="rounded-circle me-3" height="70" src="{{ user.avatar }}"/>
-                            <div class="w-100">
+                            <div class="position-relative">
+                                <img class="rounded-circle me-3" height="70" src="{{ user.avatar }}"/>
+                            </div>
+                            <div class="w-100 position-relative">
                                 <h4 class="text-black mb-0 lh-1 me-1">
                                     {{ user.fullName }}
                                     {% if user.isEnabled %}
@@ -19,13 +22,15 @@
                                 </h4>
                                 <div class="text-muted">@{{ user.handle }}</div>
                                 <hr class="my-2"/>
-                                <div class="badge bg-primary">
-                                    <span class="mdi mdi-flag-outline"></span>
-                                    <span {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></span>
-                                </div>
-                                <div class="badge bg-secondary">
-                                    <span class="mdi mdi-map-marker-outline"></span>
-                                    <span> {{ user.currentCountry|country_name }}</span>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-pill px-2 me-2 bg-grey text-black d-flex align-items-center justify-content-between">
+                                        <div class="mdi mdi-flag-outline fs-4"></div>
+                                        <div {{ stimulus_controller('nationality', {country: user.countryOfOrigin} ) }}></div>
+                                    </div>
+                                    <div class="rounded-pill px-2 bg-primary text-white d-flex align-items-center justify-content-between">
+                                        <div class="mdi mdi-map-marker-outline fs-4"></div>
+                                        <div> {{ user.currentCountry|country_name }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -52,25 +57,22 @@
                                href="{{ path('new_conversation', {id: user.id}) }}">
                                 <span class="mdi mdi-send"></span>
                             </a>
-
                             <a class="btn btn-outline-danger btn-lg"
                                href="{{ path('new_conversation', {id: user.id}) }}">
                                 <span class="mdi mdi-alert-outline"></span>
                             </a>
                         </li>
                     {% endif %}
+                    {% if app.user and app.user == user %}
+                        <li class="list-group-item text-center">
+                            <a class="link-dark"
+                               href="{{ path('account') }}">
+                                {{ 'edit-account'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
-
-            {% if app.user and app.user == user %}
-                <div class="text-center">
-                    <a class="link-primary"
-                       href="{{ path('account') }}">
-                        edit profile
-                    </a>
-                </div>
-            {% endif %}
-
         </div>
         <div class="col-12 col-md-8">
 

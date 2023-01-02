@@ -5,8 +5,12 @@ declare(strict_types = 1);
 namespace App\Controller\Controller;
 
 use App\Entity\Address;
+use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Form\AddressFormType;
+use App\Form\SelectUserAddressFormType;
 use App\Repository\AddressRepository;
+use App\Repository\MessageRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +23,7 @@ class AddressController extends AbstractController
 {
     public function __construct(
         private readonly CurrentUserService $currentUserService,
+        private readonly MessageRepository $messageRepository,
         private readonly AddressRepository $addressRepository
     ) {
     }
@@ -71,6 +76,36 @@ class AddressController extends AbstractController
     {
         $this->render('address/show.html.twig', [
             'address' => $address,
+        ]);
+    }
+
+    #[Route(path: '/share/{id}', name: 'conversation_share_address')]
+    public function select(Conversation $conversation, Request $request): Response
+    {
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+        $addressForm = $this->createForm(SelectUserAddressFormType::class);
+        $addressForm->handleRequest($request);
+        if ($addressForm->isSubmitted() && $addressForm->isValid()) {
+            dump($addressForm->get('address')->getData());
+
+            $address = $addressForm->get('address')
+                ->getData();
+            $message = new Message();
+            $message->setUser($currentUser);
+            $message->setConversation($conversation);
+            $message->setContent(
+                $address->getLineOne() . ', ' . $address->getLineTwo() . ',' . $address->getTownOrCity() . ',' . $address->getPostCode() . ',' . $address->getCountry()
+            );
+            $this->messageRepository->add($message, true);
+
+            return $this->redirectToRoute('conversation', [
+                'id' => $conversation->getId(),
+            ]);
+        }
+
+        return $this->render('address/select.html.twig', [
+            'conversation' => $conversation,
+            'addressForm' => $addressForm->createView(),
         ]);
     }
 }
