@@ -11,7 +11,6 @@ use App\Form\MessageFormType;
 use App\Repository\ConversationRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
-use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,15 +46,6 @@ class ConversationController extends AbstractController
     #[Route(path: '/remove/{id}', name: 'conversation_delete', methods: ['POST'])]
     public function delete(Request $request, Conversation $conversation): Response
     {
-        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
-        $criteria = Criteria::create()->andWhere(Criteria::expr()->in('id', [$currentUser->getId()]));
-        $exists = $conversation->getUsers()
-            ->matching($criteria);
-
-        if ($exists) {
-            throw $this->createAccessDeniedException();
-        }
-
         if ($this->isCsrfTokenValid('delete' . $conversation->getId(), (string)$request->request->get('_token'))) {
             $this->conversationRepository->remove($conversation, true);
         }
