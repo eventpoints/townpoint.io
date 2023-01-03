@@ -59,56 +59,56 @@
                             </turbo-frame>
                         </div>
                     </div>
-                    <div class="h4 my-2">{{ app.user.fullName }}</div>
+                    <div class="h4 my-2">{{ app.user.fullName|capitalize }}</div>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('feed', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-account-group-outline fs-3"></div>
-                        <div>{{ 'feed'|trans }}</div>
+                        <div class="fw-bold">{{ 'feed'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('profile', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-account-circle-outline fs-3"></div>
-                        <div>{{ 'profile'|trans }}</div>
+                        <div class="fw-bold">{{ 'profile'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('conversations') }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-message-outline fs-3"></div>
-                        <div>{{ 'conversations'|trans }}</div>
+                        <div class="fw-bold">{{ 'conversations'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('listeners') }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-ear-hearing fs-3"></div>
-                        <div>{{ 'listening'|trans }}</div>
+                        <div class="fw-bold">{{ 'listening'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('account') }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-bank-outline fs-3"></div>
-                        <div>{{ 'account'|trans }}</div>
+                        <div class="fw-bold">{{ 'account'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('app_logout') }}" class="btn btn-outline-danger w-100">
                         <div class="mdi mdi-logout-variant fs-3"></div>
-                        <div>{{ 'logout'|trans }}</div>
+                        <div class="fw-bold">{{ 'logout'|trans|capitalize }}</div>
                     </a>
                 </div>
             {% else %}
                 <div class="col-6">
                     <a href="{{ path('app_login') }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-login-variant fs-3"></div>
-                        <div>{{ 'login'|trans }}</div>
+                        <div class="fw-bold">{{ 'login'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('app_register') }}"
                        class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-account-plus-outline fs-3"></div>
-                        <div>{{ 'register'|trans }}</div>
+                        <div class="fw-bold">{{ 'register'|trans|capitalize }}</div>
                     </a>
                 </div>
             {% endif %}

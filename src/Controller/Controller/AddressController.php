@@ -86,8 +86,6 @@ class AddressController extends AbstractController
         $addressForm = $this->createForm(SelectUserAddressFormType::class);
         $addressForm->handleRequest($request);
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
-            dump($addressForm->get('address')->getData());
-
             $address = $addressForm->get('address')
                 ->getData();
             $message = new Message();

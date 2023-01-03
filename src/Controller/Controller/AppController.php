@@ -15,4 +15,10 @@ class AppController extends AbstractController
     {
         return $this->redirectToRoute('app_register');
     }
+
+    #[Route(path: '/terms', name: 'app_terms')]
+    public function terms(): Response
+    {
+        return $this->render('terms/index.html.twig');
+    }
 }

@@ -18,9 +18,9 @@
                                         <div class="w-100">
                                             <div class="h5 m-0">{{ user.fullName }}</div>
                                             {% if conversation.messages.last %}
-                                                <div class="d-flex justify-content-between w-100">
-                                                    <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }} </div>
-                                                    <div class="text-muted">{{ conversation.messages.last.createdAt|format_date }}</div>
+                                                <div class="d-flex justify-content-between align-items-center w-100">
+                                                    <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }}</div>
+                                                    <div class="text-muted small">{{ conversation.messages.last.createdAt|format_date }}</div>
                                                 </div>
                                             {% else %}
                                                 <div class="text-muted">{{ 'no-messages'|trans }}</div>

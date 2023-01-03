@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-3">
+                <div class="list-group sticky-top">
+                    <a href="#{{ 'terms.acceptance-of-agreement'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.acceptance-of-agreement'|trans }}</a>
+                    <a href="#{{ 'terms.advice'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.advice'|trans }}</a>
+                    <a href="#{{ 'terms.changes-to-software-and-services'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.changes-to-software-and-services'|trans }}</a>
+                    <a href="#{{ 'terms.copyright'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.copyright'|trans }}</a>
+                    <a href="#{{ 'terms.limitation-of-liability'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.limitation-of-liability'|trans }}</a>
+                    <a href="#{{ 'terms.indemnity'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.indemnity'|trans }}</a>
+                    <a href="#{{ 'terms.severability'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.severability'|trans }}</a>
+                    <a href="#{{ 'terms.applicable-law-and-dispute'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.applicable-law-and-dispute'|trans }}</a>
+                    <a href="#{{ 'terms.headings'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.headings'|trans }}</a>
+                    <a href="#{{ 'terms.entire-agreement'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.entire-agreement'|trans }}</a>
+                    <a href="#{{ 'terms.company-privacy-policy'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.company-privacy-policy'|trans }}</a>
+                    <a href="#{{ 'terms.data-collected'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.data-collected'|trans }}</a>
+                    <a href="#{{ 'terms.how-do-we-collect-your-data'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.how-do-we-collect-your-data'|trans }}</a>
+                    <a href="#{{ 'terms.how-will-we-use-your-data'|trans|slug|lower }}"
+                       class="list-group-item list-group-item-action">{{ 'terms.how-will-we-use-your-data'|trans }}</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-8" data-bs-spy="scroll" data-bs-target="#navbar-example2"
+                 data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true">
+                <h1>{{ 'terms-of-use-and-privicy-policy'|trans|title }}</h1>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 id="{{ 'terms.acceptance-of-agreement-content'|trans|slug }}">{{ 'terms.acceptance-of-agreement'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.acceptance-of-agreement-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.advice'|trans|slug|lower }}">{{ 'terms.advice'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.advice-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.changes-to-software-and-services'|trans|slug|lower }}">{{ 'terms.changes-to-software-and-services'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.changes-to-software-and-services-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.copyright'|trans|slug|lower }}">{{ 'terms.copyright'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.copyright-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.limitation-of-liability'|trans|slug|lower }}">{{ 'terms.limitation-of-liability'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.limitation-of-liability-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.indemnity'|trans|slug|lower }}">{{ 'terms.indemnity'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.indemnity-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.severability'|trans|slug|lower }}">{{ 'terms.severability'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.severability-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.applicable-law-and-dispute'|trans|slug|lower }}">{{ 'terms.applicable-law-and-dispute'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.applicable-law-and-dispute-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.headings'|trans|slug|lower }}">{{ 'terms.headings'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.headings-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.entire-agreement'|trans|slug|lower }}">{{ 'terms.entire-agreement'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.entire-agreement-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.company-privacy-policy'|trans|slug|lower }}">{{ 'terms.company-privacy-policy'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.company-privacy-policy-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.data-collected'|trans|slug|lower }}">{{ 'terms.data-collected'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.data-collected-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.how-do-we-collect-your-data'|trans|slug|lower }}">{{ 'terms.how-do-we-collect-your-data'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.how-do-we-collect-your-data-content'|trans }}</p>
+
+                        <h5 id="{{ 'terms.how-will-we-use-your-data'|trans|slug|lower }}">{{ 'terms.how-will-we-use-your-data'|trans }}</h5>
+                        <p class="mb-3">{{ 'terms.how-will-we-use-your-data-content'|trans }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

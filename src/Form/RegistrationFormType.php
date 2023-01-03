@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Form;
 
@@ -18,9 +18,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationFormType extends AbstractType
 {
+
+
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    )
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -72,9 +81,10 @@ class RegistrationFormType extends AbstractType
             ->add('countryOfOrigin', CountryType::class, [
                 'autocomplete' => true,
                 'label' => false,
-                'placeholder' => 'Country of origin',
+                'placeholder' => $this->translator->trans('country-of-origin'),
                 'data' => null,
                 'attr' => [
+                    'class' => 'autocomplete',
                     'autocomplete' => 'off',
                 ],
                 'row_attr' => [
@@ -83,8 +93,8 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('currentCountry', CountryType::class, [
                 'autocomplete' => true,
+                'placeholder' => $this->translator->trans('current-country'),
                 'label' => false,
-                'placeholder' => 'Current country',
                 'attr' => [
                     'autocomplete' => 'off',
                 ],
@@ -92,15 +102,8 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
             ->add('plainPassword', PasswordType::class, [
+                'label' => $this->translator->trans('password'),
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
@@ -121,15 +124,26 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])->add('handle', TextType::class, [
+                'label' => $this->translator->trans('handle'),
+                'help' => $this->translator->trans('handle-input-helper'),
                 'attr' => [
-                    'placeholder' => 'Handle',
                     'autocomplete' => 'off',
+                    'placeholder' => $this->translator->trans('username'),
                     'data-input-validity-checker-target' => 'input',
                     'data-input-validity-checker-path-value' => '/handle/check',
                     'data-action' => 'change->input-validity-checker#inputChange',
                 ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
+                ],
+            ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'label' => $this->translator->trans('terms-of-use', ),
+                'constraints' => [
+                    new IsTrue([
+                        'message' => $this->translator->trans('terms-required'),
+                    ]),
                 ],
             ]);
     }

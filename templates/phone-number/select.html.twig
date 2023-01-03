@@ -1,0 +1,8 @@
+<turbo-frame id="user-phone-number-select-form-frame">
+    {{ form_start(phoneNumberForm,{
+        action: path('conversation_share_phone_number', {id: conversation.id})
+    }) }}
+    {{ form_row(phoneNumberForm.phoneNumber) }}
+    <button type="submit" class="btn btn-primary">{{ 'select'|trans }}</button>
+    {{ form_end(phoneNumberForm) }}
+</turbo-frame>

@@ -54,11 +54,8 @@ class ConversationRepository extends ServiceEntityRepository
 
         $qb->andWhere(
             $qb->expr()
-                ->eq('c.owner', ':currentUser')
-        )->setParameter('currentUser', $currentUser->getId(), 'uuid');
-
-        $qb->andWhere($qb->expr() ->eq('users', ':user'))
-            ->setParameter('user', $user->getId(), 'uuid');
+                ->in('users', ':users')
+        )->setParameter('users', [$currentUser->getId(), $user->getId()]);
 
         return $qb->getQuery()
             ->getOneOrNullResult();

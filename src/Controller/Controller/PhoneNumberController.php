@@ -4,8 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
+use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Entity\PhoneNumber;
 use App\Form\PhoneNumberFormType;
+use App\Form\SelectUserAddressFormType;
+use App\Form\SelectUserPhoneNumberFormType;
+use App\Repository\MessageRepository;
 use App\Repository\PhoneNumberRepository;
 use App\Repository\UserRepository;
 use App\Service\CurrentUserService;
@@ -22,6 +27,7 @@ class PhoneNumberController extends AbstractController
         private readonly CurrentUserService $currentUserService,
         private readonly PhoneNumberRepository $phoneNumberRepository,
         private readonly UserRepository $userRepository,
+        private readonly MessageRepository $messageRepository,
     ) {
     }
 
@@ -122,6 +128,32 @@ class PhoneNumberController extends AbstractController
 
         return $this->render('phone-number/new.html.twig', [
             'phoneNumber' => $phoneNumber,
+            'phoneNumberForm' => $phoneNumberForm->createView(),
+        ]);
+    }
+
+    #[Route(path: '/share/{id}', name: 'conversation_share_phone_number')]
+    public function select(Conversation $conversation, Request $request): Response
+    {
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+        $phoneNumberForm = $this->createForm(SelectUserPhoneNumberFormType::class);
+        $phoneNumberForm->handleRequest($request);
+        if ($phoneNumberForm->isSubmitted() && $phoneNumberForm->isValid()) {
+            $phoneNumber = $phoneNumberForm->get('phoneNumber')->getData();
+            $message = new Message();
+            $message->setUser($currentUser);
+            $message->setConversation($conversation);
+            $message->setContent(
+                $phoneNumber->getCountryCode() . $phoneNumber->getContent()
+            );
+            $this->messageRepository->add($message, true);
+            return $this->redirectToRoute('conversation', [
+                'id' => $conversation->getId(),
+            ]);
+        }
+
+        return $this->render('phone-number/select.html.twig', [
+            'conversation' => $conversation,
             'phoneNumberForm' => $phoneNumberForm->createView(),
         ]);
     }

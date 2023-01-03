@@ -46,7 +46,8 @@ class ConversationController extends AbstractController
     #[Route(path: '/remove/{id}', name: 'conversation_delete', methods: ['POST'])]
     public function delete(Request $request, Conversation $conversation): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $conversation->getId(), (string)$request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $conversation->getId(), (string)$request->request->get('_token')))
+        {
             $this->conversationRepository->remove($conversation, true);
         }
 

@@ -15,6 +15,14 @@
     box-shadow: none!important;
 }
 
+.autocomplete:focus {
+    color: #212529;
+    background-color: #ffffff;
+    border-color: #b58dcd;
+    outline: 0;
+    box-shadow: none!important;
+}
+
 .fireworks{
     z-index: -1;
     position: absolute;

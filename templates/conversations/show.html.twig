@@ -26,7 +26,7 @@
                                     <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#share-address">{{ 'share-address'|trans }}</a>
                                 </li>
                                 <li class="zi-100">
-                                    <a href="#" class="dropdown-item">{{ 'share-phone-number'|trans }}</a>
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#share-phone-number">{{ 'share-phone-number'|trans }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -48,7 +48,7 @@
                             {% if app.user == message.user %}
                                 <div class="d-flex justify-content-end">
                                     <div class="col-md-9">
-                                        <div class="bg-grey text-black rounded-2 p-2">{{ message.content }}</div>
+                                        <div class="bg-grey text-black rounded-2 p-2 lead">{{ message.content }}</div>
                                         <div class="xtra-small text-muted">{{ message.createdAt|format_date }}</div>
                                     </div>
                                     <div class="col-md-1 d-flex justify-content-end">
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="bg-grey text-black rounded-2 p-2">{{ message.content }}</div>
-                                        <div class="xtra-small text-muted">{{ message.createdAt|format_date }}</div>
+                                        <div class="xtra-small text-muted">{{ message.createdAt|format_datetime('short', 'short', 'dd.MM.yy H:mm', app.user.timezone) }}</div>
                                     </div>
                                 </div>
                             {% endif %}
@@ -94,11 +94,32 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ 'share-address' }}</h5>
+                    <h5 class="modal-title">{{ 'share-address'|trans }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <turbo-frame src="{{ path('conversation_share_address', {id: conversation.id}) }}" id="user-address-select-form-frame" loading="lazy" target="_top">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </turbo-frame>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="share-phone-number" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'share-phone-numbder'|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <turbo-frame src="{{ path('conversation_share_phone_number', {id: conversation.id}) }}" id="user-phone-number-select-form-frame" loading="lazy" target="_top">
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border" role="status">
                                 <span class="visually-hidden">Loading...</span>

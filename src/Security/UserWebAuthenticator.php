@@ -24,7 +24,8 @@ class UserWebAuthenticator extends AbstractLoginFormAuthenticator
     final public const LOGIN_ROUTE = 'app_login';
 
     public function __construct(
-        private readonly UrlGeneratorInterface $urlGenerator
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly Security $security
     ) {
     }
 
@@ -49,7 +50,7 @@ class UserWebAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('dashboard'));
+        return new RedirectResponse($this->urlGenerator->generate('profile', ['id'=> $this->security->getUser()->getId()]));
     }
 
     protected function getLoginUrl(Request $request): string
