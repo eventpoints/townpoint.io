@@ -8,7 +8,6 @@ use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\PhoneNumber;
 use App\Form\PhoneNumberFormType;
-use App\Form\SelectUserAddressFormType;
 use App\Form\SelectUserPhoneNumberFormType;
 use App\Repository\MessageRepository;
 use App\Repository\PhoneNumberRepository;
@@ -139,14 +138,14 @@ class PhoneNumberController extends AbstractController
         $phoneNumberForm = $this->createForm(SelectUserPhoneNumberFormType::class);
         $phoneNumberForm->handleRequest($request);
         if ($phoneNumberForm->isSubmitted() && $phoneNumberForm->isValid()) {
-            $phoneNumber = $phoneNumberForm->get('phoneNumber')->getData();
+            $phoneNumber = $phoneNumberForm->get('phoneNumber')
+                ->getData();
             $message = new Message();
             $message->setUser($currentUser);
             $message->setConversation($conversation);
-            $message->setContent(
-                $phoneNumber->getCountryCode() . $phoneNumber->getContent()
-            );
+            $message->setContent($phoneNumber->getCountryCode() . $phoneNumber->getContent());
             $this->messageRepository->add($message, true);
+
             return $this->redirectToRoute('conversation', [
                 'id' => $conversation->getId(),
             ]);

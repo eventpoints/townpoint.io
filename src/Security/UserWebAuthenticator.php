@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Security;
 
+use App\Entity\User;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +52,14 @@ class UserWebAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('profile', ['id'=> $this->security->getUser()->getId()]));
+        $user = $this->security->getUser();
+        if (! $user instanceof User) {
+            throw new Exception('User object required');
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('profile', [
+            'id' => $user->getId(),
+        ]));
     }
 
     protected function getLoginUrl(Request $request): string

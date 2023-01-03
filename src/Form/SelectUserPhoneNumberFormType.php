@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Form;
 
-use App\Entity\Address;
 use App\Entity\PhoneNumber;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -40,10 +39,11 @@ class SelectUserPhoneNumberFormType extends AbstractType
                             ->eq('o.id', ':user')
                     )->setParameter('user', $currentUser->getId(), 'uuid')
                         ->orderBy('t.createdAt', 'ASC');
+
                     return $qb;
                 },
                 'choice_label' => function (PhoneNumber $phoneNumber): string {
-                    return $phoneNumber->getCountryCode() .' '. $phoneNumber->getContent();
+                    return $phoneNumber->getCountryCode() . ' ' . $phoneNumber->getContent();
                 },
                 'autocomplete' => true,
             ]);
