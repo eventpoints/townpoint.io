@@ -15,6 +15,7 @@ export default class extends Controller {
         this.canvas = this.canvasTarget
         this.canvasContext = this.canvas.getContext("2d");
         this.seek = this.seekTarget
+        this.seekTarget.value = 0;
         this.audioContext = new window.AudioContext()
         this.audio = new Audio(null)
         this.audio.loop = false
@@ -34,11 +35,16 @@ export default class extends Controller {
         this.analyser.minDecibels = -80;
         this.bufferLength = this.analyser.fftSize;
         this.dataArray = new Uint8Array(this.bufferLength);
+
+        this.audio.addEventListener("timeupdate", () => {
+            this.seekTarget.value = this.audio.currentTime / this.audio.duration * 100;
+            this.timeTarget.textContent = this.fmtTime(this.audio.currentTime);
+        });
     }
 
     seeking(event) {
         if (this.audio.src) {
-            const pct = this.seek.value / 100;
+            const pct = this.seekTarget.value / 100;
             this.audio.currentTime = (this.audio.duration || 0) * pct;
         }
     }
@@ -53,8 +59,10 @@ export default class extends Controller {
     async playPause(event) {
         if (this.audio.paused) {
             await this.audio.play()
+            event.target.classList.replace('mdi-play', 'mdi-pause')
             this.animate()
         } else {
+            event.target.classList.replace('mdi-pause', 'mdi-play')
             this.audio.pause()
         }
     }
@@ -76,7 +84,7 @@ export default class extends Controller {
             this.canvasContext.fillRect(0, 0, WIDTH, HEIGHT);
 
             this.canvasContext.lineWidth = 3;
-            this.canvasContext.strokeStyle = "rgb(106, 27, 154)";
+            this.canvasContext.strokeStyle = "rgb(221,221,221)";
 
             this.canvasContext.beginPath();
 
@@ -85,7 +93,7 @@ export default class extends Controller {
 
             for (let i = 0; i < this.bufferLength; i++) {
                 let v = this.dataArray[i] / 128.0;
-                let y = (v * HEIGHT) / 2;
+                let y = (v * HEIGHT) / 2 ;
 
                 if (i === 0) {
                     this.canvasContext.moveTo(x, y);

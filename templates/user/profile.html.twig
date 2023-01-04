@@ -3,7 +3,7 @@
 {% block body %}
 
     <div class="container">
-    <div class="row justify-content-center g-3">
+    <div class="row justify-content-center g-3 mt-3">
         <div class="col-12 col-md-4">
             <div class="card mb-3 sticky-top top-10">
 
@@ -86,52 +86,45 @@
                 </turbo-frame>
             {% endif %}
 
-            <div class="mt-3">
-                {#                    {% for snippet in snippets %} #}
-                {#                        <turbo-frame id="show-snippet-frame" src="{{ path('show_snippet', { id: snippet.id }) }}"> #}
-                {#                            <div class="d-flex justify-content-center"> #}
-                {#                                <div class="spinner-border" role="status"> #}
-                {#                                    <span class="visually-hidden">Loading...</span> #}
-                {#                                </div> #}
-                {#                            </div> #}
-                {#                        </turbo-frame> #}
-                {#                    {% else %} #}
-                {#                        <div class="h5 text-center text-muted"> #}
-                {#                            {{ 'no-snippets-found'|trans }} #}
-                {#                        </div> #}
-                {#                    {% endfor %} #}
-
-
-                <div {{ stimulus_controller('multi-audio-player') }}>
-                    <div class="card sticky-top mb-3">
-                        <div class="card-body z-index-9000">
+            <div class="mt-3" {{ stimulus_controller('multi-audio-player') }}>
+                <div class="card sticky-top mb-3 shadow-sm">
+                    <div class="position-relative">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>
+                                <div class="z-index-25">
                                     <a class="btn btn-outline-primary" {{ stimulus_action('multi-audio-player', 'playPause', 'click') }}>
-                                        <div class="mdi mdi-play fs-3"></div>
+                                        <div class="mdi mdi-play fs-4"></div>
                                     </a>
                                 </div>
-                                <div class="w-75">
-                                    <div class="h5" {{ stimulus_target('multi-audio-player', 'title') }}></div>
-                                    <input type="range" class="form-range" {{ stimulus_target('multi-audio-player', 'seek') }} />
+                                <div>
+                                    <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'title') }}></div>
                                 </div>
-                                <div class="h5" {{ stimulus_target('multi-audio-player', 'time') }}>--:--</div>
+                                <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'time') }}>--:--</div>
                             </div>
                         </div>
-                        <canvas class="position-absolute top-0 w-100 h-100"  {{ stimulus_target('multi-audio-player', 'canvas') }}></canvas>
+                        <input min="0" max="100" step="0.1" type="range"
+                               class="c-y w-100" {{ stimulus_target('multi-audio-player', 'seek') }} {{ stimulus_action('multi-audio-player', 'seeking', 'change') }} />
+                        <canvas class="position-absolute z-index-0 top-0 w-100 h-100" {{ stimulus_target('multi-audio-player', 'canvas') }}></canvas>
                     </div>
-
-                    {% for snippet in user.snippets %}
-                        <div class="card mb-3" {{ stimulus_action('multi-audio-player', 'loadTrack', 'click', { title: snippet.title, content: snippet.content }) }}>
-                            <div class="card-body">
-                                <div class="h5">{{ snippet.title }}</div>
-                            </div>
-                        </div>
-                    {% endfor %}
                 </div>
 
-
+                {% for snippet in user.snippets %}
+                    <div class="card mb-3" {{ stimulus_action('multi-audio-player', 'loadTrack', 'click', { title: snippet.title, content: snippet.content }) }}>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div>
+                                    <img src="{{ user.avatar }}" height="50" class="rounded-circle me-3">
+                                </div>
+                                <div>
+                                    <div class="h5 m-0">{{ snippet.title }}</div>
+                                    <div class="text-muted">{{ snippet.createdAt|format_datetime }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
+
         </div>
     </div>
 {% endblock %}
