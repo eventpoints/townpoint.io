@@ -94,6 +94,16 @@ class EventController extends AbstractController
     public function request(Event $event): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+        $hasUserRequested = $event->hasUserRequested($currentUser);
+
+        if ($hasUserRequested) {
+            $this->addFlash(FlashValueObject::TYPE_ERROR, 'already requested');
+
+            return $this->redirectToRoute('show_event', [
+                'id' => $event->getId(),
+            ]);
+        }
+
         $eventRequest = $this->eventRequestFactory->create($event, $currentUser);
         $this->eventRequestRepository->save($eventRequest, true);
 

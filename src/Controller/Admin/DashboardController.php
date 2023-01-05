@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Conversation;
 use App\Entity\Event;
 use App\Entity\EventRequest;
+use App\Entity\EventUser;
 use App\Entity\Snippet;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -53,6 +54,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Snippet', 'fas fa-audio', Snippet::class);
         yield MenuItem::linkToCrud('Conversations', 'fas fa-chat', Conversation::class);
         yield MenuItem::linkToCrud('Events', 'fas fa-chat', Event::class);
+        yield MenuItem::linkToCrud('Event Users', 'fas fa-chat', EventUser::class);
         yield MenuItem::linkToCrud('Event Requests', 'fas fa-chat', EventRequest::class);
     }
 }

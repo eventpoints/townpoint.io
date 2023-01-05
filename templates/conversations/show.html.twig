@@ -5,6 +5,14 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12 col-md-3">
+                <div class="mb-3">
+                    <a href="{{ path('conversations') }}" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="mdi mdi-arrow-left fs-3"></span>
+                        </div>
+                        <div class="h5 m-0">{{ 'conversations'|trans }}</div>
+                    </a>
+                </div>
                 <div class="card mb-3">
                     <div class="list-group list-group-flush zi-0">
                         {% for user in conversation.users %}
@@ -23,10 +31,12 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li class="zi-100">
-                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#share-address">{{ 'share-address'|trans }}</a>
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal"
+                                       data-bs-target="#share-address">{{ 'share-address'|trans }}</a>
                                 </li>
                                 <li class="zi-100">
-                                    <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#share-phone-number">{{ 'share-phone-number'|trans }}</a>
+                                    <a href="#" class="dropdown-item" data-bs-toggle="modal"
+                                       data-bs-target="#share-phone-number">{{ 'share-phone-number'|trans }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -98,7 +108,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <turbo-frame src="{{ path('conversation_share_address', {id: conversation.id}) }}" id="user-address-select-form-frame" loading="lazy" target="_top">
+                    <turbo-frame src="{{ path('conversation_share_address', {id: conversation.id}) }}"
+                                 id="user-address-select-form-frame" loading="lazy" target="_top">
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -119,7 +130,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <turbo-frame src="{{ path('conversation_share_phone_number', {id: conversation.id}) }}" id="user-phone-number-select-form-frame" loading="lazy" target="_top">
+                    <turbo-frame src="{{ path('conversation_share_phone_number', {id: conversation.id}) }}"
+                                 id="user-phone-number-select-form-frame" loading="lazy" target="_top">
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border" role="status">
                                 <span class="visually-hidden">Loading...</span>

@@ -9,7 +9,7 @@ use App\Entity\User;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,8 @@ class EventFilterForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        if (! $this->security->getUser() instanceof User) {
+        $currentUser = $this->security->getUser();
+        if (! $currentUser instanceof User) {
             throw new Exception();
         }
 
@@ -41,19 +42,35 @@ class EventFilterForm extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('startAt', DateType::class, [
-                'required' => false,
+            ->add('startAt', DateTimeType::class, [
+                'html5' => false,
                 'widget' => 'single_text',
+                'format' => 'YYYY-MM-DD HH:mm',
+                'input' => 'datetime_immutable',
                 'row_attr' => [
+                    'data-controller' => 'date-time-picker',
                     'class' => 'form-floating mb-3',
                 ],
+                'attr' => [
+                    'data-date-time-picker-target' => 'picker',
+                ],
+                'view_timezone' => $currentUser->getTimezone(),
+                'required' => false,
             ])
-            ->add('endAt', DateType::class, [
-                'required' => false,
+            ->add('endAt', DateTimeType::class, [
+                'html5' => false,
                 'widget' => 'single_text',
+                'format' => 'YYYY-MM-DD HH:mm',
+                'input' => 'datetime_immutable',
                 'row_attr' => [
+                    'data-controller' => 'date-time-picker',
                     'class' => 'form-floating mb-3',
                 ],
+                'attr' => [
+                    'data-date-time-picker-target' => 'picker',
+                ],
+                'view_timezone' => $currentUser->getTimezone(),
+                'required' => false,
             ]);
     }
 

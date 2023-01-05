@@ -29,8 +29,15 @@ class EventFormType extends AbstractType
         }
 
         $builder
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+            ])
             ->add('address', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
                 'tom_select_options' => [
                     'create' => true,
                     'createOnBlur' => true,
@@ -41,13 +48,33 @@ class EventFormType extends AbstractType
                 'autocomplete' => true,
             ])
             ->add('startAt', DateTimeType::class, [
-                'date_widget' => 'single_text',
+                'html5' => false,
+                'widget' => 'single_text',
+                'format' => 'YYYY-MM-DD HH:mm',
                 'input' => 'datetime_immutable',
+                'row_attr' => [
+                    'data-controller' => 'date-time-picker',
+                    'class' => 'form-floating mb-3',
+                ],
+                'attr' => [
+                    'data-date-time-picker-target' => 'picker',
+                ],
+                'view_timezone' => $currentUser->getTimezone(),
             ])
             ->add('endAt', DateTimeType::class, [
-                'required' => false,
-                'date_widget' => 'single_text',
+                'html5' => false,
+                'widget' => 'single_text',
+                'format' => 'YYYY-MM-DD HH:mm',
                 'input' => 'datetime_immutable',
+                'row_attr' => [
+                    'data-controller' => 'date-time-picker',
+                    'class' => 'form-floating mb-3',
+                ],
+                'attr' => [
+                    'data-date-time-picker-target' => 'picker',
+                ],
+                'view_timezone' => $currentUser->getTimezone(),
+                'required' => false,
             ]);
     }
 

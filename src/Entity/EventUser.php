@@ -7,14 +7,17 @@ namespace App\Entity;
 use App\Repository\EventParticipantRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: EventParticipantRepository::class)]
 class EventUser
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\CustomIdGenerator(UuidGenerator::class)]
+    private Uuid $id;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?User $owner = null;
@@ -33,7 +36,7 @@ class EventUser
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }

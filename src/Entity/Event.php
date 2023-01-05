@@ -43,13 +43,13 @@ class Event
     /**
      * @var Collection<int, EventUser>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventUser::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventUser::class, cascade: ['persist', 'remove'])]
     private Collection $users;
 
     /**
      * @var Collection<int, EventRequest>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventRequest::class)]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventRequest::class, cascade: ['persist', 'remove'])]
     private Collection $eventRequests;
 
     public function __construct()
@@ -59,12 +59,17 @@ class Event
         $this->eventRequests = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
     public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -220,7 +225,7 @@ class Event
         return $this;
     }
 
-    public function hasBeenRejected(User $user): bool
+    public function getHasBeenRejected(User $user): bool
     {
         return $this->getEventRequests()
             ->exists(function (int $key, EventRequest $eventRequest) use ($user): bool {
@@ -228,11 +233,27 @@ class Event
             });
     }
 
-    public function isUserAttending(User $user): bool
+    public function hasUserRequested(User $user): bool
+    {
+        return $this->getEventRequests()
+            ->exists(function (int $key, EventRequest $eventRequest) use ($user): bool {
+                return $eventRequest->getOwner() === $user;
+            });
+    }
+
+    public function getIsUserAttending(User $user): bool
     {
         return $this->getUsers()
             ->exists(function (int $key, EventUser $eventUser) use ($user): bool {
                 return $eventUser->getOwner() === $user;
+            });
+    }
+
+    public function getIsRequestPending(User $user): bool
+    {
+        return $this->getEventRequests()
+            ->exists(function (int $key, EventRequest $eventRequest) use ($user): bool {
+                return $eventRequest->getOwner() === $user && $eventRequest->isIsAccepted() === null;
             });
     }
 }

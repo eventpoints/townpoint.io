@@ -64,7 +64,7 @@
                                     {% if event.isUserAttending(app.user) %}
                                         <div>{{ event.address }}</div>
                                     {% endif %}
-                                    {% if app.user == event.owner or event.beenRejected(app.user) or event.isUserAttending(app.user) %}
+                                    {% if app.user == event.owner or event.hasBeenRejected(app.user) or event.isUserAttending(app.user) %}
                                     {% else %}
                                         <hr/>
                                         <a href="{{ path('create_event_request', {id: event.id}) }}"

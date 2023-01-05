@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\DataTransferObjects\EventFilterDto;
 use App\Entity\Event;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
@@ -66,18 +66,18 @@ class EventRepository extends ServiceEntityRepository
             )->setParameter('address', '%' . $eventFilterDto->getAddress() . '%');
         }
 
-        if ($eventFilterDto->getStartAt() instanceof DateTime) {
+        if ($eventFilterDto->getStartAt() instanceof DateTimeImmutable) {
             $qb->andWhere(
                 $qb->expr()
                     ->gt('e.startAt', ':startAt')
-            )->setParameter('startAt', $eventFilterDto->getStartAt(), Types::DATETIME_MUTABLE);
+            )->setParameter('startAt', $eventFilterDto->getStartAt(), Types::DATETIME_IMMUTABLE);
         }
 
-        if ($eventFilterDto->getEndAt() instanceof DateTime) {
+        if ($eventFilterDto->getEndAt() instanceof DateTimeImmutable) {
             $qb->andWhere(
                 $qb->expr()
                     ->lt('e.endAt', ':endAt')
-            )->setParameter('endAt', $eventFilterDto->getEndAt(), Types::DATETIME_MUTABLE);
+            )->setParameter('endAt', $eventFilterDto->getEndAt(), Types::DATETIME_IMMUTABLE);
         }
 
         $qb->orderBy('e.createdAt', 'DESC');

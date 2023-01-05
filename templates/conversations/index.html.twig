@@ -4,37 +4,41 @@
     <div class="container">
         <div class="row justify-content-center mb-3">
             <div class="col-12 col-md-6">
-                <div class="h3 mt-3">{{ 'conversations'|trans|capitalize }}</div>
-                <div class="list-group">
-                    {% for conversation in pagination %}
-                        <a href="{{ path('conversation', {id: conversation.id}) }}"
-                           class="list-group-item list-group-item-action">
-                            {% for user in conversation.users %}
-                                {% if user != app.user %}
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <img src="{{ user.avatar }}" width="50" class="rounded-circle me-3"/>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="h5 m-0">{{ 'conversations'|trans|capitalize }}</div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for conversation in pagination %}
+                            <a href="{{ path('conversation', {id: conversation.id}) }}"
+                               class="list-group-item list-group-item-action">
+                                {% for user in conversation.users %}
+                                    {% if user != app.user %}
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <img src="{{ user.avatar }}" width="50" class="rounded-circle me-3"/>
+                                            </div>
+                                            <div class="w-100">
+                                                <div class="h5 m-0">{{ user.fullName }}</div>
+                                                {% if conversation.messages.last %}
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }}</div>
+                                                        <div class="text-muted small">{{ conversation.messages.last.createdAt|format_date }}</div>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="text-muted">{{ 'no-messages'|trans }}</div>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                        <div class="w-100">
-                                            <div class="h5 m-0">{{ user.fullName }}</div>
-                                            {% if conversation.messages.last %}
-                                                <div class="d-flex justify-content-between align-items-center w-100">
-                                                    <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }}</div>
-                                                    <div class="text-muted small">{{ conversation.messages.last.createdAt|format_date }}</div>
-                                                </div>
-                                            {% else %}
-                                                <div class="text-muted">{{ 'no-messages'|trans }}</div>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </a>
-                    {% else %}
-                        <div class="list-group-item text-center text-muted">
-                            {{ 'no-conversations'|trans }}
-                        </div>
-                    {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </a>
+                        {% else %}
+                            <div class="list-group-item text-center text-muted">
+                                {{ 'no-conversations'|trans }}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
