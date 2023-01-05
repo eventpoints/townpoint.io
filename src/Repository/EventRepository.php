@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\DataTransferObjects\EventFilterDto;
 use App\Entity\Event;
 use DateTime;
-use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -28,19 +28,23 @@ class EventRepository extends ServiceEntityRepository
 
     public function save(Event $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(Event $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
@@ -50,29 +54,35 @@ class EventRepository extends ServiceEntityRepository
 
         if ($eventFilterDto->getTitle()) {
             $qb->andWhere(
-                $qb->expr()->like('e.title', ':title')
+                $qb->expr()
+                    ->like('e.title', ':title')
             )->setParameter('title', '%' . $eventFilterDto->getTitle() . '%');
         }
 
         if ($eventFilterDto->getAddress()) {
             $qb->andWhere(
-                $qb->expr()->like('e.address', ':address')
+                $qb->expr()
+                    ->like('e.address', ':address')
             )->setParameter('address', '%' . $eventFilterDto->getAddress() . '%');
         }
 
         if ($eventFilterDto->getStartAt() instanceof DateTime) {
             $qb->andWhere(
-                $qb->expr()->gt('e.startAt', ':startAt')
+                $qb->expr()
+                    ->gt('e.startAt', ':startAt')
             )->setParameter('startAt', $eventFilterDto->getStartAt(), Types::DATETIME_MUTABLE);
         }
 
         if ($eventFilterDto->getEndAt() instanceof DateTime) {
             $qb->andWhere(
-                $qb->expr()->lt('e.endAt', ':endAt')
+                $qb->expr()
+                    ->lt('e.endAt', ':endAt')
             )->setParameter('endAt', $eventFilterDto->getEndAt(), Types::DATETIME_MUTABLE);
         }
 
         $qb->orderBy('e.createdAt', 'DESC');
-        return $qb->getQuery()->getResult();
+
+        return $qb->getQuery()
+            ->getResult();
     }
 }

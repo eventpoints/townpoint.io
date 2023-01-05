@@ -1,17 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
-use App\Entity\Address;
 use App\Entity\Event;
 use App\Entity\User;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Exception;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,9 +21,6 @@ class EventFormType extends AbstractType
     ) {
     }
 
-    /**
-     * @throws Exception
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $currentUser = $this->security->getUser();
@@ -41,19 +35,19 @@ class EventFormType extends AbstractType
                     'create' => true,
                     'createOnBlur' => true,
                     'multiple' => false,
-                    'delimiter' => ';'
+                    'delimiter' => ';',
                 ],
-                'autocomplete_url' => '/user/addresses' ,
+                'autocomplete_url' => '/user/addresses',
                 'autocomplete' => true,
             ])
-            ->add('startAt', DateTimeType::class,[
+            ->add('startAt', DateTimeType::class, [
                 'date_widget' => 'single_text',
-                'input' => 'datetime_immutable'
+                'input' => 'datetime_immutable',
             ])
             ->add('endAt', DateTimeType::class, [
                 'required' => false,
                 'date_widget' => 'single_text',
-                'input' => 'datetime_immutable'
+                'input' => 'datetime_immutable',
             ]);
     }
 

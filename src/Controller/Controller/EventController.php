@@ -1,21 +1,18 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\DataTransferObjects\EventFilterDto;
-use App\Entity\Address;
 use App\Entity\Event;
 use App\Entity\EventRequest;
-use App\Entity\EventUser;
 use App\Factory\EventRequestFactory;
 use App\Factory\EventUserFactory;
-use App\Form\AddressFormType;
 use App\Form\EventFormType;
 use App\Form\Filter\EventFilterForm;
-use App\Repository\AddressRepository;
 use App\Repository\EventRepository;
 use App\Repository\EventRequestRepository;
-use App\Repository\MessageRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,15 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/events')]
 class EventController extends AbstractController
 {
-
     public function __construct(
         private readonly CurrentUserService $currentUserService,
-        private readonly EventRepository    $eventRepository,
-        private readonly EventRequestRepository    $eventRequestRepository,
-        private readonly EventUserFactory   $eventUserFactory,
-        private readonly EventRequestFactory  $eventRequestFactory,
-    )
-    {
+        private readonly EventRepository $eventRepository,
+        private readonly EventRequestRepository $eventRequestRepository,
+        private readonly EventUserFactory $eventUserFactory,
+        private readonly EventRequestFactory $eventRequestFactory,
+    ) {
     }
 
     #[Route(path: '/', name: 'events')]
@@ -48,15 +43,16 @@ class EventController extends AbstractController
 
         if ($eventForm->isSubmitted() && $eventForm->isValid()) {
             $events = $this->eventRepository->findByEventFilter($eventFilterDto);
+
             return $this->render('events/index.html.twig', [
                 'events' => $events,
-                'eventForm' => $eventForm->createView()
+                'eventForm' => $eventForm->createView(),
             ]);
         }
 
         return $this->render('events/index.html.twig', [
             'events' => $events,
-            'eventForm' => $eventForm->createView()
+            'eventForm' => $eventForm->createView(),
         ]);
     }
 
@@ -83,7 +79,6 @@ class EventController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/show/{id}', name: 'show_event')]
     public function show(Event $event, Request $request): Response
     {
@@ -91,10 +86,9 @@ class EventController extends AbstractController
 
         return $this->render('event/show.html.twig', [
             'event' => $event,
-            'eventRequests' => $eventRequests
+            'eventRequests' => $eventRequests,
         ]);
     }
-
 
     #[Route(path: '/request/{id}', name: 'create_event_request')]
     public function request(Event $event): Response
@@ -103,16 +97,21 @@ class EventController extends AbstractController
         $eventRequest = $this->eventRequestFactory->create($event, $currentUser);
         $this->eventRequestRepository->save($eventRequest, true);
 
-        return $this->redirectToRoute('show_event', ['id' => $event->getId()]);
+        return $this->redirectToRoute('show_event', [
+            'id' => $event->getId(),
+        ]);
     }
-
 
     #[Route(path: '/request/reject/{id}', name: 'reject_event_request')]
     public function reject(EventRequest $eventRequest): Response
     {
         $eventRequest->setIsAccepted(false);
         $this->eventRequestRepository->save($eventRequest, true);
-        return $this->redirectToRoute('show_event', ['id' => $eventRequest->getEvent()->getId()]);
+
+        return $this->redirectToRoute('show_event', [
+            'id' => $eventRequest->getEvent()
+                ->getId(),
+        ]);
     }
 
     #[Route(path: '/request/accept/{id}', name: 'accept_event_request')]
@@ -122,11 +121,13 @@ class EventController extends AbstractController
         $this->eventRequestRepository->save($eventRequest, true);
 
         $eventUser = $this->eventUserFactory->create($eventRequest->getOwner(), $eventRequest->getEvent());
-        $eventRequest->getEvent()->addUser($eventUser);
+        $eventRequest->getEvent()
+            ->addUser($eventUser);
         $this->eventRepository->save($eventRequest->getEvent(), true);
 
-        return $this->redirectToRoute('show_event', ['id' => $eventRequest->getEvent()->getId()]);
+        return $this->redirectToRoute('show_event', [
+            'id' => $eventRequest->getEvent()
+                ->getId(),
+        ]);
     }
-
-
 }

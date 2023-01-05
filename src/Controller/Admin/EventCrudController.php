@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Admin;
 
 use App\Entity\Event;
@@ -22,7 +24,7 @@ class EventCrudController extends AbstractCrudController
             TextField::new('title'),
             DateTimeField::new('startAt'),
             DateTimeField::new('endAt'),
-            DateTimeField::new('createdAt')
+            DateTimeField::new('createdAt'),
         ];
     }
 }

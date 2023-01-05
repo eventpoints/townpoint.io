@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity;
 
 use App\Repository\EventRepository;
@@ -38,9 +40,15 @@ class Event
     #[ORM\ManyToOne(inversedBy: 'authoredEvents')]
     private User $owner;
 
+    /**
+     * @var Collection<int, EventUser>
+     */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventUser::class, cascade: ['persist'])]
     private Collection $users;
 
+    /**
+     * @var Collection<int, EventRequest>
+     */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventRequest::class)]
     private Collection $eventRequests;
 
@@ -116,12 +124,12 @@ class Event
         return $this;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
@@ -138,7 +146,7 @@ class Event
 
     public function addUser(EventUser $user): self
     {
-        if (!$this->users->contains($user)) {
+        if (! $this->users->contains($user)) {
             $this->users->add($user);
             $user->setEvent($this);
         }
@@ -148,12 +156,8 @@ class Event
 
     public function removeUser(EventUser $user): self
     {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getEvent() === $this) {
-                $user->setEvent(null);
-            }
-        }
+        // set the owning side to null (unless already changed)
+        $this->users->removeElement($user);
 
         return $this;
     }
@@ -201,7 +205,7 @@ class Event
 
     public function addEventRequest(EventRequest $eventRequest): self
     {
-        if (!$this->eventRequests->contains($eventRequest)) {
+        if (! $this->eventRequests->contains($eventRequest)) {
             $this->eventRequests->add($eventRequest);
             $eventRequest->setEvent($this);
         }
@@ -211,29 +215,24 @@ class Event
 
     public function removeEventRequest(EventRequest $eventRequest): self
     {
-        if ($this->eventRequests->removeElement($eventRequest)) {
-            // set the owning side to null (unless already changed)
-            if ($eventRequest->getEvent() === $this) {
-                $eventRequest->setEvent(null);
-            }
-        }
+        $this->eventRequests->removeElement($eventRequest);
 
         return $this;
     }
 
-
     public function hasBeenRejected(User $user): bool
     {
-        return $this->getEventRequests()->exists(function (int $key, EventRequest $eventRequest) use ($user) {
-            return $eventRequest->getOwner() === $user && $eventRequest->isIsAccepted() === false;
-        });
+        return $this->getEventRequests()
+            ->exists(function (int $key, EventRequest $eventRequest) use ($user): bool {
+                return $eventRequest->getOwner() === $user && $eventRequest->isIsAccepted() === false;
+            });
     }
 
     public function isUserAttending(User $user): bool
     {
-        return $this->getUsers()->exists(function (int $key, EventUser $eventUser) use ($user) {
-            return $eventUser->getOwner() === $user;
-        });
+        return $this->getUsers()
+            ->exists(function (int $key, EventUser $eventUser) use ($user): bool {
+                return $eventUser->getOwner() === $user;
+            });
     }
-
 }

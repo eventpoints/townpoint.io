@@ -176,9 +176,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private Collection $snippets;
 
+    /**
+     * @var Collection<int, Event>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Event::class)]
     private Collection $authoredEvents;
 
+    /**
+     * @var Collection<int, EventRequest>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventRequest::class)]
     private Collection $eventRequests;
 
@@ -929,7 +935,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addAuthoredEvent(Event $authoredEvent): self
     {
-        if (!$this->authoredEvents->contains($authoredEvent)) {
+        if (! $this->authoredEvents->contains($authoredEvent)) {
             $this->authoredEvents->add($authoredEvent);
             $authoredEvent->setOwner($this);
         }
@@ -939,12 +945,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeAuthoredEvent(Event $authoredEvent): self
     {
-        if ($this->authoredEvents->removeElement($authoredEvent)) {
-            // set the owning side to null (unless already changed)
-            if ($authoredEvent->getOwner() === $this) {
-                $authoredEvent->setOwner(null);
-            }
-        }
+        // set the owning side to null (unless already changed)
+        $this->authoredEvents->removeElement($authoredEvent);
 
         return $this;
     }
@@ -959,7 +961,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addEventRequest(EventRequest $eventRequest): self
     {
-        if (!$this->eventRequests->contains($eventRequest)) {
+        if (! $this->eventRequests->contains($eventRequest)) {
             $this->eventRequests->add($eventRequest);
             $eventRequest->setOwner($this);
         }
@@ -969,12 +971,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeEventRequest(EventRequest $eventRequest): self
     {
-        if ($this->eventRequests->removeElement($eventRequest)) {
-            // set the owning side to null (unless already changed)
-            if ($eventRequest->getOwner() === $this) {
-                $eventRequest->setOwner(null);
-            }
-        }
+        // set the owning side to null (unless already changed)
+        $this->eventRequests->removeElement($eventRequest);
 
         return $this;
     }
