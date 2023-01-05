@@ -176,6 +176,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private Collection $snippets;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Event::class)]
+    private Collection $authoredEvents;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventRequest::class)]
+    private Collection $eventRequests;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
@@ -194,6 +200,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->phoneNumbers = new ArrayCollection();
         $this->addresses = new ArrayCollection();
         $this->snippets = new ArrayCollection();
+        $this->authoredEvents = new ArrayCollection();
+        $this->eventRequests = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -906,6 +914,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // set the owning side to null (unless already changed)
         if ($this->snippets->removeElement($snippet) && $snippet->getOwner() === $this) {
             $snippet->setOwner(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getAuthoredEvents(): Collection
+    {
+        return $this->authoredEvents;
+    }
+
+    public function addAuthoredEvent(Event $authoredEvent): self
+    {
+        if (!$this->authoredEvents->contains($authoredEvent)) {
+            $this->authoredEvents->add($authoredEvent);
+            $authoredEvent->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthoredEvent(Event $authoredEvent): self
+    {
+        if ($this->authoredEvents->removeElement($authoredEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($authoredEvent->getOwner() === $this) {
+                $authoredEvent->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EventRequest>
+     */
+    public function getEventRequests(): Collection
+    {
+        return $this->eventRequests;
+    }
+
+    public function addEventRequest(EventRequest $eventRequest): self
+    {
+        if (!$this->eventRequests->contains($eventRequest)) {
+            $this->eventRequests->add($eventRequest);
+            $eventRequest->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventRequest(EventRequest $eventRequest): self
+    {
+        if ($this->eventRequests->removeElement($eventRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($eventRequest->getOwner() === $this) {
+                $eventRequest->setOwner(null);
+            }
         }
 
         return $this;

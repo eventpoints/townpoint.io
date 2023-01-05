@@ -7,11 +7,16 @@
 @import "bootstrap-icons";
 @import "audio-player.scss";
 
+.event{
+    background-color: #ffffff;
+    opacity: 1;
+    background: repeating-linear-gradient( 45deg, #6a1b9a, #6a1b9a 5px, #ffffff 5px, #ffffff 25px );
+}
 
 body{
-    background-color: #e5e5f7;
+    background-color: #ffffff;
     opacity: 0.8;
-    background-image:  radial-gradient(#444cf7 0.5px, transparent 0.5px), radial-gradient(#444cf7 0.5px, #e5e5f7 0.5px);
+    background-image:  radial-gradient(#6a1b9a 0.5px, transparent 0.5px), radial-gradient(#6a1b9a 0.5px, #ffffff 0.5px);
     background-size: 20px 20px;
     background-position: 0 0,10px 10px;
 }
@@ -32,7 +37,7 @@ body{
     transform: translateY(-50%);
 }
 
-input[type="range"] {
+.custom-tp-range[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
@@ -40,7 +45,7 @@ input[type="range"] {
     width: 100%;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+.custom-tp-range[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
     background-color: #6a1b9a;
@@ -50,14 +55,14 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 
-input[type="range"]::-webkit-slider-thumb:hover {
+.custom-tp-range[type="range"]::-webkit-slider-thumb:hover {
     transition: all 0.5s ease-in-out;
     height: 1.5rem;
     width: 1.5rem;
     z-index: 15
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
+.custom-tp-range[type="range"]::-webkit-slider-runnable-track {
     background-color: transparent;
     border-radius: 0.5rem;
     height: 1rem;

@@ -1,0 +1,97 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+
+            <div class="col-12 col-md-12">
+                {{ include('partials/_nav.html.twig') }}
+            </div>
+
+            <div class="col-12 col-md-4">
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        {{ form_start(eventForm) }}
+                        {{ form_row(eventForm.title) }}
+                        {{ form_row(eventForm.address) }}
+                        <div class="input-group">
+                            {{ form_row(eventForm.startAt) }}
+                            {{ form_row(eventForm.endAt) }}
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('events') }}" class="btn btn-secondary">{{ 'reset'|trans }}</a>
+                            <button type="submit" class="btn btn-outline-primary">{{ 'search'|trans }}</button>
+                        </div>
+                        {{ form_end(eventForm) }}
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <a href="{{ path('create_event') }}"
+                       class="btn btn-outline-primary">{{ 'create-event'|trans }}</a>
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-8">
+                <div class="row row-cols-1 row-cols-md-2 g-3">
+                    {% for event in events %}
+                        <div class="col-12 col-md-6">
+                            <div class="card h-100 position-relative">
+                                <div class="card-body">
+                                    <div class="mb-2 d-flex justify-content-between align-items-start">
+                                        <a href="{{ path('show_event', {id: event.id}) }}"><span
+                                                    class="h5 me-2"> {{ event.title }}</span></a>
+                                        <span class="d-flex justify-content-between rounded-pill bg-primary px-2 text-white">
+                                   <span class="mdi mdi-account-group me-1"></span>
+                                    <span class="">{{ event.users.count|compact_notation }}</span>
+                                </span>
+                                    </div>
+                                    <div class="text-muted mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                            <span class="lh-1"> {{ event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
+                                            <span class="lh-1"> {{ event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                        </div>
+                                    </div>
+                                    {% if event.isUserAttending(app.user) %}
+                                        <div>{{ event.address }}</div>
+                                    {% endif %}
+                                    {% if app.user == event.owner or event.beenRejected(app.user) or event.isUserAttending(app.user) %}
+                                    {% else %}
+                                        <hr/>
+                                        <a href="{{ path('create_event_request', {id: event.id}) }}"
+                                           class="btn btn-outline-primary w-100">{{ 'request-invite'|trans }}</a>
+                                    {% endif %}
+                                </div>
+                                <div class="list-group list-group-flush">
+                                    <a href="{{ path('profile', {id: event.owner.id}) }}"
+                                       class="list-group-item list-group-item-action">
+
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ event.owner.avatar }}" width="35" class="rounded-circle me-2"/>
+                                            <div>
+                                                <div class="lh-1 fw-bold">{{ event.owner.fullName }}</div>
+                                                <div class="text-muted small">{{ event.createdAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+

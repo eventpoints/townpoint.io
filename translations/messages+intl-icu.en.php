@@ -57,7 +57,7 @@ return [
     'something-went-very-wrong' => 'something went very wrong',
     'sorry about this! The problem is on our end.' => 'sorry about this! The problem is on our end.',
     'terms' => [
-        'terms-of-use' => 'I agree to these %path%',
+        'terms-of-use' => 'I agree to these ',
         'acceptance-of-agreement' => 'Acceptance Of This Agreement',
         'acceptance-of-agreement-content' => 'Your access to and use Townpoint.io ("the Website") is subject exclusively to these Terms and Conditions. You will not use the Website for any purpose that is unlawful or prohibited by these Terms and Conditions. By using the Website you are fully accepting the terms, conditions and disclaimers contained in this notice. If you do not accept these Terms and Conditions you must immediately stop using the Website. (“Townpoint”)  is a trading entity under the trading name TCPX LLP.',
         'advice' => 'Advice',

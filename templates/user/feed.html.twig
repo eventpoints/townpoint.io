@@ -1,24 +1,23 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
 {% extends 'base.html.twig' %}
 
 
 {% block body %}
-
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6">
-                <div class="display-3 mb-2">
-                    {% if mode.mode == 'WORK' %}
-                        <span class="bg-grey badge text-info rounded-pill" href="#">{{ mode.mode }}</span>
-                    {% elseif mode.mode == 'PLAY' %}
-                        <span class="bg-grey badge text-danger rounded-pill" href="#">{{ mode.mode }}</span>
-                    {% else %}
-                        <span class="bg-grey badge text-success rounded-pill" href="#">{{ mode.mode }}</span>
-                    {% endif %}
-                </div>
+        <div class="row g-3 justify-content-center">
 
-                {{ wiki|raw }}
-
+            <div class="col-12 col-md-12">
+                {{ include('partials/_nav.html.twig') }}
             </div>
+
+            <div class="col-12 col-md-12">
+                <div class="card">
+                <div class="card-body text-center">
+                </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

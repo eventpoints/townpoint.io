@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand bg-light">
+<nav class="navbar navbar-expand bg-light mb-3">
     <div class="container">
         <a class="navbar-brand" href="{{ path('app_register') }}">
             <img src="{{ asset('/images/logo.png') }}" height="20">
@@ -62,9 +62,15 @@
                     <div class="h4 my-2">{{ app.user.fullName|capitalize }}</div>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('feed', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
+                    <a href="{{ path('feed') }}" class="btn btn-outline-dark w-100">
                         <div class="mdi mdi-account-group-outline fs-3"></div>
                         <div class="fw-bold">{{ 'feed'|trans|capitalize }}</div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('events') }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-calendar fs-3"></div>
+                        <div class="fw-bold">{{ 'events'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">

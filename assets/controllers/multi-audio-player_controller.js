@@ -16,7 +16,10 @@ export default class extends Controller {
         this.canvasContext = this.canvas.getContext("2d");
         this.seek = this.seekTarget
         this.seekTarget.value = 0;
-        this.audioContext = new window.AudioContext()
+
+        let audioCtx = window.AudioContext || window.webkitAudioContext;
+        this.audioContext = new audioCtx;
+
         this.audio = new Audio(null)
         this.audio.loop = false
         this.audio.preload = 'auto';
