@@ -64,22 +64,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->add($user, true);
     }
 
-    public function createAvgUserViewsCountCriteria(User $user): mixed
-    {
-        $qb = $this->createQueryBuilder('u');
-        $qb->innerJoin('u.viewed', 'v');
-        $qb->select(
-            $qb->expr()
-                ->quot($qb->expr() ->count('v.user'), $user->getViewed() ->count()) . 'as average_count'
-        );
-
-        $qb->andWhere($qb->expr() ->eq('v.owner', ':userId'))
-            ->setParameter('userId', $user->getId(), 'uuid');
-
-        return $qb->getQuery()
-            ->getScalarResult();
-    }
-
     public function findPostsByUser(User $user): mixed
     {
         $qb = $this->createQueryBuilder('u');
