@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method EventUser[]    findAll()
  * @method EventUser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EventParticipantRepository extends ServiceEntityRepository
+class EventUserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

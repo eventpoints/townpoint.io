@@ -8,14 +8,17 @@ use App\Enum\ReactionEnum;
 use App\Repository\ReactionRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ReactionRepository::class)]
 class Reaction
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\CustomIdGenerator(UuidGenerator::class)]
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private ReactionEnum $type;
@@ -29,7 +32,7 @@ class Reaction
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
-    public function getId(): ?int
+    public function getId(): Uuid
     {
         return $this->id;
     }

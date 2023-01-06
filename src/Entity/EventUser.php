@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use App\Repository\EventParticipantRepository;
+use App\Repository\EventUserRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: EventParticipantRepository::class)]
+#[ORM\Entity(repositoryClass: EventUserRepository::class)]
 class EventUser
 {
     #[ORM\Id]

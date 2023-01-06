@@ -69,12 +69,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $age = null;
 
     /**
-     * @var Collection<int, Statement> $statements
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Statement::class)]
-    private Collection $statements;
-
-    /**
      * @var Collection<int, Interactor> $interactors
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Interactor::class)]
@@ -100,36 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reaction::class)]
     private Collection $reactions;
-
-    /**
-     * @var Collection<int, View> $viewed
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: View::class, orphanRemoval: true)]
-    private Collection $viewed;
-
-    /**
-     * @var Collection<int, View> $views
-     */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: View::class)]
-    private Collection $views;
-
-    /**
-     * @var Collection<int, Poll> $polls
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Poll::class)]
-    private Collection $polls;
-
-    /**
-     * @var Collection<int, PollAnswer> $pollAnswers
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: PollAnswer::class)]
-    private Collection $pollAnswers;
-
-    /**
-     * @var Collection<int, Duration> $durations
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Duration::class)]
-    private Collection $durations;
 
     #[ORM\Column(length: 2)]
     private ?string $language = 'EN';
@@ -191,16 +155,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
-        $this->statements = new ArrayCollection();
         $this->interactors = new ArrayCollection();
         $this->friendsWithMe = new ArrayCollection();
         $this->authoredReactions = new ArrayCollection();
         $this->reactions = new ArrayCollection();
-        $this->viewed = new ArrayCollection();
-        $this->views = new ArrayCollection();
-        $this->polls = new ArrayCollection();
-        $this->pollAnswers = new ArrayCollection();
-        $this->durations = new ArrayCollection();
         $this->listening = new ArrayCollection();
         $this->listeners = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
@@ -373,34 +331,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAge(int $age): self
     {
         $this->age = $age;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Statement>
-     */
-    public function getStatements(): Collection
-    {
-        return $this->statements;
-    }
-
-    public function addStatement(Statement $statement): self
-    {
-        if (! $this->statements->contains($statement)) {
-            $this->statements->add($statement);
-            $statement->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStatement(Statement $statement): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->statements->removeElement($statement) && $statement->getOwner() === $this) {
-            $statement->setOwner(null);
-        }
 
         return $this;
     }
@@ -584,146 +514,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // set the owning side to null (unless already changed)
         if ($this->reactions->removeElement($reaction) && $reaction->getUser() === $this) {
             $reaction->setUser(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, View>
-     */
-    public function getViewed(): Collection
-    {
-        return $this->viewed;
-    }
-
-    public function addViewed(View $viewed): self
-    {
-        if (! $this->viewed->contains($viewed)) {
-            $this->viewed->add($viewed);
-            $viewed->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeViewed(View $viewed): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->viewed->removeElement($viewed) && $viewed->getOwner() === $this) {
-            $viewed->setOwner(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, View>
-     */
-    public function getViews(): Collection
-    {
-        return $this->views;
-    }
-
-    public function addView(View $view): self
-    {
-        if (! $this->views->contains($view)) {
-            $this->views->add($view);
-            $view->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeView(View $view): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->views->removeElement($view) && $view->getUser() === $this) {
-            $view->setUser(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Poll>
-     */
-    public function getPolls(): Collection
-    {
-        return $this->polls;
-    }
-
-    public function addPoll(Poll $poll): self
-    {
-        if (! $this->polls->contains($poll)) {
-            $this->polls->add($poll);
-            $poll->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removePoll(Poll $poll): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->polls->removeElement($poll) && $poll->getOwner() === $this) {
-            $poll->setOwner(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, PollAnswer>
-     */
-    public function getPollAnswers(): Collection
-    {
-        return $this->pollAnswers;
-    }
-
-    public function addPollAnswer(PollAnswer $pollAnswer): self
-    {
-        if (! $this->pollAnswers->contains($pollAnswer)) {
-            $this->pollAnswers->add($pollAnswer);
-            $pollAnswer->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removePollAnswer(PollAnswer $pollAnswer): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->pollAnswers->removeElement($pollAnswer) && $pollAnswer->getOwner() === $this) {
-            $pollAnswer->setOwner(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Duration>
-     */
-    public function getDurations(): Collection
-    {
-        return $this->durations;
-    }
-
-    public function addDuration(Duration $duration): self
-    {
-        if (! $this->durations->contains($duration)) {
-            $this->durations->add($duration);
-            $duration->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDuration(Duration $duration): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->durations->removeElement($duration) && $duration->getOwner() === $this) {
-            $duration->setOwner(null);
         }
 
         return $this;
