@@ -4,9 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Form;
 
-use App\Entity\Event;
+use App\Entity\Event\Event;
 use App\Entity\User;
 use Exception;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -75,6 +76,16 @@ class EventFormType extends AbstractType
                 ],
                 'view_timezone' => $currentUser->getTimezone(),
                 'required' => false,
+            ])
+            ->add('invitations', EntityType::class, [
+                'mapped' => false,
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+                'class' => User::class,
+                'choice_label' => 'handle',
+                'autocomplete' => true,
+                'multiple' => true,
             ]);
     }
 

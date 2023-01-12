@@ -1,0 +1,8 @@
+{{ form_start(groupForm) }}
+{{ form_row(groupForm.title) }}
+{{ form_row(groupForm.purpose) }}
+{{ form_row(groupForm.type) }}
+<div class="text-end">
+    <button type="submit" class="btn btn-outline-primary">{{ 'create'|trans }}</button>
+</div>
+{{ form_end(groupForm) }}

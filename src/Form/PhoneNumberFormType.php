@@ -24,13 +24,15 @@ class PhoneNumberFormType extends AbstractType
     {
         $builder
             ->add('content', TelType::class, [
-                'attr' => [
-                    'placeholder' => $this->translator->trans('phone-number'),
+                'label' => $this->translator->trans('phone-number'),
+                'row_attr' => [
+                    'class' => 'form-floating w-75 mb-3',
                 ],
             ])
             ->add('countryCode', TextType::class, [
-                'attr' => [
-                    'placeholder' => $this->translator->trans('dial-code'),
+                'label' => $this->translator->trans('dial-code'),
+                'row_attr' => [
+                    'class' => 'form-floating w-25 mb-3',
                 ],
             ])
             ->add('isDefault', CheckboxType::class, [

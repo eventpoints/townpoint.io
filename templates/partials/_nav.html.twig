@@ -6,6 +6,8 @@
                    aria-current="page" href="{{ path('feed') }}">{{ 'feed'|trans }}</a>
                 <a class="flex-sm-fill text-sm-center nav-link {% if app.request.attributes.get('_route') == 'events' %}active{% endif %}"
                    href="{{ path('events') }}">{{ 'events'|trans }}</a>
+                <a class="flex-sm-fill text-sm-center nav-link {% if app.request.attributes.get('_route') == 'groups' %}active{% endif %}"
+                   href="{{ path('groups') }}">{{ 'groups'|trans }}</a>
             </nav>
         </div>
     </div>

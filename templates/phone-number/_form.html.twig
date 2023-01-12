@@ -1,0 +1,12 @@
+{{ form_start(phoneNumberForm) }}
+<div class="row">
+    <div class="input-group">
+        {{ form_row(phoneNumberForm.countryCode) }}
+        {{ form_row(phoneNumberForm.content) }}
+    </div>
+    {{ form_row(phoneNumberForm.isDefault) }}
+    <div class="text-end">
+        <button type="submit" class="btn btn-outline-primary">{{ 'save'|trans }}</button>
+    </div>
+</div>
+{{ form_end(phoneNumberForm) }}

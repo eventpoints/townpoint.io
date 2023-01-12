@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4">
+                <div class="card">
+
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <img src="{{ group.photo }}" width="50" class="rounded-circle me-3"/>
+                            </div>
+                            <div class="text-end">
+                                <h5>{{ group.title }}</h5>
+                                <div class="text-muted">{{ group.createdAt|format_date }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <ul class="nav nav-pills flex-column flex-sm-row card-header-pills" id="pills-tab"
+                            role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link btn-outline-primary active" id="pills-home-tab"
+                                        data-bs-toggle="pill"
+                                        data-bs-target="#home" type="button" role="tab" aria-controls="pills-home"
+                                        aria-selected="true">{{ 'information'|trans }}</button>
+                            </li>
+                            {% if group.isUserMember(app.user) %}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="pills-home-tab"
+                                       data-bs-toggle="pill"
+                                       data-bs-target="#members" type="button" role="tab"
+                                       aria-controls="pills-home"
+                                       aria-selected="true">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>{{ 'members'|trans }}</div>
+                                            <div class="badge text-bg-dark ms-2 fw-bold lh-1">{{ group.groupUsers.count|compact_notation }}</div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill"
+                                            data-bs-target="#member-requests" type="button" role="tab"
+                                            aria-controls="pills-home"
+                                            aria-selected="true">{{ 'requests'|trans }}</button>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane card-body fade show active" id="home" role="tabpanel"
+                             aria-labelledby="pills-home-tab" tabindex="0">
+                            <div class="lead">{{ group.purpose }}</div>
+                        </div>
+
+                        {% if group.isUserMember(app.user) %}
+                            <div class="tab-pane fade list-group list-group-flush" id="members" role="tabpanel"
+                                 aria-labelledby="pills-home-tab" tabindex="0">
+                                {% for groupUser in group.groupUsers %}
+                                    <a href="{{ path('profile', {id: groupUser.owner.id}) }}"
+                                       class="d-flex align-items-center list-group-item-action list-group-item">
+                                        <img src="{{ groupUser.owner.avatar }}" width="40"
+                                             class="rounded-circle me-3"/>
+                                        <div class="h5 m-0">{{ groupUser.owner.fullName }}</div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if group.userMember(app.user) and group.isUserAdmin(app.user) %}
+                            <div class="tab-pane fade list-group list-group-flush" id="member-requests" role="tabpanel"
+                                 aria-labelledby="pills-home-tab" tabindex="0">
+                                {% for groupRequest in group.groupRequests %}
+                                    {% if groupRequest.isAccepted == null %}
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <a href="{{ path('profile', {id: groupRequest.owner.id}) }}"
+                                                   class="d-flex align-items-center">
+                                                    <img src="{{ groupRequest.owner.avatar }}" width="40"
+                                                         class="rounded-circle me-3"/>
+                                                    <div class="h5 m-0">{{ groupRequest.owner.fullName }}</div>
+                                                </a>
+                                                <div class="d-flex">
+                                                    <a class="btn link-primary"
+                                                       href="{{ path('accept_group_request', { id: groupRequest.id }) }}">
+                                                        <span class="mdi mdi-check fs-4"></span>
+                                                    </a>
+                                                    <a class="btn link-danger"
+                                                       href="{{ path('reject_group_request', { id: groupRequest.id }) }}">
+                                                        <span class="mdi mdi-close fs-4"></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if not group.userMember(app.user) %}
+                        <div class="card-footer text-center">
+                            {% if not group.userRequested(app.user) %}
+                                <a href="{{ path('group_request', {id: group.id}) }}"
+                                   class="btn btn-outline-primary w-100">
+                                    {{ 'join-group'|trans }}
+                                </a>
+                            {% else %}
+                                <div class="fw-bold text-center text-muted">
+                                    {{ 'membership-pending'|trans }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+            <div class="col-12 col-md-8">
+            </div>
+        </div>
+    </div>
+{% endblock %}

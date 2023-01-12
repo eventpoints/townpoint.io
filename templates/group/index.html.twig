@@ -1,0 +1,60 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+
+            <div class="col-12 col-md-12">
+                {{ include('partials/_nav.html.twig') }}
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-outline-primary" href="{{ path('create_group') }}">{{ 'create-group'|trans }}</a>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="row g-2">
+                    {% for group in groups %}
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <a class="link-dark h5" href="{{ path('show_group', {id: group.id}) }}">
+                                                <img src="{{ group.photo }}" width="50" class="rounded-circle me-3"/>
+                                            </a>
+                                        </div>
+                                        <div class="text-end">
+                                            <a class="link-dark h5" href="{{ path('show_group', {id: group.id}) }}">
+                                                <div class="h5">{{ group.title }}</div>
+                                            </a>
+                                            <span class="rounded-pill bg-primary px-2 text-white">
+                                                    <span class="mdi mdi-account-group me-1"></span>
+                                                    <span class="">{{ group.groupUsers.count|compact_notation }}</span>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="lead">{{ group.purpose }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+

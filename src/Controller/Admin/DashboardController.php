@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\Controller\Admin;
 
 use App\Entity\Conversation;
-use App\Entity\Event;
-use App\Entity\EventRequest;
-use App\Entity\EventUser;
+use App\Entity\Event\Event;
+use App\Entity\Event\EventRequest;
+use App\Entity\Event\EventUser;
 use App\Entity\Snippet;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;

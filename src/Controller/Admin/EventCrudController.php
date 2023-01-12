@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Event;
+use App\Entity\Event\Event;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;

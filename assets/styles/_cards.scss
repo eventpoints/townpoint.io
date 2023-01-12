@@ -9,7 +9,7 @@ $card-box-shadow:                   null;
 $card-inner-border-radius:          subtract($card-border-radius, $card-border-width);
 $card-cap-padding-y:                $card-spacer-y * .5;
 $card-cap-padding-x:                $card-spacer-x;
-$card-cap-bg:                       rgba($black, .03);
+$card-cap-bg:                       $white;
 $card-cap-color:                    null;
 $card-height:                       null;
 $card-color:                        null;

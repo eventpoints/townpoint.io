@@ -6,10 +6,18 @@
             <turbo-frame id="address-form-frame" target="_top">
                 <div class="card">
                     <div class="card-header">
-                            <span class="mdi mdi-arrow-left"></span>
+                        <div>
+                            <a class="btn btn-outline-primary" href="{{ path('account', {'_fragment': 'addresses'}) }}"
+                               data-turbo-frame="_top">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="mdi mdi-arrow-left me-4"></span>
+                                    <div>{{ 'account'|trans }}</div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <h5>{{ 'edit-address'|trans }}</h5>
+                        <h5>{{ 'new-address'|trans }}</h5>
                         {{ include('address/_form.html.twig') }}
                     </div>
                 </div>

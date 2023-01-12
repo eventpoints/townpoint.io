@@ -6,9 +6,15 @@
             <turbo-frame id="address-form-frame" target="_top">
                 <div class="card">
                     <div class="card-header">
-                        <a class="btn btn-outline-primary" href="{{ path('account', {'_fragment': 'addresses'}) }}" data-turbo-frame="_top">
-                            <span class="mdi mdi-arrow-left"></span>
-                        </a>
+                        <div>
+                            <a class="btn btn-outline-primary" href="{{ path('account', {'_fragment': 'addresses'}) }}"
+                               data-turbo-frame="_top">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="mdi mdi-arrow-left me-4"></span>
+                                    <div>{{ 'account'|trans }}</div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     <div class="card-body">
                         <h5>{{ 'new-address'|trans }}</h5>

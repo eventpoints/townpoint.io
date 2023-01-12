@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\EventRequest;
+use App\Entity\Event\EventRequest;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;

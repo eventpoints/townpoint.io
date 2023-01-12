@@ -17,7 +17,7 @@ class PhoneNumber
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
-    private Uuid $id;
+    private ?Uuid $id;
 
     #[ORM\Column(length: 20)]
     private ?string $content = null;
@@ -40,7 +40,7 @@ class PhoneNumber
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): Uuid
+    public function getId(): ?Uuid
     {
         return $this->id;
     }

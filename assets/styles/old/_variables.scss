@@ -92,7 +92,7 @@ $btn-box-shadow:              $box-shadow !default;
 
 // Forms
 
-$input-bg:                              transparent !default;
+$input-bg:                              $white !default;
 $input-disabled-bg:                     rgba($white, .1) !default;
 
 $input-border-color:                    rgba($black, .4) !default;

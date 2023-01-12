@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <turbo-frame id="comment-form-frame" target="_top">
+                <div class="card">
+                    <div class="card-body">
+                        {{ include('comment/_form.html.twig', {path: path}) }}
+                    </div>
+                </div>
+            </turbo-frame>
+        </div>
+    </div>
+{% endblock %}

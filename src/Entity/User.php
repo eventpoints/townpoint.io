@@ -4,6 +4,11 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Business\Business;
+use App\Entity\Event\Event;
+use App\Entity\Event\EventInvite;
+use App\Entity\Event\EventRequest;
+use App\Entity\Group\GroupRequest;
 use App\Entity\Traits\ProfileTrait;
 use App\Enum\ReactionEnum;
 use App\Repository\UserRepository;
@@ -67,12 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?int $age = null;
-
-    /**
-     * @var Collection<int, Interactor> $interactors
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Interactor::class)]
-    private Collection $interactors;
 
     #[ORM\Column(length: 255)]
     private ?string $countryOfOrigin = null;
@@ -152,10 +151,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventRequest::class)]
     private Collection $eventRequests;
 
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Comment::class)]
+    private Collection $comments;
+
+    /**
+     * @var Collection<int, Business>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Business::class)]
+    private Collection $businesses;
+
+    /**
+     * @var Collection<int, EventInvite>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventInvite::class, orphanRemoval: true)]
+    private Collection $eventInvites;
+
+    /**
+     * @var Collection<int, GroupRequest>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GroupRequest::class, orphanRemoval: true)]
+    private Collection $groupRequests;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
-        $this->interactors = new ArrayCollection();
         $this->friendsWithMe = new ArrayCollection();
         $this->authoredReactions = new ArrayCollection();
         $this->reactions = new ArrayCollection();
@@ -166,6 +188,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->snippets = new ArrayCollection();
         $this->authoredEvents = new ArrayCollection();
         $this->eventRequests = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->businesses = new ArrayCollection();
+        $this->eventInvites = new ArrayCollection();
+        $this->groupRequests = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -331,74 +357,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAge(int $age): self
     {
         $this->age = $age;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Interactor>
-     */
-    public function getInteractors(): Collection
-    {
-        return $this->interactors;
-    }
-
-    public function addFriend(Interactor $friend): self
-    {
-        if (! $this->interactors->contains($friend)) {
-            $this->interactors->add($friend);
-            $friend->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFriend(Interactor $friend): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->interactors->removeElement($friend) && $friend->getOwner() === $this) {
-            $friend->setOwner(null);
-        }
-
-        return $this;
-    }
-
-    public function hasFriend(self $user): bool
-    {
-        /** @var Interactor $friend */
-        foreach ($this->interactors as $friend) {
-            if ($friend->getUser() === $user && $friend->isIsAccepted()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return Collection<int, Interactor>
-     */
-    public function getFriendsWithMe(): Collection
-    {
-        return $this->friendsWithMe;
-    }
-
-    public function addFriendsWithMe(Interactor $friendsWithMe): self
-    {
-        if (! $this->friendsWithMe->contains($friendsWithMe)) {
-            $this->friendsWithMe->add($friendsWithMe);
-            $friendsWithMe->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFriendsWithMe(Interactor $friendsWithMe): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->friendsWithMe->removeElement($friendsWithMe) && $friendsWithMe->getUser() === $this) {
-            $friendsWithMe->setUser(null);
-        }
 
         return $this;
     }
@@ -763,6 +721,118 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // set the owning side to null (unless already changed)
         $this->eventRequests->removeElement($eventRequest);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (! $this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($comment->getOwner() === $this) {
+            $this->comments->removeElement($comment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Business>
+     */
+    public function getBusinesses(): Collection
+    {
+        return $this->businesses;
+    }
+
+    public function addBusiness(Business $business): self
+    {
+        if (! $this->businesses->contains($business)) {
+            $this->businesses->add($business);
+            $business->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBusiness(Business $business): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($business->getOwner() === $this) {
+            $this->businesses->removeElement($business);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EventInvite>
+     */
+    public function getEventInvites(): Collection
+    {
+        return $this->eventInvites;
+    }
+
+    public function addEventInvite(EventInvite $eventInvite): self
+    {
+        if (! $this->eventInvites->contains($eventInvite)) {
+            $this->eventInvites->add($eventInvite);
+            $eventInvite->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventInvite(EventInvite $eventInvite): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->eventInvites->removeElement($eventInvite) && $eventInvite->getOwner() === $this) {
+            $eventInvite->setOwner(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GroupRequest>
+     */
+    public function getGroupRequests(): Collection
+    {
+        return $this->groupRequests;
+    }
+
+    public function addGroupRequest(GroupRequest $groupRequest): self
+    {
+        if (! $this->groupRequests->contains($groupRequest)) {
+            $this->groupRequests->add($groupRequest);
+            $groupRequest->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupRequest(GroupRequest $groupRequest): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($groupRequest->getOwner() === $this) {
+            $this->groupRequests->removeElement($groupRequest);
+        }
 
         return $this;
     }
