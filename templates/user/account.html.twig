@@ -4,24 +4,24 @@
 
 {% block body %}
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row g-2 justify-content-center">
             <div class="col-12 col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <nav class="nav nav-pills flex-column" id="v-pills-tab" role="tablist"
                              aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
+                            <a class="flex-sm-fill text-sm-center nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
                                data-bs-target="#account" href="#account" type="button" role="tab"
                                aria-controls="v-pills-home"
                                aria-selected="true">{{ 'account'|trans|upper }}</a>
 
-                            <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
+                            <a class="flex-sm-fill text-sm-center nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
                                data-bs-target="#addresses"
                                href="#addresses"
                                type="button" role="tab" aria-controls="v-pills-settings"
                                aria-selected="false">{{ 'addresses'|trans|upper }}</a>
 
-                            <a class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
+                            <a class="flex-sm-fill text-sm-center nav-link" id="v-pills-settings-tab" data-bs-toggle="pill"
                                data-bs-target="#phone-numbers" href="#phone-numbers" type="button" role="tab"
                                aria-controls="v-pills-settings"
                                aria-selected="false">{{ 'phone-numbers'|trans|upper }}</a>

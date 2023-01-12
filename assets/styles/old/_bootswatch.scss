@@ -159,18 +159,6 @@ body {
   }
 }
 
-.nav-pills {
-  .nav-link {
-    transition: none;
-
-    &:hover,
-    &:focus {
-      color: $white;
-      isolation: auto;
-    }
-  }
-}
-
 // Indicators
 
 .alert {
