@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{# where the phone numbers are displayed #}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-2 justify-content-center">
+            <div class="col-12 col-md-3">
+                {{ include('partials/_account-menu.html.twig') }}
+            </div>
+            <div class="col-12 col-md-9">
+
+                    <div class="card-body row g-2">
+                        <div class="list-group mb-3">
+                            {% for phoneNumber in app.user.phoneNumbers %}
+                                {{ include('phone-number/_show.html.twig') }}
+                            {% endfor %}
+                        </div>
+                        <div class="text-center">
+                            <a href="{{ path('create_phone_number') }}" class="btn btn-outline-primary">add
+                                phone</a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

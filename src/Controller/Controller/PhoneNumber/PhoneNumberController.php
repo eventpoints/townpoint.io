@@ -28,6 +28,12 @@ class PhoneNumberController extends AbstractController
     ) {
     }
 
+    #[Route(path: '/', name: 'phone-numbers')]
+    public function index(): Response
+    {
+        return $this->render('phone-number/index.html.twig');
+    }
+
     #[Route(path: '/show/{id}', name: 'show_phone_number')]
     public function show(PhoneNumber $phoneNumber): Response
     {

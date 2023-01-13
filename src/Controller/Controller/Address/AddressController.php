@@ -28,6 +28,12 @@ class AddressController extends AbstractController
     ) {
     }
 
+    #[Route(path: '/', name: 'addresses')]
+    public function index(): Response
+    {
+        return $this->render('address/index.html.twig');
+    }
+
     #[Route(path: '/create', name: 'create_address')]
     public function create(Request $request): Response
     {
