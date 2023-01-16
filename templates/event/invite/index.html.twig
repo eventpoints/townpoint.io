@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="card mb-3">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item h5">
+                            {{ 'invitations'|trans }}
+                        </div>
+                        {% for eventInvite in app.user.eventInvites %}
+                            <div class="list-group-item list-group-item-action">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a href="{{ path('show_event', {id: eventInvite.event.id}) }}"
+                                       class="">
+                                        <div class="h5 m-0">{{ eventInvite.event.title }}</div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                            <span class="lh-1"> {{ eventInvite.event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
+                                            <span class="lh-1"> {{ eventInvite.event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                        </div>
+                                    </a>
+                                    <div class="d-flex">
+                                        <a class="btn link-primary"
+                                           href="{{ path('accept_event_invite', { id: eventInvite.id }) }}">
+                                            <span class="mdi mdi-check fs-4"></span>
+                                        </a>
+                                        <a class="btn link-danger"
+                                           href="{{ path('reject_event_invite', { id: eventInvite.id }) }}">
+                                            <span class="mdi mdi-close fs-4"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="list-group-item text-center text-muted fw-bold">
+                                {{ 'no-invitations'|trans }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

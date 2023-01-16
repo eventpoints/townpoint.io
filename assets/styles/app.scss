@@ -7,6 +7,11 @@
 @import "bootstrap-icons";
 @import "audio-player.scss";
 
+.ticket-border{
+    border-bottom: 0.3rem dashed rgba(0,0,0, 0.3)!important;
+    margin-top: 1rem;
+}
+
 .event{
     background-color: #ffffff;
     opacity: 1;

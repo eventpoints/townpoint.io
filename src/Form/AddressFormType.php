@@ -51,6 +51,10 @@ class AddressFormType extends AbstractType
                 'autocomplete' => true,
             ])
             ->add('isDefault', CheckboxType::class, [
+                'label_attr' => [
+                    'class' => 'checkbox-switch',
+                ],
+                'mapped' => false,
                 'required' => false,
             ]);
     }

@@ -3,7 +3,7 @@
         <div>
             <div class="d-flex h5" data-controller="copy"
                  data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
-                {% if address.isDefault %}
+                {% if app.user.address == address %}
                     <span class="mdi mdi-check-circle text-primary h5 me-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ 'default'|trans }}"></span>
                 {% endif %}
                 <div class="me-2" data-copy-target="source">{{ address.lineOne }}, {{ address.lineTwo }}, {{ address.townOrCity }}, {{ address.postCode }}, {{ address.country|country_name }}

@@ -14,27 +14,31 @@
             <div class="col-12 col-md-4">
                 <div class="card mb-3">
                     <div class="card-body">
-
+                        {{ include('group/_filter.html.twig') }}
                     </div>
                 </div>
-                <div class="text-center">
-                    <a class="btn btn-outline-primary" href="{{ path('create_group') }}">{{ 'create-group'|trans }}</a>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a class="btn btn-outline-primary w-100"
+                           href="{{ path('create_group') }}">{{ 'create-group'|trans }}</a>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-md-8">
-                <div class="row g-2">
-                    {% for group in groups %}
+                <div class="row g-3">
+                    {% for group in pagination %}
                         <div class="col-12 col-md-6">
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <a class="link-dark h5" href="{{ path('show_group', {id: group.id}) }}">
-                                                <img src="{{ group.photo }}" width="50" class="rounded-circle me-3"/>
+                                                <img src="{{ group.photo }}" width="50" class="border me-3"/>
                                             </a>
                                         </div>
                                         <div class="text-end">
-                                            <a class="link-dark h5" href="{{ path('show_group', {id: group.id}) }}">
+                                            <a class="link-dark h5 lh-1"
+                                               href="{{ path('show_group', {id: group.id}) }}">
                                                 <div class="h5">{{ group.title }}</div>
                                             </a>
                                             <span class="rounded-pill bg-primary px-2 text-white">
@@ -47,9 +51,27 @@
                                 <div class="card-body">
                                     <div class="lead">{{ group.purpose }}</div>
                                 </div>
+                                <div class="list-group list-group-flush">
+                                    <a href="{{ path('profile', {id: group.owner.id}) }}"
+                                       class="list-group-item list-group-item-action">
+
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ group.owner.avatar }}" width="35" class="rounded-circle me-2"/>
+                                            <div>
+                                                <div class="lh-1 fw-bold">{{ group.owner.fullName }}</div>
+                                                <div class="text-muted small">{{ group.createdAt|format_date }}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
+
+                    <div class="col-md-12 d-flex justify-content-center mt-5">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+
                 </div>
             </div>
 

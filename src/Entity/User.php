@@ -8,6 +8,7 @@ use App\Entity\Business\Business;
 use App\Entity\Event\Event;
 use App\Entity\Event\EventInvite;
 use App\Entity\Event\EventRequest;
+use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
 use App\Entity\Traits\ProfileTrait;
 use App\Enum\ReactionEnum;
@@ -28,11 +29,6 @@ use Symfony\Component\Uid\Uuid;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use ProfileTrait;
-
-    /**
-     * @var Collection<int, Interactor>
-     */
-    public Collection $friendsWithMe;
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -115,6 +111,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'target', targetEntity: Listener::class)]
     private Collection $listeners;
 
+    #[ORM\ManyToOne(targetEntity: PhoneNumber::class, inversedBy: 'owner')]
+    private null|PhoneNumber $phoneNumber = null;
+
+    #[ORM\ManyToOne(targetEntity: Address::class, inversedBy: 'owner')]
+    private null|Address $address = null;
+
     /**
      * @var Collection<int, PhoneNumber> $phoneNumbers
      */
@@ -175,10 +177,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: GroupRequest::class, orphanRemoval: true)]
     private Collection $groupRequests;
 
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Group::class)]
+    private Collection $ownedGroups;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
-        $this->friendsWithMe = new ArrayCollection();
         $this->authoredReactions = new ArrayCollection();
         $this->reactions = new ArrayCollection();
         $this->listening = new ArrayCollection();
@@ -192,6 +199,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->businesses = new ArrayCollection();
         $this->eventInvites = new ArrayCollection();
         $this->groupRequests = new ArrayCollection();
+        $this->ownedGroups = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -802,8 +810,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeEventInvite(EventInvite $eventInvite): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->eventInvites->removeElement($eventInvite) && $eventInvite->getOwner() === $this) {
-            $eventInvite->setOwner(null);
+        if ($eventInvite->getOwner() === $this) {
+            $this->eventInvites->removeElement($eventInvite);
         }
 
         return $this;
@@ -835,5 +843,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getOwnedGroups(): Collection
+    {
+        return $this->ownedGroups;
+    }
+
+    public function addOwnedGroup(Group $ownedGroup): self
+    {
+        if (! $this->ownedGroups->contains($ownedGroup)) {
+            $this->ownedGroups->add($ownedGroup);
+            $ownedGroup->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwnedGroup(Group $ownedGroup): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->ownedGroups->removeElement($ownedGroup) && $ownedGroup->getOwner() === $this) {
+            $ownedGroup->setOwner(null);
+        }
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?PhoneNumber
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?PhoneNumber $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): void
+    {
+        $this->address = $address;
     }
 }

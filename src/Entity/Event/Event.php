@@ -46,7 +46,7 @@ class Event
      * @var Collection<int, EventUser>
      */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventUser::class, cascade: ['persist', 'remove'])]
-    private Collection $users;
+    private Collection $eventUsers;
 
     /**
      * @var Collection<int, EventRequest>
@@ -68,7 +68,7 @@ class Event
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->eventUsers = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->eventRequests = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -160,25 +160,25 @@ class Event
     /**
      * @return Collection<int, EventUser>
      */
-    public function getUsers(): Collection
+    public function getEventUsers(): Collection
     {
-        return $this->users;
+        return $this->eventUsers;
     }
 
-    public function addUser(EventUser $user): self
+    public function addEventUser(EventUser $user): self
     {
-        if (! $this->users->contains($user)) {
-            $this->users->add($user);
+        if (! $this->eventUsers->contains($user)) {
+            $this->eventUsers->add($user);
             $user->setEvent($this);
         }
 
         return $this;
     }
 
-    public function removeUser(EventUser $user): self
+    public function removeEventUser(EventUser $user): self
     {
         // set the owning side to null (unless already changed)
-        $this->users->removeElement($user);
+        $this->eventUsers->removeElement($user);
 
         return $this;
     }
@@ -245,7 +245,7 @@ class Event
     {
         return $this->getEventRequests()
             ->exists(function (int $key, EventRequest $eventRequest) use ($user): bool {
-                return $eventRequest->getOwner() === $user && $eventRequest->isIsAccepted() === false;
+                return $eventRequest->getOwner() === $user;
             });
     }
 
@@ -259,7 +259,7 @@ class Event
 
     public function getIsUserAttending(User $user): bool
     {
-        return $this->getUsers()
+        return $this->getEventUsers()
             ->exists(function (int $key, EventUser $eventUser) use ($user): bool {
                 return $eventUser->getOwner() === $user;
             });
@@ -269,7 +269,7 @@ class Event
     {
         return $this->getEventRequests()
             ->exists(function (int $key, EventRequest $eventRequest) use ($user): bool {
-                return $eventRequest->getOwner() === $user && $eventRequest->isIsAccepted() === null;
+                return $eventRequest->getOwner() === $user;
             });
     }
 
@@ -322,10 +322,18 @@ class Event
     public function removeEventInvite(EventInvite $eventInvite): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->eventInvites->removeElement($eventInvite) && $eventInvite->getEvent() === $this) {
-            $eventInvite->setEvent(null);
+        if ($eventInvite->getEvent() === $this) {
+            $this->eventInvites->removeElement($eventInvite);
         }
 
         return $this;
+    }
+
+    public function hasBeenInvited(User $user): bool
+    {
+        return $this->getEventInvites()
+            ->exists(function (int $key, EventInvite $eventInvite) use ($user): bool {
+                return $eventInvite->getOwner() === $user;
+            });
     }
 }

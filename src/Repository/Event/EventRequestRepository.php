@@ -51,7 +51,6 @@ class EventRequestRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('er');
         $qb->andWhere($qb->expr() ->eq('er.event', ':event'))
             ->setParameter('event', $event->getId(), 'uuid');
-        $qb->andWhere($qb->expr() ->isNull('er.isAccepted'));
 
         $qb->orderBy('er.createdAt');
 

@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: EventUserRepository::class)]
 class EventUser
@@ -21,20 +22,25 @@ class EventUser
     private Uuid $id;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\ManyToOne(inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'eventUsers')]
     private Event $event;
 
-    #[ORM\Column(nullable: true)]
-    private null|bool $hasAccepted = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private Uuid $token;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private EventUserTicket $eventUserTicket;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->token = Uuid::v4();
     }
 
     public function getId(): Uuid
@@ -42,12 +48,12 @@ class EventUser
         return $this->id;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
@@ -78,14 +84,24 @@ class EventUser
         return $this;
     }
 
-    public function isHasAccepted(): ?bool
+    public function getToken(): UuidV4|Uuid
     {
-        return $this->hasAccepted;
+        return $this->token;
     }
 
-    public function setHasAccepted(?bool $hasAccepted): self
+    public function setToken(UuidV4|Uuid $token): void
     {
-        $this->hasAccepted = $hasAccepted;
+        $this->token = $token;
+    }
+
+    public function getEventUserTicket(): EventUserTicket
+    {
+        return $this->eventUserTicket;
+    }
+
+    public function setEventUserTicket(EventUserTicket $eventUserTicket): self
+    {
+        $this->eventUserTicket = $eventUserTicket;
 
         return $this;
     }

@@ -12,7 +12,6 @@ use App\Repository\Group\GroupRepository;
 use App\Repository\Group\GroupRequestRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
-use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,9 +53,7 @@ class GroupRequestController extends AbstractController
     #[Route(path: '/request/reject/{id}', name: 'reject_group_request')]
     public function reject(GroupRequest $groupRequest): Response
     {
-        $groupRequest->setIsAccepted(false);
-        $groupRequest->setResponseAt(new DateTimeImmutable());
-        $this->groupRequestRepository->save($groupRequest, true);
+        $this->groupRequestRepository->remove($groupRequest, true);
 
         return $this->redirectToRoute('show_event', [
             'id' => $groupRequest->getGroup()
@@ -67,14 +64,11 @@ class GroupRequestController extends AbstractController
     #[Route(path: '/request/accept/{id}', name: 'accept_group_request')]
     public function accept(GroupRequest $groupRequest): Response
     {
-        $groupRequest->setIsAccepted(true);
-        $groupRequest->setResponseAt(new DateTimeImmutable());
-        $this->groupRequestRepository->save($groupRequest, true);
-
-        $eventUser = $this->groupUserFactory->create($groupRequest->getOwner(), $groupRequest->getGroup());
+        $groupUser = $this->groupUserFactory->create($groupRequest->getOwner(), $groupRequest->getGroup());
         $groupRequest->getGroup()
-            ->addGroupUser($eventUser);
+            ->addGroupUser($groupUser);
         $this->groupRepository->save($groupRequest->getGroup(), true);
+        $this->groupRequestRepository->remove($groupRequest, true);
 
         return $this->redirectToRoute('show_group', [
             'id' => $groupRequest->getGroup()

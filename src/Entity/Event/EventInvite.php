@@ -21,17 +21,14 @@ class EventInvite
     private Uuid $id;
 
     #[ORM\ManyToOne(inversedBy: 'eventInvites')]
-    private ?Event $event = null;
+    private Event $event;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $isAccepted = null;
-
     #[ORM\ManyToOne(inversedBy: 'eventInvites')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     public function __construct()
     {
@@ -43,12 +40,12 @@ class EventInvite
         return $this->id;
     }
 
-    public function getEvent(): ?Event
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(?Event $event): self
+    public function setEvent(Event $event): self
     {
         $this->event = $event;
 
@@ -67,24 +64,12 @@ class EventInvite
         return $this;
     }
 
-    public function isIsAccepted(): ?bool
-    {
-        return $this->isAccepted;
-    }
-
-    public function setIsAccepted(?bool $isAccepted): self
-    {
-        $this->isAccepted = $isAccepted;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 

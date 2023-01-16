@@ -30,16 +30,25 @@
                     </div>
                 </div>
 
-                <div class="text-center">
-                    <a href="{{ path('create_event') }}"
-                       class="btn btn-outline-primary">{{ 'create-event'|trans }}</a>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="{{ path('create_event') }}"
+                           class="btn btn-outline-primary w-100">{{ 'create-event'|trans }}</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body text-center">
+                        <a href="{{ path('invitations') }}"
+                           class="btn btn-outline-primary w-100">{{ 'invitations'|trans }}</a>
+                    </div>
                 </div>
 
             </div>
 
             <div class="col-12 col-md-8">
                 <div class="row row-cols-1 row-cols-md-2 g-3">
-                    {% for event in events %}
+                    {% for event in pagination %}
                         <div class="col-12 col-md-6">
                             <div class="card h-100 position-relative">
                                 <div class="card-body">
@@ -48,7 +57,7 @@
                                                     class="h5 me-2"> {{ event.title }}</span></a>
                                         <span class="d-flex justify-content-between rounded-pill bg-primary px-2 text-white">
                                    <span class="mdi mdi-account-group me-1"></span>
-                                    <span class="">{{ event.users.count|compact_notation }}</span>
+                                    <span class="">{{ event.eventUsers.count|compact_notation }}</span>
                                 </span>
                                     </div>
                                     <div class="text-muted mb-2">
@@ -87,6 +96,11 @@
                             </div>
                         </div>
                     {% endfor %}
+
+                    <div class="col-md-12 d-flex justify-content-center mt-5">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+
                 </div>
             </div>
 

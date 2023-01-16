@@ -29,9 +29,6 @@ class EventRequest
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
-    private null|bool $isAccepted = null;
-
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -74,18 +71,6 @@ class EventRequest
     public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function isIsAccepted(): ?bool
-    {
-        return $this->isAccepted;
-    }
-
-    public function setIsAccepted(?bool $isAccepted): self
-    {
-        $this->isAccepted = $isAccepted;
 
         return $this;
     }

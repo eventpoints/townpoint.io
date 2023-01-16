@@ -25,7 +25,7 @@ class QrController extends AbstractController
     }
 
     #[Route(path: '/user/account', name: 'user_account_qr')]
-    public function show(): Response
+    public function account(): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $url = $this->urlGenerator->generate('profile', [

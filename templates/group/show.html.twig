@@ -72,28 +72,30 @@
                             <div class="tab-pane fade list-group list-group-flush" id="member-requests" role="tabpanel"
                                  aria-labelledby="pills-home-tab" tabindex="0">
                                 {% for groupRequest in group.groupRequests %}
-                                    {% if groupRequest.isAccepted == null %}
-                                        <div class="list-group-item list-group-item-action">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <a href="{{ path('profile', {id: groupRequest.owner.id}) }}"
-                                                   class="d-flex align-items-center">
-                                                    <img src="{{ groupRequest.owner.avatar }}" width="40"
-                                                         class="rounded-circle me-3"/>
-                                                    <div class="h5 m-0">{{ groupRequest.owner.fullName }}</div>
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <a href="{{ path('profile', {id: groupRequest.owner.id}) }}"
+                                               class="d-flex align-items-center">
+                                                <img src="{{ groupRequest.owner.avatar }}" width="40"
+                                                     class="rounded-circle me-3"/>
+                                                <div class="h5 m-0">{{ groupRequest.owner.fullName }}</div>
+                                            </a>
+                                            <div class="d-flex">
+                                                <a class="btn link-primary"
+                                                   href="{{ path('accept_group_request', { id: groupRequest.id }) }}">
+                                                    <span class="mdi mdi-check fs-4"></span>
                                                 </a>
-                                                <div class="d-flex">
-                                                    <a class="btn link-primary"
-                                                       href="{{ path('accept_group_request', { id: groupRequest.id }) }}">
-                                                        <span class="mdi mdi-check fs-4"></span>
-                                                    </a>
-                                                    <a class="btn link-danger"
-                                                       href="{{ path('reject_group_request', { id: groupRequest.id }) }}">
-                                                        <span class="mdi mdi-close fs-4"></span>
-                                                    </a>
-                                                </div>
+                                                <a class="btn link-danger"
+                                                   href="{{ path('reject_group_request', { id: groupRequest.id }) }}">
+                                                    <span class="mdi mdi-close fs-4"></span>
+                                                </a>
                                             </div>
                                         </div>
-                                    {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="list-group-item text-center text-muted fw-bold">
+                                        {{ 'no-requests'|trans }}
+                                    </div>
                                 {% endfor %}
                             </div>
                         {% endif %}

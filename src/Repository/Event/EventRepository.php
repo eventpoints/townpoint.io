@@ -48,7 +48,7 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByEventFilter(EventFilterDto $eventFilterDto): array
+    public function findByEventFilter(EventFilterDto $eventFilterDto, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('e');
 
@@ -66,6 +66,10 @@ class EventRepository extends ServiceEntityRepository
             )->setParameter('address', '%' . $eventFilterDto->getAddress() . '%');
         }
 
+        $now = new DateTimeImmutable();
+        $qb->andWhere($qb->expr() ->lte(':now', 'e.startAt'))
+            ->setParameter('now', $now, Types::DATETIME_IMMUTABLE);
+
         if ($eventFilterDto->getStartAt() instanceof DateTimeImmutable) {
             $qb->andWhere(
                 $qb->expr()
@@ -81,6 +85,10 @@ class EventRepository extends ServiceEntityRepository
         }
 
         $qb->orderBy('e.createdAt', 'DESC');
+
+        if ($isQuery) {
+            return $qb->getQuery();
+        }
 
         return $qb->getQuery()
             ->getResult();

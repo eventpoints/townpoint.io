@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-3">
+                <div class="card shadow-lg mb-3">
+                    <turbo-frame id="show-event-user-ticket-frame"
+                                 src="{{ path('show_event_user_ticket', {id: eventUser.eventUserTicket.id}) }}">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </turbo-frame>
+                    <div class="ticket-border"></div>
+                    <div class="card-body">
+                        <div class="h1 text-primary">{{ eventUser.event.title }}</div>
+                        <div>{{ eventUser.event.address }}</div>
+                        <div>
+                            <div class="d-flex align-items-center">
+                                <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                <span class="lh-1"> {{ eventUser.event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
+                                <span class="lh-1"> {{ eventUser.event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="h5 fw-light text-center">{{ eventUser.owner.fullName }}</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

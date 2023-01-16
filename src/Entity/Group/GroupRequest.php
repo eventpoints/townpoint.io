@@ -30,12 +30,6 @@ class GroupRequest
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
-    private null|bool $isAccepted = null;
-
-    #[ORM\Column(nullable: true)]
-    private null|DateTimeImmutable $responseAt = null;
-
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -78,30 +72,6 @@ class GroupRequest
     public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function isIsAccepted(): ?bool
-    {
-        return $this->isAccepted;
-    }
-
-    public function setIsAccepted(?bool $isAccepted): self
-    {
-        $this->isAccepted = $isAccepted;
-
-        return $this;
-    }
-
-    public function getResponseAt(): ?DateTimeImmutable
-    {
-        return $this->responseAt;
-    }
-
-    public function setResponseAt(?DateTimeImmutable $responseAt): self
-    {
-        $this->responseAt = $responseAt;
 
         return $this;
     }

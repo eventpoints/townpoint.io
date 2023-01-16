@@ -1,0 +1,18 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-3">
+                <div class="card mb-3">
+                    <div class="text-center">
+                        <span class="mdi mdi-checkbox-marked-circle-outline display-1 text-success"></span>
+                        <h1>{{ 'valid-ticket'|trans }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

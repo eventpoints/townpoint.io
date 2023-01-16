@@ -11,9 +11,11 @@ use App\Form\PhoneNumberFormType;
 use App\Form\SelectUserPhoneNumberFormType;
 use App\Repository\MessageRepository;
 use App\Repository\PhoneNumberRepository;
+use App\Repository\UserRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +27,7 @@ class PhoneNumberController extends AbstractController
         private readonly CurrentUserService $currentUserService,
         private readonly PhoneNumberRepository $phoneNumberRepository,
         private readonly MessageRepository $messageRepository,
+        private readonly UserRepository $userRepository,
     ) {
     }
 
@@ -51,11 +54,17 @@ class PhoneNumberController extends AbstractController
 
         if ($phoneNumberForm->isSubmitted() && $phoneNumberForm->isValid()) {
             $this->phoneNumberRepository->add($phoneNumber, true);
+            $isDefault = $phoneNumberForm->get('isDefault')
+                ->getData();
+
+            if ($isDefault) {
+                $currentUser->setPhoneNumber($phoneNumber);
+                $this->userRepository->add($currentUser, true);
+            }
+
             $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'changes saved');
 
-            return $this->redirectToRoute('account', [
-                '_fragment' => 'phone-numbers',
-            ]);
+            return $this->redirectToRoute('phone-numbers');
         }
 
         return $this->render('phone-number/edit.html.twig', [
@@ -73,8 +82,8 @@ class PhoneNumberController extends AbstractController
         return $this->redirectToRoute('account');
     }
 
-    #[Route(path: '/new', name: 'create_phone_number')]
-    public function new(Request $request): Response
+    #[Route(path: '/create', name: 'create_phone_number')]
+    public function create(Request $request): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $phoneNumber = new PhoneNumber();
@@ -84,11 +93,18 @@ class PhoneNumberController extends AbstractController
         $phoneNumberForm->handleRequest($request);
         if ($phoneNumberForm->isSubmitted() && $phoneNumberForm->isValid()) {
             $this->phoneNumberRepository->add($phoneNumber, true);
+
+            $isDefault = $phoneNumberForm->get('isDefault')
+                ->getData();
+
+            if ($isDefault) {
+                $currentUser->setPhoneNumber($phoneNumber);
+                $this->userRepository->add($currentUser, true);
+            }
+
             $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'changes saved');
 
-            return $this->redirectToRoute('account', [
-                '_fragment' => 'phone-numbers',
-            ]);
+            return $this->redirectToRoute('phone-numbers');
         }
 
         return $this->render('phone-number/new.html.twig', [
@@ -121,5 +137,15 @@ class PhoneNumberController extends AbstractController
             'conversation' => $conversation,
             'phoneNumberForm' => $phoneNumberForm->createView(),
         ]);
+    }
+
+    #[Route(path: '/set/default/{id}', name: 'set_default_phone_number')]
+    public function setDefault(PhoneNumber $phoneNumber): RedirectResponse
+    {
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+        $currentUser->setPhoneNumber($phoneNumber);
+        $this->userRepository->add($currentUser, true);
+
+        return $this->redirectToRoute('phone-numbers');
     }
 }

@@ -51,6 +51,15 @@ class Group
     #[ORM\Column(length: 255)]
     private null|string $type = null;
 
+    #[ORM\Column(length: 3)]
+    private ?string $country = null;
+
+    #[ORM\Column]
+    private bool $isVisible = true;
+
+    #[ORM\ManyToOne(inversedBy: 'ownedGroups')]
+    private ?User $owner = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -159,7 +168,7 @@ class Group
     {
         return $this->getGroupRequests()
             ->exists(function (int $key, GroupRequest $groupRequest) use ($user): bool {
-                return $groupRequest->getOwner() === $user && $groupRequest->isIsAccepted() === null;
+                return $groupRequest->getOwner() === $user;
             });
     }
 
@@ -199,6 +208,42 @@ class Group
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function isIsVisible(): bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): self
+    {
+        $this->isVisible = $isVisible;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

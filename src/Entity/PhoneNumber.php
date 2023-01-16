@@ -32,9 +32,6 @@ class PhoneNumber
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
-    #[ORM\Column]
-    private bool $isDefault = false;
-
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -89,18 +86,6 @@ class PhoneNumber
     public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function isIsDefault(): ?bool
-    {
-        return $this->isDefault;
-    }
-
-    public function setIsDefault(bool $isDefault): self
-    {
-        $this->isDefault = $isDefault;
 
         return $this;
     }

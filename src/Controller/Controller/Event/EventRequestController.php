@@ -8,6 +8,7 @@ use App\Entity\Event\Event;
 use App\Entity\Event\EventRequest;
 use App\Factory\Event\EventRequestFactory;
 use App\Factory\Event\EventUserFactory;
+use App\Factory\Event\EventUserTicketFactory;
 use App\Repository\Event\EventRepository;
 use App\Repository\Event\EventRequestRepository;
 use App\Service\CurrentUserService;
@@ -25,6 +26,7 @@ class EventRequestController extends AbstractController
         private readonly EventRequestRepository $eventRequestRepository,
         private readonly EventUserFactory $eventUserFactory,
         private readonly EventRequestFactory $eventRequestFactory,
+        private readonly EventUserTicketFactory $eventTicketFactory,
     ) {
     }
 
@@ -53,8 +55,7 @@ class EventRequestController extends AbstractController
     #[Route(path: '/request/reject/{id}', name: 'reject_event_request')]
     public function reject(EventRequest $eventRequest): Response
     {
-        $eventRequest->setIsAccepted(false);
-        $this->eventRequestRepository->save($eventRequest, true);
+        $this->eventRequestRepository->remove($eventRequest, true);
 
         return $this->redirectToRoute('show_event', [
             'id' => $eventRequest->getEvent()
@@ -65,13 +66,15 @@ class EventRequestController extends AbstractController
     #[Route(path: '/request/accept/{id}', name: 'accept_event_request')]
     public function accept(EventRequest $eventRequest): Response
     {
-        $eventRequest->setIsAccepted(true);
-        $this->eventRequestRepository->save($eventRequest, true);
-
         $eventUser = $this->eventUserFactory->create($eventRequest->getOwner(), $eventRequest->getEvent());
         $eventRequest->getEvent()
-            ->addUser($eventUser);
+            ->addEventUser($eventUser);
+
+        $eventUserTicket = $this->eventTicketFactory->createTicketAndEventUserTicket($eventUser);
+        $eventUser->setEventUserTicket($eventUserTicket);
+
         $this->eventRepository->save($eventRequest->getEvent(), true);
+        $this->eventRequestRepository->remove($eventRequest, true);
 
         return $this->redirectToRoute('show_event', [
             'id' => $eventRequest->getEvent()

@@ -36,6 +36,7 @@ class PhoneNumberFormType extends AbstractType
                 ],
             ])
             ->add('isDefault', CheckboxType::class, [
+                'mapped' => false,
                 'label_attr' => [
                     'class' => 'checkbox-switch',
                 ],

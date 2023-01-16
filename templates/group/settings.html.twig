@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        {{ form_start(groupForm) }}
+                        {{ form_row(groupForm.title) }}
+                        {{ form_row(groupForm.purpose) }}
+                        {{ form_row(groupForm.type) }}
+                        {{ form_row(groupForm.country) }}
+                        {{ form_row(groupForm.isVisible) }}
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-outline-primary">{{ 'create'|trans }}</button>
+                        </div>
+                        {{ form_end(groupForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

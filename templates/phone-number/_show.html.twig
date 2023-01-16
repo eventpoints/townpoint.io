@@ -2,7 +2,7 @@
     <div data-controller="copy"
          data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
         <div class="h5 m-0 d-flex align-items-center">
-            {% if phoneNumber.isDefault %}
+            {% if app.user.phoneNumber == phoneNumber %}
                 <span class="mdi mdi-check-circle text-primary me-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{ 'default'|trans }}"></span>
             {% endif %}
             <div class="me-2" data-copy-target="source" >

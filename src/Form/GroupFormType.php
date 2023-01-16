@@ -5,8 +5,10 @@ declare(strict_types = 1);
 namespace App\Form;
 
 use App\Entity\Group\Group;
+use App\Enum\GroupTypeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,17 +29,17 @@ class GroupFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
+            ->add('country', CountryType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+                'autocomplete' => true,
+            ])
             ->add('type', ChoiceType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'choices' => [
-                    'recreational' => 'recreational',
-                    'employment' => 'employment',
-                    'political' => 'political',
-                    'accommodation' => 'accommodation',
-                    'activism' => 'activism',
-                ],
+                'choices' => GroupTypeEnum::getArrayCases(),
                 'autocomplete' => true,
             ])
         ;

@@ -1,0 +1,25 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-3">
+                <div class="card mb-3">
+                    <div class="text-center">
+                        <span class="mdi mdi-checkbox-marked-circle-outline display-1 text-bg-success"></span>
+                        <h1>{{ 'valid-ticket'|trans }}</h1>
+                    </div>
+                </div>
+                {% if app.user == eventUser.event.owner %}
+                    <div class="list-group list-group-flush">
+                        <a class="list-group-item list-group-item-action" href="{{ path('event_ticket_mark_used'{ id: eventUser.id}) }}">
+                            {{ 'mark-ticket-used' }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

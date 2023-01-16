@@ -40,9 +40,6 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column]
-    private ?bool $isDefault = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private null|string $lineTwo = null;
 
@@ -136,18 +133,6 @@ class Address
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function isIsDefault(): ?bool
-    {
-        return $this->isDefault;
-    }
-
-    public function setIsDefault(bool $isDefault): self
-    {
-        $this->isDefault = $isDefault;
 
         return $this;
     }

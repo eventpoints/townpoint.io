@@ -11,6 +11,7 @@ use App\Form\AddressFormType;
 use App\Form\SelectUserAddressFormType;
 use App\Repository\AddressRepository;
 use App\Repository\MessageRepository;
+use App\Repository\UserRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +25,8 @@ class AddressController extends AbstractController
     public function __construct(
         private readonly CurrentUserService $currentUserService,
         private readonly MessageRepository $messageRepository,
-        private readonly AddressRepository $addressRepository
+        private readonly AddressRepository $addressRepository,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -45,11 +47,17 @@ class AddressController extends AbstractController
         $addressForm->handleRequest($request);
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
             $this->addressRepository->add($addressForm->getData(), true);
+
+            $isDefault = $addressForm->get('isDefault')
+                ->getData();
+            if ($isDefault) {
+                $currentUser->setAddress($address);
+                $this->userRepository->add($currentUser, true);
+            }
+
             $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'changes saved');
 
-            return $this->redirectToRoute('account', [
-                '_fragment' => 'addresses',
-            ]);
+            return $this->redirectToRoute('addresses');
         }
 
         return $this->render('address/new.html.twig', [
@@ -60,16 +68,22 @@ class AddressController extends AbstractController
     #[Route(path: '/edit/{id}', name: 'edit_address')]
     public function edit(Address $address, Request $request): Response
     {
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $addressForm = $this->createForm(AddressFormType::class, $address);
 
         $addressForm->handleRequest($request);
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
+            $isDefault = $addressForm->get('isDefault')
+                ->getData();
+            if ($isDefault) {
+                $currentUser->setAddress($address);
+                $this->userRepository->add($currentUser, true);
+            }
+
             $this->addressRepository->add($addressForm->getData(), true);
             $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'changes saved');
 
-            return $this->redirectToRoute('account', [
-                '_fragment' => 'addresses',
-            ]);
+            return $this->redirectToRoute('addresses');
         }
 
         return $this->render('address/edit.html.twig', [
