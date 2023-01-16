@@ -9,14 +9,12 @@ use App\Repository\Event\EventUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route(path: '/event/participant')]
 class EventUserController extends AbstractController
 {
     public function __construct(
         private readonly EventUserRepository $eventUserRepository,
-        private readonly UrlGeneratorInterface $urlGenerator
     ) {
     }
 
@@ -47,5 +45,6 @@ class EventUserController extends AbstractController
     #[Route(path: '/invalidate/{id}', name: 'event_ticket_mark_used')]
     public function invalidateTicket(): Response
     {
+        return $this->render('terms/index.html.twig');
     }
 }
