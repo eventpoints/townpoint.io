@@ -4,7 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller\Event;
 
+use App\Entity\Event\EventUser;
 use App\Entity\Event\EventUserTicket;
+use App\Repository\Ticket\EventUserTicketRepository;
+use App\Repository\TicketRepository;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -19,7 +22,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class EventUserTicketController extends AbstractController
 {
     public function __construct(
-        private readonly UrlGeneratorInterface $urlGenerator
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly EventUserTicketRepository $eventUserTicketRepository
     ) {
     }
 
@@ -27,8 +31,7 @@ class EventUserTicketController extends AbstractController
     public function show(EventUserTicket $eventUserTicket): Response
     {
         $url = $this->urlGenerator->generate('event_qr_validate', [
-            'token' => $eventUserTicket->getEventUser()
-                ->getToken(),
+            'token' => $eventUserTicket->getToken(),
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $ticketQr = Builder::create()
@@ -53,5 +56,28 @@ class EventUserTicketController extends AbstractController
     public function create(EventUserTicket $eventTicket): Response
     {
         return $this->render('');
+    }
+
+
+    #[Route(path: '/validate/{token}', name: 'event_qr_validate')]
+    public function validateTicket(string $token): Response
+    {
+        $eventUserTicket = $this->eventUserTicketRepository->findOneBy([
+            'token' => $token,
+        ]);
+
+        if (! $eventUserTicket instanceof EventUserTicket) {
+            return $this->render('event/ticket/invalid.html.twig');
+        }
+
+        return $this->render('event/ticket/valid.html.twig', [
+            'eventUserTicket' => $eventUserTicket,
+        ]);
+    }
+
+    #[Route(path: '/invalidate/{id}', name: 'event_ticket_mark_used')]
+    public function invalidateTicket(): Response
+    {
+        return $this->render('terms/index.html.twig');
     }
 }

@@ -6,7 +6,8 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-3">
                 <div class="mb-3">
-                    <a href="{{ path('conversations') }}" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-between">
+                    <a href="{{ path('conversations') }}"
+                       class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-between">
                         <div>
                             <span class="mdi mdi-arrow-left fs-3"></span>
                         </div>
@@ -23,6 +24,11 @@
             </div>
             <div class="col-12 col-md-6">
                 <div class="card mb-3">
+                    {% if conversation.title %}
+                        <div class="card-header">
+                            <h3>{{ conversation.title }}</h3>
+                        </div>
+                    {% endif %}
                     <div class="border-bottom d-flex justify-content-between">
                         <div class="dropdown text-end">
                             <button class="btn link-primary" type="button" data-bs-toggle="dropdown"
@@ -46,8 +52,13 @@
                                 <i class="bi bi-three-dots-vertical fs-3"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li class="zi-100">
-                                    {{ include('conversations/_delete_form.html.twig', {id: conversation.id}) }}
+                                <li><a class="dropdown-item"
+                                       href="{{ path('conversation_edit', {id: conversation.id}) }}">{{ 'edit'|trans }}</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                {{ include('conversations/_delete_form.html.twig', {id: conversation.id}) }}
                                 </li>
                             </ul>
                         </div>

@@ -1,0 +1,11 @@
+{{ form_start(itemForm) }}
+{{ form_row(itemForm.images) }}
+{{ form_row(itemForm.title) }}
+{{ form_row(itemForm.description) }}
+{{ form_row(itemForm.price) }}
+{{ form_row(itemForm.isAcceptingPriceOffers) }}
+{{ form_row(itemForm.condition) }}
+<div class="text-end">
+    <button type="submit" class="btn btn-outline-primary">{{ 'save'|trans }}</button>
+</div>
+{{ form_end(itemForm) }}

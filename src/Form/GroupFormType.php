@@ -9,6 +9,7 @@ use App\Enum\GroupTypeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,6 +31,12 @@ class GroupFormType extends AbstractType
                 ],
             ])
             ->add('country', CountryType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+                'autocomplete' => true,
+            ])
+            ->add('language', LanguageType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],

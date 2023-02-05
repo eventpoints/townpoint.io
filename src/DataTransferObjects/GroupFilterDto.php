@@ -12,6 +12,8 @@ class GroupFilterDto
 
     private null|string $country = null;
 
+    private null|string $language = null;
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -41,4 +43,21 @@ class GroupFilterDto
     {
         $this->country = $country;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string|null $language
+     */
+    public function setLanguage(?string $language): void
+    {
+        $this->language = $language;
+    }
+
 }

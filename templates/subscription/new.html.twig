@@ -1,0 +1,85 @@
+{% import "macro/user.component.macro.twig" as userComponent %}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="h3">{{ 'create-subscription'|trans }}</div>
+                            <div>
+                                <span class="h3 mdi mdi-credit-card-outline"></span>
+                            </div>
+                        </div>
+                        <div class="h5">90 days free</div>
+                        <div class="lead">€4 per month after trial period.</div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <div class="fw-bold">{{ 'no-adverts'|trans }}</div>
+                                <div class="text-muted">Never. on our platform you are not the product and never will be.</div>
+                            </div>
+                            <div>
+                                <span class="mdi mdi-check-circle text-success fs-4"></span>
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <div class="fw-bold">{{ 'true-transparency'|trans }}</div>
+                                <div class="text-muted">We don\'t hide anything and will always be completely honest
+                                    with our customers.
+                                    don\'t believe us? check the <a href="https://github.com/townpoint/townpoint.io">code</a>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="mdi mdi-check-circle text-success fs-4"></span>
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <div class="fw-bold">{{ 'privacy-by-defualt'|trans }}</div>
+                                <div class="text-muted">end-to-end encryption is by default, we protect our customer's
+                                    privacy
+                                    (you sacrifice our willingness to protect you if you do something illegal, so please keep it legal)
+                                </div>
+                            </div>
+                            <div>
+                                <span class="mdi mdi-check-circle text-success fs-4"></span>
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <div class="fw-bold">{{ 'unlimited-features-access'|trans }}</div>
+                                <div class="text-muted">Access all the useful tools we love to create, Events, Groups
+                                    and The Market.
+                                </div>
+                            </div>
+                            <div>
+                                <span class="mdi mdi-check-circle text-success fs-4"></span>
+                            </div>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <div>
+                                <div class="fw-bold">{{ 'simplicty'|trans }}</div>
+                                <div class="text-muted">Because we don\'t have a advert model, we don't want to keep you
+                                    on our platform. We want to assist with useful and easy to use features to make your
+                                    life just a bit easier and more productive.
+                                </div>
+                            </div>
+                            <div>
+                                <span class="mdi mdi-check-circle text-success fs-4"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary w-100">{{ 'subscribe'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

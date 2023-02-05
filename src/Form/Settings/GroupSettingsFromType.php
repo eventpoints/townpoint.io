@@ -57,6 +57,7 @@ class GroupSettingsFromType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
+                'required' => false
             ]);
     }
 

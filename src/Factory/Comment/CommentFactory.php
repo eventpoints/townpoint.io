@@ -6,6 +6,8 @@ namespace App\Factory\Comment;
 
 use App\Entity\Comment;
 use App\Entity\Event\Event;
+use App\Entity\Group\Group;
+use App\Entity\Market\Item;
 use App\Entity\User;
 
 class CommentFactory
@@ -24,6 +26,20 @@ class CommentFactory
         $comment = $this->create($user, $content);
         $comment->setEvent($event);
 
+        return $comment;
+    }
+
+    public function createGroupComment(User $user, string $content, Group $group): Comment
+    {
+        $comment = $this->create($user, $content);
+        $comment->setGroup($group);
+        return $comment;
+    }
+
+    public function createMarketItem(User $user, string $content, Item $item): Comment
+    {
+        $comment = $this->create($user, $content);
+        $comment->setMarketItem($item);
         return $comment;
     }
 }

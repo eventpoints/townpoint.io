@@ -20,6 +20,9 @@
                                             </div>
                                             <div class="w-100">
                                                 <div class="h5 m-0">{{ user.fullName }}</div>
+                                                {% if conversation.title %}
+                                                    <div class="text-muted">{{ conversation.title }}</div>
+                                                {% endif %}
                                                 {% if conversation.messages.last %}
                                                     <div class="d-flex justify-content-between align-items-center w-100">
                                                         <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }}</div>

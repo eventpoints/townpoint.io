@@ -1,0 +1,197 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                             aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
+                                    data-bs-target="#people"
+                                    type="button" role="tab" aria-controls="v-pills-home"
+                                    aria-selected="true">
+                        <span class="d-flex justify-content-between align-items-center">
+                            <span>{{ 'people'|trans|capitalize }}</span>
+                            <span>{{ usersPagination.count|compact_notation }}</span>
+                        </span>
+                            </button>
+                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill"
+                                    data-bs-target="#events"
+                                    type="button" role="tab" aria-controls="v-pills-profile"
+                                    aria-selected="false">
+                        <span class="d-flex justify-content-between align-items-center">
+                            <span>{{ 'events'|trans|capitalize }}</span>
+                            <span>{{ eventsPagination.count|compact_notation }}</span>
+                        </span>
+                            </button>
+                            <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill"
+                                    data-bs-target="#groups"
+                                    type="button" role="tab" aria-controls="v-pills-profile"
+                                    aria-selected="false">
+                        <span class="d-flex justify-content-between align-items-center">
+                            <span>{{ 'groups'|trans|capitalize }}</span>
+                            <span>{{ groupsPagination.count|compact_notation }}</span>
+                        </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="people" role="tabpanel"
+                         aria-labelledby="v-pills-home-tab"
+                         tabindex="0">
+                        {% for user in usersPagination %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <a href="{{ path('profile', {id: user.id}) }}"
+                                       class="list-group-item list-group-item-action">
+
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ user.avatar }}" width="35" class="rounded-circle me-2"/>
+                                            <div>
+                                                <div class="lh-1 fw-bold">{{ user.fullName }}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    {{ 'no-users-found'|trans }}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="col-md-12 d-flex justify-content-center mt-5">
+                            {{ knp_pagination_render(usersPagination) }}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="v-pills-profile-tab"
+                         tabindex="0">
+                        {% for event in eventsPagination %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="mb-2 d-flex justify-content-between align-items-start">
+                                        <a href="{{ path('show_event', {id: event.id}) }}"><span
+                                                    class="h5 me-2"> {{ event.title }}</span></a>
+                                        <span class="d-flex justify-content-between rounded-pill bg-primary px-2 text-white">
+                                   <span class="mdi mdi-account-group me-1"></span>
+                                    <span class="">{{ event.eventUsers.count|compact_notation }}</span>
+                                </span>
+                                    </div>
+                                    <div class="text-muted mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                            <span class="lh-1"> {{ event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
+                                            <span class="lh-1"> {{ event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                        </div>
+                                    </div>
+                                    {% if event.isUserAttending(app.user) %}
+                                        <div>{{ event.address }}</div>
+                                    {% endif %}
+                                    {% if app.user == event.owner or event.hasBeenRejected(app.user) or event.isUserAttending(app.user) %}
+                                    {% elseif event.userRejectedInvitation(app.user) %}
+                                        <div class="text-center text-muted">
+                                            {{ 'invitation-declined' }}
+                                        </div>
+                                    {% else %}
+                                        <hr/>
+                                        <a href="{{ path('create_event_request', {id: event.id}) }}"
+                                           class="btn btn-outline-primary w-100">{{ 'request-invite'|trans }}</a>
+                                    {% endif %}
+                                </div>
+                                <div class="list-group list-group-flush">
+                                    <a href="{{ path('profile', {id: event.owner.id}) }}"
+                                       class="list-group-item list-group-item-action">
+
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ event.owner.avatar }}" width="35"
+                                                 class="rounded-circle me-2"/>
+                                            <div>
+                                                <div class="lh-1 fw-bold">{{ event.owner.fullName }}</div>
+                                                <div class="text-muted small">{{ event.createdAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    {{ 'no-events-found'|trans }}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="col-md-12 d-flex justify-content-center mt-5">
+                            {{ knp_pagination_render(eventsPagination) }}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="groups" role="tabpanel" aria-labelledby="v-pills-profile-tab"
+                         tabindex="0">
+                        {% for group in groupsPagination %}
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <a class="link-dark h5" href="{{ path('show_group', {id: group.id}) }}">
+                                                <img src="{{ group.photo }}" width="50" class="border me-3"/>
+                                            </a>
+                                        </div>
+                                        <div class="text-end">
+                                            <a class="link-dark h5 lh-1"
+                                               href="{{ path('show_group', {id: group.id}) }}">
+                                                <div class="h5">{{ group.title }}</div>
+                                            </a>
+                                            <span class="rounded-pill bg-primary px-2 text-white">
+                                                    <span class="mdi mdi-account-group me-1"></span>
+                                                    <span class="">{{ group.groupUsers.count|compact_notation }}</span>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="lead">{{ group.purpose }}</div>
+                                </div>
+                                <div class="list-group list-group-flush">
+                                    <a href="{{ path('profile', {id: group.owner.id}) }}"
+                                       class="list-group-item list-group-item-action">
+
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ group.owner.avatar }}" width="35"
+                                                 class="rounded-circle me-2"/>
+                                            <div>
+                                                <div class="lh-1 fw-bold">{{ group.owner.fullName }}</div>
+                                                <div class="text-muted small">{{ group.createdAt|format_date }}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    {{ 'no-groups-found'|trans }}
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="col-md-12 d-flex justify-content-center mt-5">
+                            {{ knp_pagination_render(groupsPagination) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

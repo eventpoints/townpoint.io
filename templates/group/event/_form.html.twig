@@ -1,0 +1,13 @@
+{{ form_start(eventForm) }}
+{{ form_row(eventForm.title) }}
+{{ form_row(eventForm.address) }}
+<div class="input-group">
+    {{ form_row(eventForm.startAt) }}
+    {{ form_row(eventForm.endAt) }}
+</div>
+{{ form_row(eventForm.inviteMembers) }}
+{{ form_row(eventForm.isTicketed) }}
+<div class="text-end">
+    <button type="submit" class="btn btn-outline-primary">{{ 'create'|trans }}</button>
+</div>
+{{ form_end(eventForm) }}

@@ -28,8 +28,10 @@ final class ImageUploadService
             'driver' => 'gd',
         ]);
         $image = $manager->make($file->getRealPath());
-        $image->resize(800, null, function ($constraint): void {
+
+        $image->resize(800, 800, function ($constraint) {
             $constraint->aspectRatio();
+            $constraint->upsize();
         });
 
         return $image->encode('data-url');

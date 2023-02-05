@@ -22,11 +22,11 @@ class GroupUser
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     #[ORM\ManyToOne(inversedBy: 'groupUsers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Group $group = null;
+    private Group $group;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
@@ -44,12 +44,12 @@ class GroupUser
         return $this->id;
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): self
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
 
@@ -61,7 +61,7 @@ class GroupUser
         return $this->group;
     }
 
-    public function setGroup(?Group $group): self
+    public function setGroup(Group $group): self
     {
         $this->group = $group;
 

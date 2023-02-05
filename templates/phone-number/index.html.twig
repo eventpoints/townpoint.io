@@ -6,16 +6,15 @@
             <div class="col-12 col-md-3">
                 {{ include('partials/_account-menu.html.twig') }}
             </div>
-            <div class="col-12 col-md-9">
+            <div class="col-12 col-md-8">
                 <div class="card-body row g-2">
                     <div class="list-group mb-3">
                         {% for phoneNumber in app.user.phoneNumbers %}
                             {{ include('phone-number/_show.html.twig') }}
+                        {% else %}
+                            <div class="text-center list-group-item h5 m-0 text-muted py-4">{{ 'no-phone-numbers-found'|trans }}</div>
                         {% endfor %}
-                    </div>
-                    <div class="text-center">
-                        <a href="{{ path('create_phone_number') }}" class="btn btn-outline-primary">add
-                            phone</a>
+                        <a href="{{ path('create_phone_number') }}" class="text-center text-primary list-group-item list-group-item-action">{{ 'add-phone-number'|trans }}</a>
                     </div>
                 </div>
             </div>

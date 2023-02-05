@@ -1,0 +1,89 @@
+{% import "macro/comment.macro.twig" as comment %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div id="item-image-carousel" class="carousel carousel-dark gray-light slide mb-3">
+        <div class="carousel-indicators">
+            {% for image in item.images %}
+                <button type="button" data-bs-target="#item-image-carousel" data-bs-slide-to="{{ loop.index0 }}"
+                        style="height: 20px;width: 20px"
+                        class="bg-dark rounded-circle {% if loop.index0 == 0 %} active {% endif %}"
+                        aria-current="true" aria-label="{{ loop.index0 == 0 }}"></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for image in item.images %}
+                <div class="carousel-item{% if loop.index0 == 0 %} active {% endif %}" data-bs-interval="10000">
+                    <img src="{{ image.content }}" class="w-100 object-fit-contain" style="height: 500px" alt="...">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#item-image-carousel"
+                data-bs-slide="prev">
+            <span class="mdi mdi-chevron-left text-black display-1"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#item-image-carousel"
+                data-bs-slide="next">
+            <span class="mdi mdi-chevron-right text-black display-1"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4">
+                <div class="card sticky-top mb-3">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            <div class="h3">{{ item.title }}</div>
+                            <div class="h5">
+                                {% if item.isAcceptingPriceOffers %}
+                                    {{ 'open-to-offers'|trans }}
+                                {% else %}
+                                    {{ item.price|format_currency(item.currency) }}
+                                {% endif %}
+                            </div>
+                            <div class="text-muted">{{ item.createdAtAgo }}</div>
+                        </div>
+                        <div class="list-group-item lead">{{ item.description }}</div>
+                        <a href="{{ path('profile', {id: item.owner.id}) }}"
+                           class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ item.owner.avatar }}" width="35" class="rounded-circle me-2"/>
+                                <div>
+                                    <div class="lh-1 fw-bold">{{ item.owner.fullName }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <turbo-frame id="comment-form-frame"
+                                     src="{{ path('market_item_create_comment', {id: item.id}) }}"
+                                     target="_top">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </turbo-frame>
+                    </div>
+
+                    {% for comment in marketItemCommentsPagination %}
+                        {{ comment.comment(comment) }}
+                    {% else %}
+                        <div class="card card-body text-muted text-center">{{ 'no-comments' }}</div>
+                    {% endfor %}
+
+                    <div class="col-md-12 d-flex justify-content-center mt-5">
+                        {{ knp_pagination_render(marketItemCommentsPagination) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

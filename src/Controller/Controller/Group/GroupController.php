@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controller\Controller\Group;
 
@@ -10,6 +10,8 @@ use App\Factory\Group\GroupUserFactory;
 use App\Form\Filter\GroupFilterForm;
 use App\Form\GroupFormType;
 use App\Form\Settings\GroupSettingsFromType;
+use App\Repository\CommentRepository;
+use App\Repository\Group\GroupEventRepository;
 use App\Repository\Group\GroupRepository;
 use App\Service\AvatarService;
 use App\Service\CurrentUserService;
@@ -19,17 +21,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route(path: '/group')]
 class GroupController extends AbstractController
 {
     public function __construct(
         private readonly CurrentUserService $currentUserService,
-        private readonly GroupUserFactory $groupUserFactory,
-        private readonly AvatarService $avatarService,
-        private readonly GroupRepository $groupRepository,
+        private readonly GroupUserFactory   $groupUserFactory,
+        private readonly AvatarService      $avatarService,
+        private readonly GroupRepository    $groupRepository,
         private readonly PaginatorInterface $paginator,
-    ) {
+        private readonly CommentRepository  $commentRepository,
+        private readonly GroupEventRepository  $groupEventRepository,
+    )
+    {
     }
 
     #[Route(path: '/', name: 'groups')]
@@ -87,10 +93,27 @@ class GroupController extends AbstractController
     }
 
     #[Route(path: '/show/{id}', name: 'show_group')]
-    public function show(Group $group): Response
+    public function show(Group $group, Request $request): Response
     {
+        $commentQuery = $this->commentRepository->findByGroup(group: $group, isQuery: true);
+        $groupCommentPagination = $this->paginator->paginate($commentQuery, $request->query->getInt('group-comment-page', 1), 10, [
+            'pageParameterName' => 'group-comment-page'
+        ]);
+
+        $groupEventQuery = $this->groupEventRepository->findByGroup(group: $group, isQuery: true);
+        $groupEventPagination = $this->paginator->paginate($groupEventQuery, $request->query->getInt('group-event-page', 1), 10, [
+            'pageParameterName' => 'group-event-page'
+        ]);
+
+        $groupUrl = $this->generateUrl('show_group', [
+            'id' => $group->getId(),
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
+
         return $this->render('group/show.html.twig', [
             'group' => $group,
+            'groupCommentPagination' => $groupCommentPagination,
+            'groupEventPagination' => $groupEventPagination,
+            'groupUrl' => $groupUrl
         ]);
     }
 
@@ -109,6 +132,9 @@ class GroupController extends AbstractController
         $groupForm->handleRequest($request);
 
         if ($groupForm->isSubmitted() && $groupForm->isValid()) {
+            $this->groupRepository->save($groupForm->getData(), true);
+            $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'changes saved');
+            return $this->redirectToRoute('show_group', ['id' => $group->getId()]);
         }
 
         return $this->render('group/settings.html.twig', [

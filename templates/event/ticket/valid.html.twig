@@ -1,14 +1,44 @@
-{% import "macro/user.component.macro.twig" as userComponent %}
 {% extends 'base.html.twig' %}
 
 {% block body %}
     <div class="container">
         <div class="row g-3 justify-content-center">
             <div class="col-12 col-md-3">
-                <div class="card mb-3">
+                <div class="card mb-2">
                     <div class="text-center">
                         <span class="mdi mdi-checkbox-marked-circle-outline display-1 text-success"></span>
-                        <h1>{{ 'valid-ticket'|trans }}</h1>
+                        <h3>{{ 'valid-ticket'|trans }}</h3>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="h3 text-primary">
+                            <a class="link-primary" href="{{ path('show_event', {id: eventUserTicket.eventUser.event.id }) }}">
+                                {{ eventUserTicket.eventUser.event.title }}
+                            </a>
+                        </div>
+                        <div>{{ eventUserTicket.eventUser.event.address }}</div>
+                        <div>
+                            <div class="d-flex align-items-center">
+                                <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                <span class="lh-1"> {{ eventUserTicket.eventUser.event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
+                                <span class="lh-1"> {{ eventUserTicket.eventUser.event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                            </div>
+                        </div>
+                        <hr/>
+                        <a href="{{ path('profile', {id: eventUserTicket.eventUser.owner.id}) }}"
+                           class="list-group-item list-group-item-action">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ eventUserTicket.eventUser.owner.avatar }}" height="50" class="rounded-circle me-3"/>
+                                <div>
+                                    <div class="lh-1 h5 m-0 fw-bold">{{ eventUserTicket.eventUser.owner.fullName }}</div>
+                                    <div>{{ eventUserTicket.eventUser.createdAt|format_datetime }}</div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

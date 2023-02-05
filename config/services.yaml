@@ -20,8 +20,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Builder\PollBuilder: ~
-    App\Builder\StatementBuilder: ~
+    Stripe\StripeClient:
+        arguments:
+            - '%env(STRIPE_PRIVATE_KEY)%'
 
-    App\Builder\Contract\StatementBuilderInterface $pollBuilder: '@App\Builder\PollBuilder'
-    App\Builder\Contract\StatementBuilderInterface: '@App\Builder\StatementBuilder'
+    trix.form.type:
+        class: App\Form\Type\TrixTextEditorType
+        tags:
+            - { name: form.type }

@@ -16,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method EventUserTicket[]    findAll()
  * @method EventUserTicket[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EventTicketRepository extends ServiceEntityRepository
+class EventUserTicketRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -14,6 +14,21 @@
             <div class="col-12 col-md-4">
 
                 <div class="card mb-3">
+                    <div class="card-body text-center">
+                        <div class="d-flex">
+                            <a href="{{ path('create_event') }}"
+                               class="btn btn-outline-primary me-3">
+                                <span class="mdi mdi-plus fs-4"></span>
+                            </a>
+                            <a href="{{ path('invitations') }}"
+                               class="btn btn-outline-primary">
+                                <span class="mdi mdi-email-outline fs-4"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
                     <div class="card-body">
                         {{ form_start(eventForm) }}
                         {{ form_row(eventForm.title) }}
@@ -29,21 +44,6 @@
                         {{ form_end(eventForm) }}
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-body text-center">
-                        <a href="{{ path('create_event') }}"
-                           class="btn btn-outline-primary w-100">{{ 'create-event'|trans }}</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body text-center">
-                        <a href="{{ path('invitations') }}"
-                           class="btn btn-outline-primary w-100">{{ 'invitations'|trans }}</a>
-                    </div>
-                </div>
-
             </div>
 
             <div class="col-12 col-md-8">
@@ -74,6 +74,10 @@
                                         <div>{{ event.address }}</div>
                                     {% endif %}
                                     {% if app.user == event.owner or event.hasBeenRejected(app.user) or event.isUserAttending(app.user) %}
+                                    {% elseif event.userRejectedInvitation(app.user) %}
+                                        <div class="text-center text-muted">
+                                            {{ 'invitation-declined' }}
+                                        </div>
                                     {% else %}
                                         <hr/>
                                         <a href="{{ path('create_event_request', {id: event.id}) }}"
@@ -81,17 +85,32 @@
                                     {% endif %}
                                 </div>
                                 <div class="list-group list-group-flush">
-                                    <a href="{{ path('profile', {id: event.owner.id}) }}"
-                                       class="list-group-item list-group-item-action">
 
-                                        <div class="d-flex align-items-center">
-                                            <img src="{{ event.owner.avatar }}" width="35" class="rounded-circle me-2"/>
-                                            <div>
-                                                <div class="lh-1 fw-bold">{{ event.owner.fullName }}</div>
-                                                <div class="text-muted small">{{ event.createdAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</div>
+                                    {% if not event.groupEvent %}
+                                        <a href="{{ path('profile', {id: event.owner.id}) }}"
+                                           class="list-group-item list-group-item-action">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ event.owner.avatar }}" width="35"
+                                                     class="rounded-circle me-2"/>
+                                                <div>
+                                                    <div class="lh-1 fw-bold">{{ event.owner.fullName }}</div>
+                                                    <div class="text-muted small">{{ event.createdAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('show_group', {id: event.groupEvent.group.id}) }}"
+                                           class="list-group-item list-group-item-action">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ event.groupEvent.group.photo }}" width="35"
+                                                     class="rounded-circle me-2"/>
+                                                <div>
+                                                    <div class="lh-1 fw-bold">{{ event.groupEvent.group.title }}</div>
+                                                    <div class="text-muted small">{{ event.createdAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

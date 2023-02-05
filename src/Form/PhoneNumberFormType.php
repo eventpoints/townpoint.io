@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\PhoneNumber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,7 +30,7 @@ class PhoneNumberFormType extends AbstractType
                     'class' => 'form-floating w-75 mb-3',
                 ],
             ])
-            ->add('countryCode', TextType::class, [
+            ->add('countryCode', CountryType::class, [
                 'label' => $this->translator->trans('dial-code'),
                 'row_attr' => [
                     'class' => 'form-floating w-25 mb-3',

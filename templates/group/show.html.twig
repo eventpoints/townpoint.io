@@ -1,11 +1,11 @@
+{% import "macro/comment.macro.twig" as comment %}
 {% extends 'base.html.twig' %}
 
 {% block body %}
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-4">
-                <div class="card">
-
+            <div class="col-12 col-md-5">
+                <div class="card mb-3">
                     <div class="card-header">
                         <div class="d-flex justify-content-between">
                             <div>
@@ -13,45 +13,66 @@
                             </div>
                             <div class="text-end">
                                 <h5>{{ group.title }}</h5>
-                                <div class="text-muted">{{ group.createdAt|format_date }}</div>
                             </div>
                         </div>
                     </div>
                     <div class="card-header">
-                        <ul class="nav nav-pills flex-column flex-sm-row card-header-pills" id="pills-tab"
+                        <ul class="nav nav-pills nav-justified flex-column flex-sm-row card-header-pills" id="pills-tab"
                             role="tablist">
                             <li class="nav-item">
-                                <button class="nav-link btn-outline-primary active" id="pills-home-tab"
+                                <a href="#information" class="nav-link btn-outline-primary active" id="pills-home-tab"
                                         data-bs-toggle="pill"
                                         data-bs-target="#home" type="button" role="tab" aria-controls="pills-home"
-                                        aria-selected="true">{{ 'information'|trans }}</button>
+                                        aria-selected="true">{{ 'information'|trans }}</a>
                             </li>
                             {% if group.isUserMember(app.user) %}
                                 <li class="nav-item">
-                                    <a class="nav-link" id="pills-home-tab"
+                                    <a href="#members" class="nav-link" id="pills-home-tab"
                                        data-bs-toggle="pill"
                                        data-bs-target="#members" type="button" role="tab"
                                        aria-controls="pills-home"
                                        aria-selected="true">
-                                        <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center justify-content-around">
                                             <div>{{ 'members'|trans }}</div>
                                             <div class="badge text-bg-dark ms-2 fw-bold lh-1">{{ group.groupUsers.count|compact_notation }}</div>
                                         </div>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill"
-                                            data-bs-target="#member-requests" type="button" role="tab"
-                                            aria-controls="pills-home"
-                                            aria-selected="true">{{ 'requests'|trans }}</button>
+                                    <a href="#member-requests" class="nav-link" id="pills-home-tab" data-bs-toggle="pill"
+                                       data-bs-target="#member-requests" type="button" role="tab"
+                                       aria-controls="pills-home"
+                                       aria-selected="true">
+                                        <div class="d-flex align-items-center justify-content-around">
+                                            <div>{{ 'requests'|trans }}</div>
+                                            <div class="badge text-bg-dark ms-2 fw-bold lh-1">{{ group.groupRequests.count|compact_notation }}</div>
+                                        </div>
+                                    </a>
                                 </li>
                             {% endif %}
                         </ul>
                     </div>
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane card-body fade show active" id="home" role="tabpanel"
+                        <div class="tab-pane fade show active" id="home" role="tabpanel"
                              aria-labelledby="pills-home-tab" tabindex="0">
-                            <div class="lead">{{ group.purpose }}</div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item">
+                                    <div class="lead">{{ group.purpose }}</div>
+                                </div>
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-pill px-2 me-2 bg-grey text-black d-flex align-items-center justify-content-between">
+                                            <div class="mdi mdi-map-marker fs-4 me-2"></div>
+                                            <div>{{ group.country|country_name(app.user.language)|capitalize }}</div>
+                                        </div>
+                                        <div class="rounded-pill px-2 bg-primary text-white d-flex align-items-center justify-content-between">
+                                            <div class="mdi mdi-translate fs-4 me-2"></div>
+                                            <div> {{ group.language|language_name(app.user.language)|capitalize }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item">{{ 'founded'|trans }} {{ group.createdAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</div>
+                            </div>
                         </div>
 
                         {% if group.isUserMember(app.user) %}
@@ -100,8 +121,11 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% if not group.userMember(app.user) %}
-                        <div class="card-footer text-center">
+                </div>
+
+                {% if not group.userMember(app.user) %}
+                    <div class="card">
+                        <div class="card-body text-center">
                             {% if not group.userRequested(app.user) %}
                                 <a href="{{ path('group_request', {id: group.id}) }}"
                                    class="btn btn-outline-primary w-100">
@@ -109,15 +133,135 @@
                                 </a>
                             {% else %}
                                 <div class="fw-bold text-center text-muted">
-                                    {{ 'membership-pending'|trans }}
+                                    {{ 'membership-request-pending'|trans }}
                                 </div>
                             {% endif %}
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
 
+                {% if app.user == group.owner and not group.isVisible %}
+                    <div class="alert alert-warning fade show text-muted" role="alert">
+                        <div class="text-center fw-bold">{{ 'private-group-link-information'|trans }}</div>
+                        <hr>
+                        <div class="d-flex" data-controller="copy"
+                             data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
+                            <div class="me-2" data-copy-target="source">{{ groupUrl }}</div>
+                            <a class="btn-link link-primary" type="button"
+                               data-action="copy#copy"
+                               data-copy-target="button">
+                                <span class="mdi mdi-content-copy" data-bs-toggle="tooltip" data-bs-placement="right"
+                                      data-bs-title="{{ 'copy'|trans }}"></span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-7">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a href="#comments" class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                                        data-bs-target="#comments" type="button" role="tab" aria-controls="pills-home"
+                                        aria-selected="true">{{ 'comments'|trans }}
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a href="#events" class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#events"
+                                        type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+                                    {{ 'events'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="comments" role="tabpanel"
+                         aria-labelledby="pills-home-tab" tabindex="0">
+                        <div class="mb-3">
+                            <div class="mb-3">
+                                <turbo-frame id="comment-form-frame"
+                                             src="{{ path('group_create_comment', {id: group.id}) }}"
+                                             target="_top">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </turbo-frame>
+                            </div>
+
+                            {% for comment in groupCommentPagination %}
+                                {{ comment.comment(comment) }}
+                            {% else %}
+                                <div class="card card-body text-muted text-center">{{ 'no-comments' }}</div>
+                            {% endfor %}
+
+                            <div class="col-md-12 d-flex justify-content-center mt-5">
+                                {{ knp_pagination_render(groupCommentPagination) }}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="events" role="tabpanel" aria-labelledby="pills-profile-tab"
+                         tabindex="0">
+                        {% if group.isUserMember(app.user) and group.isUserAdmin(app.user) %}
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <a class="btn btn-outline-primary"
+                                       href="{{ path('create_group_event', {id: group.id}) }}">{{ 'create-group-event'|trans }}</a>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if group.isUserMember(app.user) %}
+                            {% for groupEvent in groupEventPagination %}
+                                <div class="card mb-3 position-relative">
+                                    <div class="card-body">
+                                        <div class="mb-2 d-flex justify-content-between align-items-start">
+                                            <a href="{{ path('show_event', {id: groupEvent.event.id}) }}"><span
+                                                        class="h5 me-2"> {{ groupEvent.event.title }}</span></a>
+                                            <span class="d-flex justify-content-between rounded-pill bg-primary px-2 text-white">
+                                   <span class="mdi mdi-account-group me-1"></span>
+                                    <span class="">{{ groupEvent.event.eventUsers.count|compact_notation }}</span>
+                                </span>
+                                        </div>
+                                        <div class="text-muted mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                                <span class="lh-1"> {{ groupEvent.event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
+                                                <span class="lh-1"> {{ groupEvent.event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                            </div>
+                                        </div>
+                                        {% if groupEvent.event.isUserAttending(app.user) %}
+                                            <div>{{ groupEvent.event.address }}</div>
+                                        {% endif %}
+                                        {% if app.user == groupEvent.event.owner or groupEvent.event.hasBeenRejected(app.user) or groupEvent.event.isUserAttending(app.user) %}
+                                        {% elseif groupEvent.event.userRejectedInvitation(app.user) %}
+                                            <div class="text-center text-muted">
+                                                {{ 'invitation-declined' }}
+                                            </div>
+                                        {% else %}
+                                            <hr/>
+                                            <a href="{{ path('create_event_request', {id: groupEvent.event.id}) }}"
+                                               class="btn btn-outline-primary w-100">{{ 'request-invite'|trans }}</a>
+                                        {% endif %}
+                                    </div>
+                                    {% if groupEvent.event.isSameWeek %}
+                                        <div class="card-footer text-primary text-center">
+                                            <div class="fw-bold">Happening this week!</div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

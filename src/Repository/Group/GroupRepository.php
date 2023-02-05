@@ -1,13 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Repository\Group;
 
 use App\DataTransferObjects\GroupFilterDto;
 use App\Entity\Group\Group;
+use App\Entity\User;
+use App\Exception\ShouldNotHappenException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Group>
@@ -19,7 +24,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GroupRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry           $registry,
+                                private readonly Security $security
+    )
     {
         parent::__construct($registry, Group::class);
     }
@@ -50,8 +57,14 @@ class GroupRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('g');
 
-        $qb->andWhere($qb->expr() ->eq('g.isVisible', ':true'))
+        $qb->andWhere($qb->expr()->eq('g.isVisible', ':true'))
             ->setParameter('true', true);
+
+        if ($groupFilterDto->getLanguage()) {
+            $qb->andWhere(
+                $qb->expr()->eq('g.language', ':language')
+            )->setParameter(':language', $groupFilterDto->getLanguage());
+        }
 
         if ($groupFilterDto->getTitle()) {
             $qb->andWhere(
@@ -82,5 +95,37 @@ class GroupRepository extends ServiceEntityRepository
 
         return $qb->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @throws ShouldNotHappenException
+     */
+    public function findByKeyword(string $keyword, bool $isQuery = false): mixed
+    {
+        $user = $this->security->getUser();
+
+        if(!$user instanceof User){
+            throw new ShouldNotHappenException('user required');
+        }
+
+        $qb = $this->createQueryBuilder('g');
+
+        $qb->andWhere($qb->expr()->eq('g.isVisible', ':true'))
+            ->setParameter('true', true);
+
+        $qb->andWhere(
+            $qb->expr()->eq('g.language', ':language')
+        )->setParameter(':language', $user->getLanguage());
+
+        $qb->andWhere(
+            $qb->expr()
+                ->like('LOWER(g.title)', ':title')
+        )->setParameter('title', '%' . strtolower($keyword) . '%');
+
+        if($isQuery){
+            return $qb->getQuery();
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

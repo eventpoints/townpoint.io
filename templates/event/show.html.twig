@@ -1,10 +1,12 @@
 {% import "macro/user.component.macro.twig" as userComponent %}
+{% import "macro/comment.macro.twig" as comment %}
 {% extends 'base.html.twig' %}
 
 {% block body %}
     <div class="container">
         <div class="row g-3 justify-content-center">
             <div class="col-12 col-md-6">
+
                 <div class="card mb-3">
                     <div class="card-body">
                         <h1>{{ event.title }}</h1>
@@ -26,7 +28,7 @@
                                 </div>
                             </div>
                         </div>
-                        {% if event.isUserAttending(app.user) or event.hasBeenInvited(app.user) %}
+                        {% if event.isUserAttending(app.user) %}
                             <div class="d-flex" data-controller="copy"
                                  data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
                                 <div class="h5 me-2" data-copy-target="source">
@@ -41,164 +43,239 @@
                             </div>
                         {% endif %}
                     </div>
-                </div>
 
-                <div class="mb-3">
-                    <turbo-frame id="comment-form-frame" src="{{ path('event_create_comment', {id: event.id}) }}"
-                                 target="_top">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
+                    {% if app.user == event.owner %}
+                    {% elseif event.isUserAttending(app.user) %}
+                        <div class="card-footer text-center">
+                            {{ 'attending-event'|trans }}
                         </div>
-                    </turbo-frame>
-                </div>
-
-                {% for comment in event.comments %}
-                    <div class="card mb-2">
-                        <div class="card-body">
-
-                            <figure class="text-center">
-                                <blockquote class="blockquote">
-                                    <p class="lead">{{ comment.content }}</p>
-                                </blockquote>
-                                <figcaption class="blockquote-footer">
-                                    <a class="link-dark"
-                                       href="{{ path('profile', {id: comment.owner.id}) }}">{{ comment.owner.firstName }}</a>
-                                    @{{ comment.createdAt|format_datetime('medium', 'medium', '', app.user.timezone) }}
-                                </figcaption>
-                            </figure>
+                    {% elseif event.hasBeenInvited(app.user) %}
+                        <div class="card-footer text-center">
+                            <a class="link-dark"
+                               href="{{ path('invitations') }}">{{ 'respond-to-event-invitation'|trans }}</a>
                         </div>
-                    </div>
-                {% else %}
-                    <div class="h5 text-muted">{{ 'no-comments' }}</div>
-                {% endfor %}
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="list-group mb-3">
-                    <div class="list-group-item h4 m-0 d-flex justify-content-between">
-                        <div>{{ 'event-participants'|trans }}</div>
-                        <span class="mdi mdi-account-group me-1"></span>
-                    </div>
-                    {% for eventUser in event.eventUsers %}
-                        <a
-                                {% if app.user == eventUser.owner %}
-                                href="{{ path('show_event_participant', {id: eventUser.id}) }}"
-                                {% else %}
-                                    href="{{ path('profile', {id: eventUser.owner.id}) }}"
-                                {% endif %}
-                                class="list-group-item list-group-item-action">
-                            <div class="d-flex align-items-center">
-                                <img src="{{ eventUser.owner.avatar }}" width="40" class="rounded-circle me-3"/>
-                                <div>
-                                    <div class="h5 m-0">{{ eventUser.owner.fullName }}</div>
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-
-                {% if event.owner == app.user %}
-                    <div class="list-group mb-3">
-                        <div class="list-group-item h5 m-0 d-flex justify-content-between">
-                            <div>{{ 'invited'|trans }}</div>
-                            <span class="mdi mdi-account-group me-1"></span>
+                    {% elseif event.hasUserRequested(app.user) %}
+                        <div class="card-footer text-center">
+                            {{ 'request-pending'|trans }}
                         </div>
-                        {% for eventInvite in event.eventInvites %}
-                            <div class="list-group-item list-group-item-action">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <a href="{{ path('profile', {id: eventInvite.owner.id}) }}"
-                                       class="d-flex align-items-center">
-                                        <img src="{{ eventInvite.owner.avatar }}" width="40"
-                                             class="rounded-circle me-3"/>
-                                        <div class="h5 m-0">{{ eventInvite.owner.fullName }}</div>
-                                    </a>
-                                    <div class="d-flex">
-                                        pending
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="list-group-item text-center text-muted mb-3">
-                                {{ 'no-invites'|trans }}
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="list-group mb-3">
-                        <div class="list-group-item h5 m-0 d-flex justify-content-between">
-                            <div>{{ 'event-requests'|trans }}</div>
-                            <span class="mdi mdi-account-group me-1"></span>
+                    {% elseif event.hasBeenRejected(app.user) %}
+                        <div class="card-footer text-center">
+                            {{ 'request-rejected'|trans }}
                         </div>
-
-                        {% for eventRequest in eventRequests %}
-                            <div class="list-group-item list-group-item-action">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <a href="{{ path('profile', {id: eventRequest.owner.id}) }}"
-                                       class="d-flex align-items-center">
-                                        <img src="{{ eventRequest.owner.avatar }}" width="40"
-                                             class="rounded-circle me-3"/>
-                                        <div class="h5 m-0">{{ eventRequest.owner.fullName }}</div>
-                                    </a>
-                                    <div class="d-flex">
-                                        <a class="btn link-primary"
-                                           href="{{ path('accept_event_request', { id: eventRequest.id }) }}">
-                                            <span class="mdi mdi-check fs-4"></span>
-                                        </a>
-                                        <a class="btn link-danger"
-                                           href="{{ path('reject_event_request', { id: eventRequest.id }) }}">
-                                            <span class="mdi mdi-close fs-4"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div class="list-group-item text-center text-muted mb-3">
-                                {{ 'no-requests'|trans }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-
-
-                {% if app.user == event.owner %}
-                {% elseif event.isRequestPending(app.user) %}
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="h5 m-0">{{ 'request-pending'|trans }}</div>
-                                <div>
-                                    <span class="mdi mdi-timelapse fs-3"></span>
-                                </div>
-                            </div>
+                    {% elseif event.userRejectedInvitation(app.user) %}
+                        <div class="card-footer text-center text-muted">
+                            {{ 'invitation-declined'|trans }}
                         </div>
-                    </div>
-                {% elseif event.hasBeenRejected(app.user) %}
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="h5 m-0">{{ 'request-rejected'|trans }}</div>
-                                <div>
-                                    <span class="mdi mdi-close text-danger fs-3"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% elseif event.isUserAttending(app.user) %}
-                {% else %}
-                    <div class="card">
-                        <div class="card-body">
+                    {% else %}
+                        <div class="card-footer">
                             <a href="{{ path('create_event_request', {id: event.id}) }}"
                                class="btn btn-outline-primary w-100">{{ 'request-invite'|trans }}</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="nav nav-pills" id="event-participants-tab" role="tablist">
+                            <div class="nav-item" role="presentation">
+                                <button class="nav-link active" id="participants-tab" data-bs-toggle="pill"
+                                        data-bs-target="#participants" type="button" role="tab"
+                                        aria-controls="pills-participants"
+                                        aria-selected="true">
+                                    {{ 'participants'|trans|capitalize }}
+                                </button>
+                            </div>
+
+                            {% if event.owner == app.user %}
+                                <div class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-requests-tab" data-bs-toggle="pill"
+                                            data-bs-target="#requests" type="button" role="tab"
+                                            aria-controls="pills-requests" aria-selected="false">
+                                        {{ 'requests'|trans|capitalize }}
+                                    </button>
+                                </div>
+                            {% endif %}
+
+                            {% if event.owner == app.user %}
+                                <div class="nav-item" role="presentation">
+                                    <button class="nav-link" id="event-invitations-tab" data-bs-toggle="pill"
+                                            data-bs-target="#invitations" type="button" role="tab"
+                                            aria-controls="pills-invitations" aria-selected="false">
+                                        {{ 'invitations'|trans|capitalize }}
+                                    </button>
+                                </div>
+                            {% endif %}
+
+                            {% if event.owner == app.user or event.userRejectedInvitation(app.user) or event.isUserAttending(app.user) or event.hasBeenInvited(app.user) %}
+                                <div class="nav-item" role="presentation">
+                                    <button class="nav-link" id="pills-requests-tab" data-bs-toggle="pill"
+                                            data-bs-target="#declined" type="button" role="tab"
+                                            aria-controls="pills-requests" aria-selected="false">
+                                        {{ 'declined'|trans|capitalize }}
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="participants" role="tabpanel"
+                             aria-labelledby="pills-home-tab" tabindex="0">
+                            <div class="list-group list-group-flush">
+                                {% for eventUser in eventParticipantsPagination %}
+                                    <div
+                                            class="list-group-item list-group-item-action">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <a href="{{ path('profile', {id: eventUser.owner.id}) }}"
+                                               class="d-flex align-items-center">
+                                                <img src="{{ eventUser.owner.avatar }}" width="40"
+                                                     class="rounded-circle me-3"/>
+                                                <div class="h5 m-0">{{ eventUser.owner.fullName }}</div>
+                                            </a>
+                                            {% if app.user == eventUser.owner %}
+                                                <span class="mdi mdi-account-supervisor-circle fs-3"></span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {{ knp_pagination_render(eventParticipantsPagination) }}
+                            </div>
+                        </div>
+                        {% if event.owner == app.user %}
+                            <div class="tab-pane fade" id="invitations" role="tabpanel"
+                                 aria-labelledby="pills-profile-tab" tabindex="0">
+                                <div class="list-group list-group-flush">
+                                    {% for eventInvite in eventInvitationsPagination %}
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <a href="{{ path('profile', {id: eventInvite.owner.id}) }}"
+                                                   class="d-flex align-items-center">
+                                                    <img src="{{ eventInvite.owner.avatar }}" width="40"
+                                                         class="rounded-circle me-3"/>
+                                                    <div class="h5 m-0">{{ eventInvite.owner.fullName }}</div>
+                                                </a>
+                                                <div class="d-flex">
+                                                    <div>{{ 'response-pending'|trans }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="list-group-item text-center text-muted">
+                                            {{ 'no-invitations-sent'|trans }}
+                                        </div>
+                                    {% endfor %}
+                                    {{ knp_pagination_render(eventInvitationsPagination) }}
+                                </div>
+
+                            </div>
+                        {% endif %}
+                        {% if event.owner == app.user or event.userRejectedInvitation(app.user) or event.isUserAttending(app.user) or event.hasBeenInvited(app.user) %}
+                            <div class="tab-pane fade" id="declined" role="tabpanel"
+                                 aria-labelledby="pills-contact-tab" tabindex="0">
+                                <div class="list-group list-group-flush">
+                                    {% for eventRejection in eventRejectionsPagination %}
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <a href="{{ path('profile', {id: eventRejection.owner.id}) }}"
+                                                   class="d-flex align-items-center">
+                                                    <img src="{{ eventRejection.owner.avatar }}" width="40"
+                                                         class="rounded-circle me-3"/>
+                                                    <div class="h5 m-0">{{ eventRejection.owner.fullName }}</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="list-group-item text-center text-muted">
+                                            {{ 'no-rejections'|trans }}
+                                        </div>
+                                    {% endfor %}
+                                    {{ knp_pagination_render(eventRejectionsPagination) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if event.owner == app.user %}
+                            <div class="tab-pane fade" id="requests" role="tabpanel"
+                                 aria-labelledby="pills-contact-tab" tabindex="0">
+                                <div class="list-group list-group-flush">
+                                    {% for eventRequest in eventRequestsPagination %}
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <a href="{{ path('profile', {id: eventRequest.owner.id}) }}"
+                                                   class="d-flex align-items-center">
+                                                    <img src="{{ eventRequest.owner.avatar }}" width="40"
+                                                         class="rounded-circle me-3"/>
+                                                    <div class="h5 m-0">{{ eventRequest.owner.fullName }}</div>
+                                                </a>
+                                                <div class="d-flex">
+                                                    <a class="btn link-primary"
+                                                       href="{{ path('accept_event_request', { id: eventRequest.id }) }}">
+                                                        <span class="mdi mdi-check fs-4"></span>
+                                                    </a>
+                                                    <a class="btn link-danger"
+                                                       href="{{ path('reject_event_request', { id: eventRequest.id }) }}">
+                                                        <span class="mdi mdi-close fs-4"></span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="list-group-item text-center text-muted">
+                                            {{ 'no-requests'|trans }}
+                                        </div>
+                                    {% endfor %}
+                                    {{ knp_pagination_render(eventRejectionsPagination) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if event.isUserAttending(app.user) %}
+                    <div class="mb-5">
+                        <turbo-frame id="comment-form-frame" src="{{ path('event_create_comment', {id: event.id}) }}"
+                                     target="_top">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </turbo-frame>
+                    </div>
+
+                    {% for comment in eventCommentPagination %}
+                        {{ comment.comment(comment) }}
+                    {% else %}
+                        <div class="h5 text-muted">{{ 'no-comments' }}</div>
+                    {% endfor %}
+
+                    <div class="col-md-12 d-flex justify-content-center mt-5">
+                        {{ knp_pagination_render(eventCommentPagination) }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-3">
+                {% if event.isTicketed %}
+                    {% for eventUser in event.eventUsers %}
+                        {% if app.user == eventUser.owner %}
+                            <turbo-frame id="show-event-user-ticket-frame"
+                                         src="{{ path('show_event_user_ticket', {id: eventUser.eventUserTicket.id}) }}">
+                                <div class="d-flex justify-content-center py-5">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </turbo-frame>
+                        {% endif %}
+                    {% endfor %}
+                {% elseif not event.isUserAttending(app.user) %}
+                {% else %}
+                    <div class="card">
+                        <div class="card-body text-center fw-bold text-muted">
+                            <div style="padding: 7em 0">{{ 'none-ticketed-event'|trans }}</div>
                         </div>
                     </div>
                 {% endif %}
             </div>
         </div>
-
-    </div>
-    </div>
     </div>
 {% endblock %}
 

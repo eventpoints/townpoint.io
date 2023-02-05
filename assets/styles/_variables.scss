@@ -47,6 +47,7 @@ $border-radius-sm: .3rem;
 $badge-pill-border-radius: 0.3rem;
 $pink: #f8bbd0;
 $white:    #fff !default;
+$gray-light: #F2F3F5 !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
@@ -79,6 +80,7 @@ $prefix: --bs-;
 @import "bootstrap/scss/_variables";
 
 $custom-theme-colours: (
+"gray-light": $gray-light,
 "primary-light": $purple-light,
 "success-light": $green-light,
 "secondary-light": $gray-100,

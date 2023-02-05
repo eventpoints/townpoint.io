@@ -1,11 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -23,7 +25,8 @@ class UserAccountFormType extends AbstractType
 {
     public function __construct(
         private readonly TranslatorInterface $translator
-    ) {
+    )
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -55,11 +58,6 @@ class UserAccountFormType extends AbstractType
             ])
             ->add('language', LanguageType::class, [
                 'label' => $this->translator->trans('language'),
-                'choice_loader' => null,
-                'choices' => [
-                    'English' => 'en',
-                    'Češka' => 'cz',
-                ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
@@ -105,6 +103,7 @@ class UserAccountFormType extends AbstractType
                 'required' => false,
                 'label' => $this->translator->trans('one-sentence-about-you'),
                 'attr' => [
+                    'data-controller' => 'textarea-autogrow',
                     'placeholder' => $this->translator->trans('about'),
                 ],
                 'row_attr' => [
@@ -115,7 +114,13 @@ class UserAccountFormType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-        ;
+            ->add('isVisible', CheckboxType::class, [
+                'required' => false,
+                'help'=> 'hide yourself from the search',
+                'label_attr' => [
+                    'class' => 'checkbox-switch',
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

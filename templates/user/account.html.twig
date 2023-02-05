@@ -8,71 +8,91 @@
             <div class="col-12 col-md-3">
                 {{ include('partials/_account-menu.html.twig') }}
             </div>
-            <div class="col-12 col-md-9">
-                        <div class="row justify-content-center">
-                            <div class="col-12 col-md-3">
-                                <div class="card mb-3">
-                                    <img class="img-fluid rounded w-100" src="{{ app.user.avatar }}"/>
-                                </div>
+            <div class="col-12 col-md-8">
+                {{ form_start(userForm) }}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div class="w-50">
+                                <div class="h5">{{ 'account-information'|trans }}</div>
+                                <p>{{ 'account-information-explainer'|trans }}</p>
                             </div>
-                            <div class="col-12 col-md-8">
-                                {{ form_start(userForm) }}
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <h5>{{ 'account-information'|trans }}</h5>
-
-                                        <div class="input-group">
-                                            {{ form_row(userForm.firstName) }}
-                                            {{ form_row(userForm.lastName) }}
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-12 col-md-8">
-                                                <div class="input-group">
-                                                    {{ form_row(userForm.email) }}
-                                                    {% if app.user.isEnabled %}
-                                                        <span class="position-absolute top-0 start-100 translate-middle">
-                                                        <span class="h5 mdi mdi-check-circle text-primary"></span>
-                                                    </span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                {{ form_row(userForm.age) }}
-                                            </div>
-                                        </div>
-
-                                        {{ form_row(userForm.avatar) }}
-
-                                        <div class="row">
-                                            <div class="col-12 col-md-4">
-                                                {{ form_row(userForm.language) }}
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                {{ form_row(userForm.timezone) }}
-                                            </div>
-                                            <div class="col-12 col-md-4">
-                                                {{ form_row(userForm.currency) }}
-                                            </div>
-                                        </div>
-
-                                        <div class="input-group">
-                                            {{ form_row(userForm.countryOfOrigin) }}
-                                            {{ form_row(userForm.currentCountry) }}
-                                        </div>
-
-                                        {{ form_row(userForm.description) }}
-
-                                        <div class="d-flex justify-content-between">
-                                            <button class="btn btn-outline-danger w-25">{{ 'delete-account'|trans }}</button>
-                                            <button class="btn btn-outline-primary w-25"
-                                                    type="submit">{{ 'save'|trans }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{ form_end(userForm) }}
+                            <div {{ stimulus_controller('light-gallery') }}>
+                                <a href="{{ app.user.avatar }}">
+                                    <img class="rounded-circle border" height="100" src="{{ app.user.avatar }}"/>
+                                </a>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group">
+                            {{ form_row(userForm.firstName) }}
+                            {{ form_row(userForm.lastName) }}
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-8">
+                                <div class="input-group">
+                                    {{ form_row(userForm.email) }}
+                                    {% if app.user.isEnabled %}
+                                        <span class="position-absolute top-0 start-100 translate-middle">
+                                                        <span class="h5 mdi mdi-check-circle text-primary"></span>
+                                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                {{ form_row(userForm.age) }}
+                            </div>
+                        </div>
+                        {{ form_row(userForm.avatar) }}
+                        <div class="row">
+                            <div class="col-12 col-md-4">
+                                {{ form_row(userForm.language) }}
+                            </div>
+                            <div class="col-12 col-md-4">
+                                {{ form_row(userForm.timezone) }}
+                            </div>
+                            <div class="col-12 col-md-4">
+                                {{ form_row(userForm.currency) }}
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            {{ form_row(userForm.countryOfOrigin) }}
+                            {{ form_row(userForm.currentCountry) }}
+                        </div>
+                        {{ form_row(userForm.description) }}
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item">
+                            {{ form_row(userForm.isVisible) }}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-outline-primary"
+                                    type="submit">{{ 'save'|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(userForm) }}
+
+                <div class="card mb-5">
+                    <div class="card-header">
+                        <div class="h5 text-danger">{{ 'danger-zone'|trans }}</div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="text-danger">{{ 'delete-account'|trans }}</div>
+                                <p>Once you delete an account, there is no going back. Please be certain.</p>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-danger">{{ 'delete-account'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -16,28 +16,22 @@ import './styles/app.scss';
 // start the Stimulus application
 import './bootstrap';
 
-document.addEventListener('turbo:load', function (e) {
-
-    let tabs = document.querySelectorAll('a[role="tab"]')
-
-    tabs.forEach((item) => {
-        item.addEventListener('click', (event) => {
-            event.preventDefault();
-            console.log(event.target.getAttribute('href'))
-            history.pushState("object or string", "Page title", event.target.getAttribute('href'));
-        })
-    })
-
-    let hash = window.location.hash;
-    let element = document.querySelector('a[href="' + hash + '"]');
-    let tab = new Tab(element);
-    tab.show();
-});
 
 document.addEventListener('turbo:load', function (e) {
-    // this enables bootstrap tooltips globally
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new Tooltip(tooltipTriggerEl)
+    })
+})
+
+document.addEventListener('turbo:load', function (e) {
+    $("a[role='tab']").on("click", function (event) {
+        event.preventDefault();
+        history.pushState("object or string", "Page title", $(this).attr("href"));
     });
+
+    let selectedTab = window.location.hash;
+    console.log(selectedTab)
+    let tabTrigger = new Tab($('.nav-link[href="' + selectedTab + '"]:first'));
+    tabTrigger.show();
 });

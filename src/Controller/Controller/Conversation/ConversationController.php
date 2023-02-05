@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controller\Controller\Conversation;
 
 use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Form\Conversation\ConversationEditFormType;
 use App\Form\MessageFormType;
 use App\Repository\ConversationRepository;
 use App\Service\CurrentUserService;
@@ -24,10 +25,11 @@ class ConversationController extends AbstractController
 {
     public function __construct(
         private readonly ConversationRepository $conversationRepository,
-        private readonly PaginatorInterface $paginator,
-        private readonly CurrentUserService $currentUserService,
-        private readonly TranslatorInterface $translator
-    ) {
+        private readonly PaginatorInterface     $paginator,
+        private readonly CurrentUserService     $currentUserService,
+        private readonly TranslatorInterface    $translator
+    )
+    {
     }
 
     #[Route(path: '/', name: 'conversations')]
@@ -105,4 +107,21 @@ class ConversationController extends AbstractController
             'messageForm' => $messageForm->createView(),
         ]);
     }
+
+    #[Route(path: '/edit/{id}', name: 'conversation_edit')]
+    public function edit(Request $request, Conversation $conversation): Response
+    {
+        $conversationForm = $this->createForm(ConversationEditFormType::class, $conversation);
+        $conversationForm->handleRequest($request);
+        if ($conversationForm->isSubmitted() && $conversationForm->isValid()) {
+            $this->conversationRepository->add($conversation, true);
+            return $this->redirectToRoute('conversation', ['id' => $conversation->getId()]);
+        }
+
+        return $this->render('conversations/edit.html.twig', [
+            'conversation' => $conversation,
+            'conversationForm' => $conversationForm->createView(),
+        ]);
+    }
+
 }

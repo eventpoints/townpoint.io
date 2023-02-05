@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Repository\Event;
 
+use App\Entity\Event\Event;
 use App\Entity\Event\EventInvite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -43,5 +44,21 @@ class EventInviteRepository extends ServiceEntityRepository
             $this->getEntityManager()
                 ->flush();
         }
+    }
+
+    public function findByEvent(Event $event, bool $isQuery = false) : mixed
+    {
+        $qb = $this->createQueryBuilder('ei');
+        $qb->andWhere($qb->expr() ->eq('ei.event', ':event'))
+            ->setParameter('event', $event->getId(), 'uuid');
+
+        $qb->orderBy('ei.createdAt', 'ASC');
+
+        if($isQuery){
+            return $qb->getQuery();
+        }
+
+        return $qb->getQuery()
+            ->getResult();
     }
 }

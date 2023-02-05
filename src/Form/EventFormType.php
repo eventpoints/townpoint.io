@@ -1,15 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Address;
 use App\Entity\Event\Event;
 use App\Entity\User;
 use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,13 +22,14 @@ class EventFormType extends AbstractType
 {
     public function __construct(
         private readonly Security $security
-    ) {
+    )
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $currentUser = $this->security->getUser();
-        if (! $currentUser instanceof User) {
+        if (!$currentUser instanceof User) {
             throw new Exception('Must be type of User');
         }
 
@@ -38,15 +42,7 @@ class EventFormType extends AbstractType
             ->add('address', TextType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
-                ],
-                'tom_select_options' => [
-                    'create' => true,
-                    'createOnBlur' => true,
-                    'multiple' => false,
-                    'delimiter' => ';',
-                ],
-                'autocomplete_url' => '/user/addresses',
-                'autocomplete' => true,
+                ]
             ])
             ->add('startAt', DateTimeType::class, [
                 'html5' => false,
@@ -86,6 +82,13 @@ class EventFormType extends AbstractType
                 'choice_label' => 'handle',
                 'autocomplete' => true,
                 'multiple' => true,
+            ])->add('isTicketed', CheckboxType::class, [
+                'label' => 'Generate QR Tickets',
+                'help' => 'automatically create QR tickets for event participants',
+                'label_attr' => [
+                    'class' => 'checkbox-switch',
+                ],
+                'required' => false,
             ]);
     }
 

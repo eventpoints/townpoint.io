@@ -7,9 +7,11 @@ namespace App\Entity;
 use App\Entity\Business\Business;
 use App\Entity\Event\Event;
 use App\Entity\Event\EventInvite;
+use App\Entity\Event\EventRejection;
 use App\Entity\Event\EventRequest;
 use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
+use App\Entity\Market\Item;
 use App\Entity\Traits\ProfileTrait;
 use App\Enum\ReactionEnum;
 use App\Repository\UserRepository;
@@ -91,10 +93,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $reactions;
 
     #[ORM\Column(length: 2)]
-    private ?string $language = 'EN';
+    private ?string $language = 'en';
 
     #[ORM\Column(length: 3)]
-    private ?string $currency = 'EUR';
+    private ?string $currency = 'eur';
 
     #[ORM\Column(length: 255, nullable: true)]
     private null|string $timezone = null;
@@ -183,6 +185,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Group::class)]
     private Collection $ownedGroups;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventRejection::class, orphanRemoval: true)]
+    private Collection $eventRejections;
+
+    #[ORM\Column]
+    private null|bool $isVisible = true;
+
+    #[ORM\Column]
+    private null|bool $isSuspended = false;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class)]
+    private Collection $marketItems;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
@@ -200,6 +214,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->eventInvites = new ArrayCollection();
         $this->groupRequests = new ArrayCollection();
         $this->ownedGroups = new ArrayCollection();
+        $this->eventRejections = new ArrayCollection();
+        $this->marketItems = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -393,7 +409,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isIsEnabled(): ?bool
+    public function getIsEnabled(): ?bool
     {
         return $this->isEnabled;
     }
@@ -891,5 +907,89 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAddress(?Address $address): void
     {
         $this->address = $address;
+    }
+
+    /**
+     * @return Collection<int, EventRejection>
+     */
+    public function getEventRejections(): Collection
+    {
+        return $this->eventRejections;
+    }
+
+    public function addEventRejection(EventRejection $eventRejection): self
+    {
+        if (!$this->eventRejections->contains($eventRejection)) {
+            $this->eventRejections->add($eventRejection);
+            $eventRejection->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventRejection(EventRejection $eventRejection): self
+    {
+        if ($this->eventRejections->removeElement($eventRejection)) {
+            // set the owning side to null (unless already changed)
+            if ($eventRejection->getOwner() === $this) {
+                $eventRejection->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIsVisible(): ?bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): self
+    {
+        $this->isVisible = $isVisible;
+
+        return $this;
+    }
+
+    public function isIsSuspended(): ?bool
+    {
+        return $this->isSuspended;
+    }
+
+    public function setIsSuspended(bool $isSuspended): self
+    {
+        $this->isSuspended = $isSuspended;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getMarketItems(): Collection
+    {
+        return $this->marketItems;
+    }
+
+    public function addMarketItem(Item $marketItem): self
+    {
+        if (!$this->marketItems->contains($marketItem)) {
+            $this->marketItems->add($marketItem);
+            $marketItem->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMarketItem(Item $marketItem): self
+    {
+        if ($this->marketItems->removeElement($marketItem)) {
+            // set the owning side to null (unless already changed)
+            if ($marketItem->getOwner() === $this) {
+                $marketItem->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }

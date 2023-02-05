@@ -6,6 +6,50 @@
 @import 'tom-select/dist/css/tom-select.bootstrap5.css';
 @import "bootstrap-icons";
 @import "audio-player.scss";
+@import "lightgallery/scss/lightgallery";
+@import "trix/dist/trix.css";
+@import "lightgallery/scss/lightgallery";
+@import 'swiper/swiper.css';
+
+.card-img-overlay-hover{
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+.card-img-overlay-hover:hover{
+    background-color: rgba(0,0,0,0.7);
+}
+
+.bg-black-transparent{
+    background-color: rgba(0,0,0,0.7);
+}
+
+.gallery-item{
+    margin-bottom: 20px;
+}
+
+.grid-sizer,
+.gallery-item { width: 20%; }
+
+.trix-button-group--file-tools,
+.trix-button--icon-attach,
+.trix-button-group--history-tools,
+.trix-button--icon-undo,
+.trix-button--icon-redo,
+.trix-button-group-spacer { display:none!important; }
+
+.card-header-hover{
+    background-color: rgba(255,255,255,0.7);
+    display: none;
+    position: relative;
+}
+
+.card:hover .card-header-hover{
+    position: absolute;
+    top: 0;
+    display: flex!important;
+    justify-content: end;
+    align-content: center;
+    width: 100%;
+}
 
 .ticket-border{
     border-bottom: 0.3rem dashed rgba(0,0,0, 0.3)!important;
@@ -169,7 +213,13 @@ textarea {
     right: 5px;
 }
 
+.object-fit-contain{
+    background-size: contain;
+    object-fit: contain;
+}
+
 .object-fit-cover{
+    background-size: cover;
     object-fit: cover;
 }
 

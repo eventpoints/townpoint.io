@@ -25,26 +25,4 @@ class EventUserController extends AbstractController
             'eventUser' => $eventUser,
         ]);
     }
-
-    #[Route(path: '/validate/{token}', name: 'event_qr_validate')]
-    public function validateTicket(string $token): Response
-    {
-        $eventUser = $this->eventUserRepository->findOneBy([
-            'token' => $token,
-        ]);
-
-        if (! $eventUser instanceof EventUser) {
-            return $this->render('event/ticket/invalid.html.twig');
-        }
-
-        return $this->render('event/ticket/valid.html.twig', [
-            'eventUser' => $eventUser,
-        ]);
-    }
-
-    #[Route(path: '/invalidate/{id}', name: 'event_ticket_mark_used')]
-    public function invalidateTicket(): Response
-    {
-        return $this->render('terms/index.html.twig');
-    }
 }

@@ -5,8 +5,11 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use App\Entity\Event\Event;
+use App\Entity\Group\Group;
+use App\Entity\Market\Item;
 use App\Repository\CommentRepository;
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
@@ -20,7 +23,7 @@ class Comment
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
     private ?Uuid $id;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private string $content;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
@@ -31,6 +34,12 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Event $event = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Group $group = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Item $marketItem = null;
 
     public function __construct()
     {
@@ -86,6 +95,30 @@ class Comment
     public function setEvent(?Event $event): self
     {
         $this->event = $event;
+
+        return $this;
+    }
+
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?Group $group): self
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    public function getMarketItem(): ?Item
+    {
+        return $this->marketItem;
+    }
+
+    public function setMarketItem(?Item $marketItem): self
+    {
+        $this->marketItem = $marketItem;
 
         return $this;
     }

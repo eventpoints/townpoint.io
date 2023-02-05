@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'market-item-rules' => 'Market Rules',
+    'market-item-rule-common-sense' => 'Please use your common sense, do not advertise illegal items or services.',
+    'market-item-rule-dimensions' => 'Add item dimensions to the description if it\'s applicable',
+    'market-item-rule-price' => 'If you post an item for 0.00, this will be show as free. If you are open to offers ensure you check accepting offers checkbox',
+    'market-item-accepting-price-offers-explainer' => 'The price field will be ignored if this is checked',
     'email-address' => 'E-mail Address',
     'firstName' => 'firstName',
     'lastName' => 'lastName',
@@ -25,6 +30,7 @@ return [
     'addresses' => 'addresses',
     'phone-numbers' => 'phone-numbers',
     'account-information' => 'account-information',
+    'account-information-explainer' => 'find all your personal information, account settings and deletion on one page',
     'delete-account' => 'delete-account',
     'add-address' => 'add-address',
     'create-poll' => 'create-poll',
@@ -88,5 +94,6 @@ return [
         'how-do-we-collect-your-data-content' => 'You directly provide our company with most of the data we collect. We collect data and process data when you: Register online or place an order for any of our products or services. Voluntarily complete a form or provide feedback on any of our Use or view our website via your browser\'s cookies. Our Company may also receive your data indirectly from the following sources: Geolocation based on address of property',
         'how-will-we-use-your-data' => 'How will we use your data?',
         'how-will-we-use-your-data-content' => 'Our Company collects your data so that we can: Process your order, manage your account. Email you with special offers on other products and services we think you might like. If you agree, Our Company will share your data with our partner companies so that they may offer you their products and services.',
+        'private-group-link-information' => 'This is a private group. Only users with a link can access the group.',
     ]
 ];

@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Entity\Event;
 
 use App\Entity\Comment;
+use App\Entity\Group\GroupEvent;
 use App\Entity\User;
 use App\Repository\Event\EventRepository;
 use Carbon\Carbon;
@@ -66,6 +67,16 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventInvite::class)]
     private Collection $eventInvites;
 
+    #[ORM\Column]
+    private bool $isTicketed = false;
+
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventRejection::class)]
+    private Collection $eventRejections;
+
+    #[ORM\OneToOne(inversedBy: 'event', targetEntity: GroupEvent::class,cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private null|GroupEvent $groupEvent = null;
+
     public function __construct()
     {
         $this->eventUsers = new ArrayCollection();
@@ -73,6 +84,7 @@ class Event
         $this->eventRequests = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->eventInvites = new ArrayCollection();
+        $this->eventRejections = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -167,7 +179,7 @@ class Event
 
     public function addEventUser(EventUser $user): self
     {
-        if (! $this->eventUsers->contains($user)) {
+        if (!$this->eventUsers->contains($user)) {
             $this->eventUsers->add($user);
             $user->setEvent($this);
         }
@@ -226,7 +238,7 @@ class Event
 
     public function addEventRequest(EventRequest $eventRequest): self
     {
-        if (! $this->eventRequests->contains($eventRequest)) {
+        if (!$this->eventRequests->contains($eventRequest)) {
             $this->eventRequests->add($eventRequest);
             $eventRequest->setEvent($this);
         }
@@ -283,7 +295,7 @@ class Event
 
     public function addComment(Comment $comment): self
     {
-        if (! $this->comments->contains($comment)) {
+        if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
             $comment->setEvent($this);
         }
@@ -311,7 +323,7 @@ class Event
 
     public function addEventInvite(EventInvite $eventInvite): self
     {
-        if (! $this->eventInvites->contains($eventInvite)) {
+        if (!$this->eventInvites->contains($eventInvite)) {
             $this->eventInvites->add($eventInvite);
             $eventInvite->setEvent($this);
         }
@@ -336,4 +348,71 @@ class Event
                 return $eventInvite->getOwner() === $user;
             });
     }
+
+    public function isIsTicketed(): bool
+    {
+        return $this->isTicketed;
+    }
+
+    public function setIsTicketed(bool $isTicketed): self
+    {
+        $this->isTicketed = $isTicketed;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EventRejection>
+     */
+    public function getEventRejections(): Collection
+    {
+        return $this->eventRejections;
+    }
+
+    public function addEventRejection(EventRejection $eventRejection): self
+    {
+        if (!$this->eventRejections->contains($eventRejection)) {
+            $this->eventRejections->add($eventRejection);
+            $eventRejection->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventRejection(EventRejection $eventRejection): self
+    {
+        if ($this->eventRejections->removeElement($eventRejection)) {
+            // set the owning side to null (unless already changed)
+            if ($eventRejection->getEvent() === $this) {
+                $eventRejection->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasUserRejectedInvitation(User $user): bool
+    {
+        return $this->getEventRejections()
+            ->exists(function (int $key, EventRejection $eventRejection) use ($user): bool {
+                return $eventRejection->getOwner() === $user;
+            });
+    }
+
+    public function getGroupEvent(): null|GroupEvent
+    {
+        return $this->groupEvent;
+    }
+
+    public function setGroupEvent(null|GroupEvent $groupEvent): void
+    {
+        $this->groupEvent = $groupEvent;
+    }
+
+    public function isSameWeek() : bool
+    {
+        $date = Carbon::parse($this->createdAt);
+        return $date->isSameWeek();
+    }
+
 }

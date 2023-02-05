@@ -5,8 +5,7 @@
         </a>
         {% if app.user %}
             <div class="w-50">
-                <turbo-frame src="{{ path('_user_search') }}" class="w-100" id="user-search-form-frame"
-                             target="_top">
+                <turbo-frame src="{{ path('search') }}" class="w-100" id="search-form-frame" target="_top">
                     <div class="d-flex justify-content-center">
                         <div class="spinner-border" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -62,9 +61,9 @@
                     <div class="h4 my-2">{{ app.user.fullName|capitalize }}</div>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('feed') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-format-list-text fs-3"></div>
-                        <div class="fw-bold">{{ 'feed'|trans|capitalize }}</div>
+                    <a href="{{ path('market') }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-store fs-3"></div>
+                        <div class="fw-bold">{{ 'market'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">

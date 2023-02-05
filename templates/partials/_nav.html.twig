@@ -1,14 +1,21 @@
-<div class="col-12 col-md-12">
-    <div class="card">
-        <div class="card-body">
-            <nav class="nav nav-pills flex-column flex-sm-row">
-                <a class="flex-sm-fill text-sm-center nav-link {% if app.request.attributes.get('_route') == 'feed' %}active{% endif %}"
-                   aria-current="page" href="{{ path('feed') }}">{{ 'feed'|trans }}</a>
-                <a class="flex-sm-fill text-sm-center nav-link {% if app.request.attributes.get('_route') == 'events' %}active{% endif %}"
-                   href="{{ path('events') }}">{{ 'events'|trans }}</a>
-                <a class="flex-sm-fill text-sm-center nav-link {% if app.request.attributes.get('_route') == 'groups' %}active{% endif %}"
-                   href="{{ path('groups') }}">{{ 'groups'|trans }}</a>
-            </nav>
-        </div>
+<div class="card">
+    <div class="card-body">
+        <nav class="nav nav-pills flex-row">
+            <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'market' %}active{% endif %}"
+               aria-current="page" href="{{ path('market') }}">
+                <span class="mdi mdi-store fs-3"></span>
+                <div>{{ 'market'|trans|capitalize }}</div>
+            </a>
+            <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'events' %}active{% endif %}"
+               href="{{ path('events') }}">
+                <span class="mdi mdi-calendar fs-3"></span>
+                <div>{{ 'events'|trans|capitalize }}</div>
+            </a>
+            <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'groups' %}active{% endif %}"
+               href="{{ path('groups') }}">
+                <span class="mdi mdi-account-group fs-3"></span>
+                <div>{{ 'groups'|trans|capitalize }}</div>
+            </a>
+        </nav>
     </div>
 </div>

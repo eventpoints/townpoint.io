@@ -30,17 +30,13 @@ class EventUser
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'eventUsers')]
     private Event $event;
 
-    #[ORM\Column(type: 'uuid', unique: true)]
-    private Uuid $token;
-
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private EventUserTicket $eventUserTicket;
+    #[ORM\JoinColumn(nullable: true)]
+    private null|EventUserTicket $eventUserTicket;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
-        $this->token = Uuid::v4();
     }
 
     public function getId(): Uuid
@@ -84,22 +80,12 @@ class EventUser
         return $this;
     }
 
-    public function getToken(): UuidV4|Uuid
-    {
-        return $this->token;
-    }
-
-    public function setToken(UuidV4|Uuid $token): void
-    {
-        $this->token = $token;
-    }
-
-    public function getEventUserTicket(): EventUserTicket
+    public function getEventUserTicket(): null|EventUserTicket
     {
         return $this->eventUserTicket;
     }
 
-    public function setEventUserTicket(EventUserTicket $eventUserTicket): self
+    public function setEventUserTicket(null|EventUserTicket $eventUserTicket): self
     {
         $this->eventUserTicket = $eventUserTicket;
 

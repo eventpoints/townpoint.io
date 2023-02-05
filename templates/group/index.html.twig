@@ -12,15 +12,19 @@
             </div>
 
             <div class="col-12 col-md-4">
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <a class="btn btn-outline-primary"
+                           href="{{ path('create_group') }}">
+                            <span class="mdi mdi-plus fs-4"></span>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="card mb-3">
                     <div class="card-body">
                         {{ include('group/_filter.html.twig') }}
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body text-center">
-                        <a class="btn btn-outline-primary w-100"
-                           href="{{ path('create_group') }}">{{ 'create-group'|trans }}</a>
                     </div>
                 </div>
             </div>

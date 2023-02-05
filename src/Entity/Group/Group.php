@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Entity\Group;
 
+use App\Entity\Comment;
 use App\Entity\User;
 use App\Repository\Group\GroupRepository;
 use DateTimeImmutable;
@@ -52,7 +53,7 @@ class Group
     private null|string $type = null;
 
     #[ORM\Column(length: 3)]
-    private ?string $country = null;
+    private ?string $country = 'en';
 
     #[ORM\Column]
     private bool $isVisible = true;
@@ -60,11 +61,25 @@ class Group
     #[ORM\ManyToOne(inversedBy: 'ownedGroups')]
     private ?User $owner = null;
 
+    #[ORM\Column(length: 3)]
+    private string $language = 'gb';
+
+    /**
+     * @var Collection<int,GroupEvent> $groupEvents
+     */
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupEvent::class, orphanRemoval: true)]
+    private Collection $groupEvents;
+
+    #[ORM\OneToMany(mappedBy: 'groupp', targetEntity: Comment::class)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->groupUsers = new ArrayCollection();
         $this->groupRequests = new ArrayCollection();
+        $this->groupEvents = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -212,7 +227,7 @@ class Group
         return $this;
     }
 
-    public function getCountry(): ?string
+    public function getCountry(): string
     {
         return $this->country;
     }
@@ -244,6 +259,78 @@ class Group
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GroupEvent>
+     */
+    public function getGroupEvents(): Collection
+    {
+        return $this->groupEvents;
+    }
+
+    public function addGroupEvent(GroupEvent $groupEvent): self
+    {
+        if (!$this->groupEvents->contains($groupEvent)) {
+            $this->groupEvents->add($groupEvent);
+            $groupEvent->setGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupEvent(GroupEvent $groupEvent): self
+    {
+        if ($this->groupEvents->removeElement($groupEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($groupEvent->getGroup() === $this) {
+                $groupEvent->setGroup(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getGroup() === $this) {
+                $comment->setGroup(null);
+            }
+        }
 
         return $this;
     }

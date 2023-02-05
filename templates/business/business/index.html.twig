@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Business index{% endblock %}
+
+{% block body %}
+    <h1>Business index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>FoundedAt</th>
+                <th>CreatedAt</th>
+                <th>Address</th>
+                <th>PhoneNumber</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for business in businesses %}
+            <tr>
+                <td>{{ business.id }}</td>
+                <td>{{ business.title }}</td>
+                <td>{{ business.description }}</td>
+                <td>{{ business.type }}</td>
+                <td>{{ business.foundedAt ? business.foundedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ business.createdAt ? business.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ business.address }}</td>
+                <td>{{ business.phoneNumber }}</td>
+                <td>{{ business.email }}</td>
+                <td>{{ business.website }}</td>
+                <td>
+                    <a href="{{ path('app_business_business_show', {'id': business.id}) }}">show</a>
+                    <a href="{{ path('app_business_business_edit', {'id': business.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_business_business_new') }}">Create new</a>
+{% endblock %}
