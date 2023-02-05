@@ -1,13 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
-use App\Entity\User;
-use App\Exception\ShouldNotHappenException;
 use App\Form\KeywordFormType;
-use App\Form\UserSearchFormType;
 use App\Repository\Event\EventRepository;
 use App\Repository\Group\GroupRepository;
 use App\Repository\UserRepository;
@@ -19,26 +16,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-
     public function __construct(
-        private readonly UserRepository     $userRepository,
-        private readonly GroupRepository    $groupRepository,
-        private readonly EventRepository    $eventRepository,
+        private readonly UserRepository $userRepository,
+        private readonly GroupRepository $groupRepository,
+        private readonly EventRepository $eventRepository,
         private readonly PaginatorInterface $paginator,
-    )
-    {
+    ) {
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
     #[Route(path: '/search', name: 'search')]
     public function search(Request $request): Response
     {
         $searchForm = $this->createForm(KeywordFormType::class);
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $keyword = $searchForm->get('keyword')->getData();
+            $keyword = $searchForm->get('keyword')
+                ->getData();
 
             $usersQuery = $this->userRepository->findByKeyword(keyword: $keyword, isQuery: true);
             $eventsQuery = $this->eventRepository->findByKeyword(keyword: $keyword, isQuery: true);
@@ -51,7 +44,7 @@ class SearchController extends AbstractController
             return $this->render('search/index.html.twig', [
                 'usersPagination' => $usersPagination,
                 'eventsPagination' => $eventsPagination,
-                'groupsPagination' => $groupsPagination
+                'groupsPagination' => $groupsPagination,
             ]);
         }
 
@@ -59,7 +52,7 @@ class SearchController extends AbstractController
             'searchForm' => $searchForm->createView(),
             'usersPagination' => null,
             'eventsPagination' => null,
-            'groupsPagination' => null
+            'groupsPagination' => null,
         ]);
     }
 }

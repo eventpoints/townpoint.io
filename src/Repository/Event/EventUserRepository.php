@@ -46,7 +46,7 @@ class EventUserRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByEvent(Event $event, bool $isQuery = false) : mixed
+    public function findByEvent(Event $event, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('eu');
         $qb->andWhere($qb->expr() ->eq('eu.event', ':event'))
@@ -54,7 +54,7 @@ class EventUserRepository extends ServiceEntityRepository
 
         $qb->orderBy('eu.createdAt', 'ASC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity\Market;
 
 use App\Entity\Comment;
-use App\Entity\Conversation;
 use App\Entity\Image;
 use App\Entity\User;
 use App\Repository\ItemRepository;
@@ -19,11 +20,16 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item
 {
+    /**
+     * @var ArrayCollection
+     */
+    public $conversations;
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
-    private ?Uuid $id;
+    private Uuid $id;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -66,7 +72,7 @@ class Item
         $this->conversations = new ArrayCollection();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }
@@ -170,7 +176,7 @@ class Item
 
     public function addImage(Image $image): self
     {
-        if (!$this->images->contains($image)) {
+        if (! $this->images->contains($image)) {
             $this->images->add($image);
             $image->setMarketItem($this);
         }
@@ -180,11 +186,9 @@ class Item
 
     public function removeImage(Image $image): self
     {
-        if ($this->images->removeElement($image)) {
-            // set the owning side to null (unless already changed)
-            if ($image->getMarketItem() === $this) {
-                $image->setMarketItem(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->images->removeElement($image) && $image->getMarketItem() === $this) {
+            $image->setMarketItem(null);
         }
 
         return $this;
@@ -212,7 +216,7 @@ class Item
 
     public function addComment(Comment $comment): self
     {
-        if (!$this->comments->contains($comment)) {
+        if (! $this->comments->contains($comment)) {
             $this->comments->add($comment);
             $comment->setMarketItem($this);
         }
@@ -222,11 +226,9 @@ class Item
 
     public function removeComment(Comment $comment): self
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getMarketItem() === $this) {
-                $comment->setMarketItem(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->comments->removeElement($comment) && $comment->getMarketItem() === $this) {
+            $comment->setMarketItem(null);
         }
 
         return $this;
@@ -243,5 +245,4 @@ class Item
 
         return $this;
     }
-
 }

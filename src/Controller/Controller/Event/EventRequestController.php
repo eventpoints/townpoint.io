@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controller\Controller\Event;
 
@@ -23,16 +23,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventRequestController extends AbstractController
 {
     public function __construct(
-        private readonly CurrentUserService     $currentUserService,
-        private readonly EventRepository        $eventRepository,
+        private readonly CurrentUserService $currentUserService,
+        private readonly EventRepository $eventRepository,
         private readonly EventRequestRepository $eventRequestRepository,
-        private readonly EventUserFactory       $eventUserFactory,
-        private readonly EventRequestFactory    $eventRequestFactory,
+        private readonly EventUserFactory $eventUserFactory,
+        private readonly EventRequestFactory $eventRequestFactory,
         private readonly EventUserTicketFactory $eventTicketFactory,
         private readonly EventRejectionFactory $eventRejectionFactory,
         private readonly EventRejectionRepository $eventRejectionRepository,
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/request/{id}', name: 'create_event_request')]

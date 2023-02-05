@@ -17,6 +17,7 @@ use App\Enum\ReactionEnum;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -185,6 +186,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Group::class)]
     private Collection $ownedGroups;
 
+    /**
+     * @var Collection<int, EventRejection>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventRejection::class, orphanRemoval: true)]
     private Collection $eventRejections;
 
@@ -194,6 +198,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private null|bool $isSuspended = false;
 
+    /**
+     * @var Collection<int, Item>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class)]
     private Collection $marketItems;
 
@@ -422,9 +429,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Reaction>
+     * @return ReadableCollection<int, Reaction>
      */
-    public function getAuthoredAdmirations(): Collection
+    public function getAuthoredAdmirations(): ReadableCollection
     {
         return $this->authoredReactions->filter(function (Reaction $reaction): bool {
             return $reaction->getType() === ReactionEnum::ADMIRE;
@@ -432,9 +439,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Reaction>
+     * @return ReadableCollection<int, Reaction>
      */
-    public function getAuthoredDissagreements(): Collection
+    public function getAuthoredDissagreements(): ReadableCollection
     {
         return $this->authoredReactions->filter(function (Reaction $reaction): bool {
             return $reaction->getType() === ReactionEnum::DISAGREE;
@@ -462,9 +469,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Reaction>
+     * @return ReadableCollection<int, Reaction>
      */
-    public function getAdmirations(): Collection
+    public function getAdmirations(): ReadableCollection
     {
         return $this->reactions->filter(function (Reaction $reaction): bool {
             return $reaction->getType() === ReactionEnum::ADMIRE;
@@ -472,9 +479,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Reaction>
+     * @return ReadableCollection<int, Reaction>
      */
-    public function getDissagreements(): Collection
+    public function getDissagreements(): ReadableCollection
     {
         return $this->reactions->filter(function (Reaction $reaction): bool {
             return $reaction->getType() === ReactionEnum::DISAGREE;
@@ -919,7 +926,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addEventRejection(EventRejection $eventRejection): self
     {
-        if (!$this->eventRejections->contains($eventRejection)) {
+        if (! $this->eventRejections->contains($eventRejection)) {
             $this->eventRejections->add($eventRejection);
             $eventRejection->setOwner($this);
         }
@@ -929,11 +936,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeEventRejection(EventRejection $eventRejection): self
     {
-        if ($this->eventRejections->removeElement($eventRejection)) {
-            // set the owning side to null (unless already changed)
-            if ($eventRejection->getOwner() === $this) {
-                $eventRejection->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->eventRejections->removeElement($eventRejection) && $eventRejection->getOwner() === $this) {
+            $eventRejection->setOwner(null);
         }
 
         return $this;
@@ -973,7 +978,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addMarketItem(Item $marketItem): self
     {
-        if (!$this->marketItems->contains($marketItem)) {
+        if (! $this->marketItems->contains($marketItem)) {
             $this->marketItems->add($marketItem);
             $marketItem->setOwner($this);
         }
@@ -983,11 +988,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeMarketItem(Item $marketItem): self
     {
-        if ($this->marketItems->removeElement($marketItem)) {
-            // set the owning side to null (unless already changed)
-            if ($marketItem->getOwner() === $this) {
-                $marketItem->setOwner(null);
-            }
+        if ($marketItem->getOwner() === $this) {
+            $this->marketItems->removeElement($marketItem);
         }
 
         return $this;

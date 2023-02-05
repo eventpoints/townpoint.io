@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository\Group;
 
 use App\Entity\Group\Group;
@@ -24,23 +26,27 @@ class GroupEventRepository extends ServiceEntityRepository
 
     public function save(GroupEvent $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(GroupEvent $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
-    public function findByGroup(Group $group, bool $isQuery = false) : mixed
+    public function findByGroup(Group $group, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('ge');
         $qb->andWhere($qb->expr()->eq('ge.group', ':group'))

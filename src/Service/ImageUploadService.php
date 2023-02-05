@@ -29,7 +29,7 @@ final class ImageUploadService
         ]);
         $image = $manager->make($file->getRealPath());
 
-        $image->resize(800, 800, function ($constraint) {
+        $image->resize(800, 800, function ($constraint): void {
             $constraint->aspectRatio();
             $constraint->upsize();
         });

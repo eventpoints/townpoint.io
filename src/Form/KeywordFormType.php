@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
-use App\Form\Autocomplete\UserAutocompleteField;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,10 +18,10 @@ class KeywordFormType extends AbstractType
             ->setMethod(Request::METHOD_GET)
             ->add('keyword', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'search'
+                    'placeholder' => 'search',
                 ],
                 'row_attr' => [
-                    'class' => 'form-floating mb-3'
+                    'class' => 'form-floating mb-3',
                 ],
             ]);
     }

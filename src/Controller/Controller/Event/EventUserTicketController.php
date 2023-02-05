@@ -4,10 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller\Event;
 
-use App\Entity\Event\EventUser;
 use App\Entity\Event\EventUserTicket;
 use App\Repository\Ticket\EventUserTicketRepository;
-use App\Repository\TicketRepository;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -57,7 +55,6 @@ class EventUserTicketController extends AbstractController
     {
         return $this->render('');
     }
-
 
     #[Route(path: '/validate/{token}', name: 'event_qr_validate')]
     public function validateTicket(string $token): Response

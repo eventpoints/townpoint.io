@@ -41,7 +41,7 @@ class EventInviteController extends AbstractController
         $eventInvite->getEvent()
             ->addEventUser($eventUser);
 
-        if($eventInvite->getEvent()->isIsTicketed()) {
+        if ($eventInvite->getEvent()->isIsTicketed()) {
             $eventUserTicket = $this->eventTicketFactory->createTicketAndEventUserTicket($eventUser);
             $eventUser->setEventUserTicket($eventUserTicket);
         }

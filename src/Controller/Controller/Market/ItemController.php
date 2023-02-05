@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller\Market;
 
-use App\Entity\Image;
 use App\Entity\Market\Item;
 use App\Factory\image\ImageFactory;
 use App\Form\MarketItemFormType;
@@ -22,17 +23,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/market/item')]
 class ItemController extends AbstractController
 {
-
     public function __construct(
         private readonly CurrentUserService $currentUserService,
-        private readonly ItemRepository     $itemRepository,
-        private readonly ImageRepository    $imageRepository,
-        private readonly CommentRepository    $commentRepository,
+        private readonly ItemRepository $itemRepository,
+        private readonly ImageRepository $imageRepository,
+        private readonly CommentRepository $commentRepository,
         private readonly ImageUploadService $imageUploadService,
-        private readonly ImageFactory       $imageFactory,
+        private readonly ImageFactory $imageFactory,
         private readonly PaginatorInterface $paginator
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/create', name: 'create_market_item')]
@@ -45,19 +44,21 @@ class ItemController extends AbstractController
 
         $itemForm->handleRequest($request);
         if ($itemForm->isSubmitted() && $itemForm->isValid()) {
-
-            $itemImages = $itemForm->get('images')->getData();
+            $itemImages = $itemForm->get('images')
+                ->getData();
             /** @var UploadedFile $itemImage */
             foreach ($itemImages as $itemImage) {
                 $base64Image = $this->imageUploadService->processStatementPhoto($itemImage);
-                $image = $this->imageFactory->create($base64Image, $item);
+                $image = $this->imageFactory->create($base64Image->getEncoded(), $item);
                 $this->imageRepository->save($image);
             }
 
             $this->itemRepository->save($itemForm->getData(), true);
             $this->addFlash(FlashValueObject::TYPE_SUCCESS, 'item added');
 
-            return $this->redirectToRoute('show_market_item', ['id' => $item->getId(),]);
+            return $this->redirectToRoute('show_market_item', [
+                'id' => $item->getId(),
+            ]);
         }
 
         return $this->render('market/item/new.html.twig', [
@@ -69,13 +70,18 @@ class ItemController extends AbstractController
     public function show(Item $item, Request $request): Response
     {
         $commentsQuery = $this->commentRepository->findByMarketItem($item, true);
-        $marketItemCommentsPagination = $this->paginator->paginate($commentsQuery, $request->query->getInt('item-comments-page', 1), 30, [
-            'pageParameterName' => 'items-page'
-        ]);
+        $marketItemCommentsPagination = $this->paginator->paginate(
+            $commentsQuery,
+            $request->query->getInt('item-comments-page', 1),
+            30,
+            [
+                'pageParameterName' => 'items-page',
+            ]
+        );
 
         return $this->render('market/item/show.html.twig', [
             'marketItemCommentsPagination' => $marketItemCommentsPagination,
-            'item' => $item
+            'item' => $item,
         ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form;
 
 use App\Entity\Market\Item;
@@ -19,42 +21,40 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MarketItemFormType extends AbstractType
 {
-
     public function __construct(
-        private readonly Security            $security,
+        private readonly Security $security,
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user is needed to create a market item');
         }
 
         $builder
-            ->add('images', FileType::class,[
+            ->add('images', FileType::class, [
                 'mapped' => false,
-                'multiple' => true
+                'multiple' => true,
             ])
-            ->add('title', TextType::class,[
+            ->add('title', TextType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
-                ]
+                ],
             ])
             ->add('description', TextareaType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
-                ]
+                ],
             ])
             ->add('price', MoneyType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'currency' => $user->getCurrency()
+                'currency' => $user->getCurrency(),
             ])
             ->add('isAcceptingPriceOffers', CheckboxType::class, [
                 'help' => $this->translator->trans('market-item-accepting-price-offers-explainer'),
@@ -70,7 +70,7 @@ class MarketItemFormType extends AbstractType
                     $this->translator->trans('seller-refurbished') => 'used',
                     $this->translator->trans('spare-parts-or-not-working') => 'spare-parts-or-not-working',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ]);
     }
 

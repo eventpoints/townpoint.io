@@ -46,7 +46,7 @@ class EventInviteRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByEvent(Event $event, bool $isQuery = false) : mixed
+    public function findByEvent(Event $event, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('ei');
         $qb->andWhere($qb->expr() ->eq('ei.event', ':event'))
@@ -54,7 +54,7 @@ class EventInviteRepository extends ServiceEntityRepository
 
         $qb->orderBy('ei.createdAt', 'ASC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 

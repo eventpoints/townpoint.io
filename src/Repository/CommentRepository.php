@@ -10,7 +10,6 @@ use App\Entity\Group\Group;
 use App\Entity\Market\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -73,54 +72,56 @@ class CommentRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-    public function findByEvent(Event $event, bool $isQuery = false) : mixed
+    public function findByEvent(Event $event, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('e');
 
-        $qb->andWhere(
-            $qb->expr()->eq('e.event', ':eventId')
-        )->setParameter('eventId', $event->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('e.event', ':eventId'))
+            ->setParameter('eventId', $event->getId(), 'uuid');
 
         $qb->orderBy('e.createdAt', 'DESC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 
-    public function findByGroup(Group $group, bool $isQuery  = false) : mixed
+    public function findByGroup(Group $group, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('c');
 
-        $qb->andWhere(
-            $qb->expr()->eq('c.group', ':groupId')
-        )->setParameter('groupId', $group->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('c.group', ':groupId'))
+            ->setParameter('groupId', $group->getId(), 'uuid');
 
         $qb->orderBy('c.createdAt', 'DESC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 
-    public function findByMarketItem(Item $item, bool $isQuery = false)
+    public function findByMarketItem(Item $item, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('c');
 
         $qb->andWhere(
-            $qb->expr()->eq('c.marketItem', ':marketItem')
+            $qb->expr()
+                ->eq('c.marketItem', ':marketItem')
         )->setParameter('marketItem', $item->getId(), 'uuid');
 
         $qb->orderBy('c.createdAt', 'DESC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

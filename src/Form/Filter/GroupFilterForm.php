@@ -46,7 +46,7 @@ class GroupFilterForm extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
                 'autocomplete' => true,
-                'required' => false
+                'required' => false,
             ]);
     }
 

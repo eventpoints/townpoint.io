@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use App\Entity\Market\Item;
 use App\Repository\ConversationRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -142,5 +141,4 @@ class Conversation
 
         return $this;
     }
-
 }

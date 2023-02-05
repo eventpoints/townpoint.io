@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace App\Controller\Controller\Group;
 
 use App\Entity\Comment;
-use App\Entity\Event\Event;
 use App\Entity\Group\Group;
+use App\Exception\ShouldNotHappenException;
 use App\Factory\Comment\CommentFactory;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
@@ -56,10 +56,17 @@ class GroupCommentController extends AbstractController
     public function remove(Comment $comment, Request $request): Response
     {
         $group = $comment->getGroup();
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+
+        if (! $group instanceof Group) {
+            throw new ShouldNotHappenException('Group object required');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), (string)$request->request->get('_token'))) {
             $this->commentRepository->remove($comment, true);
         }
 
-        return $this->redirectToRoute('show_group', ['id' => $group->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('show_group', [
+            'id' => $group->getId(),
+        ], Response::HTTP_SEE_OTHER);
     }
 }

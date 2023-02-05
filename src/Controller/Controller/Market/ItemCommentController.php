@@ -5,9 +5,8 @@ declare(strict_types = 1);
 namespace App\Controller\Controller\Market;
 
 use App\Entity\Comment;
-use App\Entity\Event\Event;
-use App\Entity\Group\Group;
 use App\Entity\Market\Item;
+use App\Exception\ShouldNotHappenException;
 use App\Factory\Comment\CommentFactory;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
@@ -57,10 +56,17 @@ class ItemCommentController extends AbstractController
     public function remove(Comment $comment, Request $request): Response
     {
         $marketItem = $comment->getMarketItem();
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+
+        if (! $marketItem instanceof Item) {
+            throw new ShouldNotHappenException('Item object required');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), (string)$request->request->get('_token'))) {
             $this->commentRepository->remove($comment, true);
         }
 
-        return $this->redirectToRoute('show_market_item', ['id' => $marketItem->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('show_market_item', [
+            'id' => $marketItem->getId(),
+        ], Response::HTTP_SEE_OTHER);
     }
 }

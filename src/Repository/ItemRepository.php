@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\DataTransferObjects\MarketItemFilterDto;
@@ -9,7 +11,6 @@ use App\Exception\ShouldNotHappenException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Item>
@@ -22,28 +23,31 @@ use function Doctrine\ORM\QueryBuilder;
 class ItemRepository extends ServiceEntityRepository
 {
     public function __construct(
-        ManagerRegistry           $registry,
+        ManagerRegistry $registry,
         private readonly Security $security
-    )
-    {
+    ) {
         parent::__construct($registry, Item::class);
     }
 
     public function save(Item $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(Item $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
@@ -51,38 +55,43 @@ class ItemRepository extends ServiceEntityRepository
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
         $qb = $this->createQueryBuilder('i');
         if ($marketItemFilterDto->getTitle()) {
             $qb->andWhere(
-                $qb->expr()->like('LOWER(i.title)', ':title')
+                $qb->expr()
+                    ->like('LOWER(i.title)', ':title')
             )->setParameter('title', '%' . strtolower($marketItemFilterDto->getTitle()) . '%');
         }
 
         if ($marketItemFilterDto->getMinPrice()) {
             $qb->andWhere(
-                $qb->expr()->gte('i.price', ':price')
-            )->setParameter('price', (float) $marketItemFilterDto->getMinPrice());
+                $qb->expr()
+                    ->gte('i.price', ':price')
+            )->setParameter('price', (float)$marketItemFilterDto->getMinPrice());
         }
 
         if ($marketItemFilterDto->getMaxPrice()) {
             $qb->andWhere(
-                $qb->expr()->lte('i.price', ':price')
-            )->setParameter('price', (float) $marketItemFilterDto->getMaxPrice());
+                $qb->expr()
+                    ->lte('i.price', ':price')
+            )->setParameter('price', (float)$marketItemFilterDto->getMaxPrice());
         }
 
         if ($marketItemFilterDto->getCurrency()) {
             $qb->andWhere(
-                $qb->expr()->eq('i.currency', ':currency')
+                $qb->expr()
+                    ->eq('i.currency', ':currency')
             )->setParameter('currency', $marketItemFilterDto->getCurrency());
         }
 
         if ($marketItemFilterDto->getCondition()) {
             $qb->andWhere(
-                $qb->expr()->eq('i.condition', ':condition')
+                $qb->expr()
+                    ->eq('i.condition', ':condition')
             )->setParameter('condition', $marketItemFilterDto->getCondition());
         }
 
@@ -92,6 +101,7 @@ class ItemRepository extends ServiceEntityRepository
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

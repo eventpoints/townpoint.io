@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository\Group;
 
@@ -10,9 +10,7 @@ use App\Entity\User;
 use App\Exception\ShouldNotHappenException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Group>
@@ -24,10 +22,10 @@ use function Doctrine\ORM\QueryBuilder;
  */
 class GroupRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry           $registry,
-                                private readonly Security $security
-    )
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly Security $security
+    ) {
         parent::__construct($registry, Group::class);
     }
 
@@ -62,7 +60,8 @@ class GroupRepository extends ServiceEntityRepository
 
         if ($groupFilterDto->getLanguage()) {
             $qb->andWhere(
-                $qb->expr()->eq('g.language', ':language')
+                $qb->expr()
+                    ->eq('g.language', ':language')
             )->setParameter(':language', $groupFilterDto->getLanguage());
         }
 
@@ -97,14 +96,11 @@ class GroupRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
     public function findByKeyword(string $keyword, bool $isQuery = false): mixed
     {
         $user = $this->security->getUser();
 
-        if(!$user instanceof User){
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -114,7 +110,8 @@ class GroupRepository extends ServiceEntityRepository
             ->setParameter('true', true);
 
         $qb->andWhere(
-            $qb->expr()->eq('g.language', ':language')
+            $qb->expr()
+                ->eq('g.language', ':language')
         )->setParameter(':language', $user->getLanguage());
 
         $qb->andWhere(
@@ -122,10 +119,11 @@ class GroupRepository extends ServiceEntityRepository
                 ->like('LOWER(g.title)', ':title')
         )->setParameter('title', '%' . strtolower($keyword) . '%');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
@@ -18,7 +18,6 @@ class CommentFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $builder
             ->add('content', HiddenType::class);
     }

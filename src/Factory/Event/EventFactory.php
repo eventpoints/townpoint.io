@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Factory\Event;
 
 use App\Entity\Event\Event;
 use App\Entity\User;
-use App\Form\EventFormType;
 use DateTimeImmutable;
 
 class EventFactory
 {
-
     public function create(
         null|string $title = null,
         null|string $address = null,
@@ -17,8 +17,7 @@ class EventFactory
         null|DateTimeImmutable $endAt = null,
         null|User $user = null,
         null|bool $isTicketed = null
-    ) : Event
-    {
+    ): Event {
         $event = new Event();
         $event->setTitle($title);
         $event->setAddress($address);
@@ -26,8 +25,7 @@ class EventFactory
         $event->setIsTicketed($isTicketed);
         $event->setStartAt($startAt);
         $event->setEndAt($endAt);
+
         return $event;
     }
-
-
 }

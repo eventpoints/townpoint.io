@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form\Filter;
 
 use App\DataTransferObjects\MarketItemFilterDto;
@@ -16,8 +18,7 @@ class MarketItemFilterForm extends AbstractType
 {
     public function __construct(
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -27,7 +28,7 @@ class MarketItemFilterForm extends AbstractType
                 'required' => false,
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
-                ]
+                ],
             ])
             ->add('minPrice', TextType::class, [
                 'required' => false,

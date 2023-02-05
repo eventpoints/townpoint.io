@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller\Market;
 
 use App\DataTransferObjects\MarketItemFilterDto;
-use App\Entity\Market\Item;
 use App\Form\Filter\MarketItemFilterForm;
-use App\Form\MarketItemFormType;
 use App\Repository\ItemRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,13 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/market')]
 class MarketController extends AbstractController
 {
-
     public function __construct(
-        private readonly ItemRepository     $itemRepository,
+        private readonly ItemRepository $itemRepository,
         private readonly PaginatorInterface $paginator,
-
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/', name: 'market')]
@@ -31,27 +28,31 @@ class MarketController extends AbstractController
         $marketItemFilterDto = new MarketItemFilterDto();
         $itemsQuery = $this->itemRepository->findByFilter($marketItemFilterDto, true);
         $marketItemPagination = $this->paginator->paginate($itemsQuery, $request->query->getInt('items-page', 1), 30, [
-            'pageParameterName' => 'items-page'
+            'pageParameterName' => 'items-page',
         ]);
 
         $marketItemFilterForm = $this->createForm(MarketItemFilterForm::class, $marketItemFilterDto);
         $marketItemFilterForm->handleRequest($request);
         if ($marketItemFilterForm->isSubmitted() && $marketItemFilterForm->isValid()) {
-
             $itemsQuery = $this->itemRepository->findByFilter($marketItemFilterDto, true);
-            $marketItemPagination = $this->paginator->paginate($itemsQuery, $request->query->getInt('items-page', 1), 30, [
-                'pageParameterName' => 'items-page'
-            ]);
+            $marketItemPagination = $this->paginator->paginate(
+                $itemsQuery,
+                $request->query->getInt('items-page', 1),
+                30,
+                [
+                    'pageParameterName' => 'items-page',
+                ]
+            );
 
             return $this->render('market/index.html.twig', [
                 'marketItemFilterForm' => $marketItemFilterForm,
-                'marketItemPagination' => $marketItemPagination
+                'marketItemPagination' => $marketItemPagination,
             ]);
         }
 
         return $this->render('market/index.html.twig', [
             'marketItemFilterForm' => $marketItemFilterForm,
-            'marketItemPagination' => $marketItemPagination
+            'marketItemPagination' => $marketItemPagination,
         ]);
     }
 }

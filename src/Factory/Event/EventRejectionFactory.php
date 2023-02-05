@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Factory\Event;
 
 use App\Entity\Event\Event;
@@ -8,8 +10,7 @@ use App\Entity\User;
 
 class EventRejectionFactory
 {
-
-    public function create(Event $event, User $user) : EventRejection
+    public function create(Event $event, User $user): EventRejection
     {
         $eventRejection = new EventRejection();
         $eventRejection->setEvent($event);
@@ -17,5 +18,4 @@ class EventRejectionFactory
 
         return $eventRejection;
     }
-
 }

@@ -6,6 +6,7 @@ namespace App\Controller\Controller\Event;
 
 use App\Entity\Comment;
 use App\Entity\Event\Event;
+use App\Exception\ShouldNotHappenException;
 use App\Factory\Comment\CommentFactory;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
@@ -55,10 +56,17 @@ class EventCommentController extends AbstractController
     public function remove(Comment $comment, Request $request): Response
     {
         $event = $comment->getEvent();
-        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+
+        if (! $event instanceof Event) {
+            throw new ShouldNotHappenException('Event object required');
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $comment->getId(), (string)$request->request->get('_token'))) {
             $this->commentRepository->remove($comment, true);
         }
 
-        return $this->redirectToRoute('show_event', ['id' => $event->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('show_event', [
+            'id' => $event->getId(),
+        ], Response::HTTP_SEE_OTHER);
     }
 }

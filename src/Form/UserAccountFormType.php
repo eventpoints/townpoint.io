@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -25,8 +24,7 @@ class UserAccountFormType extends AbstractType
 {
     public function __construct(
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -116,7 +114,7 @@ class UserAccountFormType extends AbstractType
             ])
             ->add('isVisible', CheckboxType::class, [
                 'required' => false,
-                'help'=> 'hide yourself from the search',
+                'help' => 'hide yourself from the search',
                 'label_attr' => [
                     'class' => 'checkbox-switch',
                 ],

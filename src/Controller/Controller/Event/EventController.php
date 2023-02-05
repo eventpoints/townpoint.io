@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controller\Controller\Event;
 
 use App\DataTransferObjects\EventFilterDto;
 use App\Entity\Event\Event;
-use App\Entity\Group\GroupEvent;
-use App\Factory\Event\EventFactory;
 use App\Factory\Event\EventInviteFactory;
 use App\Factory\Event\EventUserFactory;
 use App\Factory\Event\EventUserTicketFactory;
@@ -31,19 +29,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventController extends AbstractController
 {
     public function __construct(
-        private readonly CurrentUserService     $currentUserService,
-        private readonly EventRepository        $eventRepository,
-        private readonly EventInviteRepository  $eventInviteRepository,
-        private readonly EventRejectionRepository  $eventRejectionRepository,
+        private readonly CurrentUserService $currentUserService,
+        private readonly EventRepository $eventRepository,
+        private readonly EventInviteRepository $eventInviteRepository,
+        private readonly EventRejectionRepository $eventRejectionRepository,
         private readonly EventRequestRepository $eventRequestRepository,
-        private readonly EventUserFactory       $eventUserFactory,
-        private readonly EventUserRepository       $eventUserRepository,
-        private readonly EventInviteFactory     $eventInviteFactory,
-        private readonly PaginatorInterface     $paginator,
+        private readonly EventUserFactory $eventUserFactory,
+        private readonly EventUserRepository $eventUserRepository,
+        private readonly EventInviteFactory $eventInviteFactory,
+        private readonly PaginatorInterface $paginator,
         private readonly EventUserTicketFactory $eventUserTicketFactory,
         private readonly CommentRepository $commentRepository
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/', name: 'events')]
@@ -84,7 +81,8 @@ class EventController extends AbstractController
         $eventForm = $this->createForm(EventFormType::class, $event);
         $eventForm->handleRequest($request);
         if ($eventForm->isSubmitted() && $eventForm->isValid()) {
-            $invitations = $eventForm->get('invitations')->getData();
+            $invitations = $eventForm->get('invitations')
+                ->getData();
 
             foreach ($invitations as $user) {
                 if ($user !== $currentUser) {
@@ -113,30 +111,54 @@ class EventController extends AbstractController
     public function show(Event $event, Request $request): Response
     {
         $eventParticipantsQuery = $this->eventUserRepository->findByEvent($event, true);
-        $eventParticipantsPagination = $this->paginator->paginate($eventParticipantsQuery, $request->query->getInt('event-participants-page', 1), 10, [
-            'pageParameterName' => 'event-participants-page'
-        ]);
+        $eventParticipantsPagination = $this->paginator->paginate(
+            $eventParticipantsQuery,
+            $request->query->getInt('event-participants-page', 1),
+            10,
+            [
+                'pageParameterName' => 'event-participants-page',
+            ]
+        );
 
         $eventInvitationsQuery = $this->eventInviteRepository->findByEvent($event, true);
-        $eventInvitationsPagination = $this->paginator->paginate($eventInvitationsQuery, $request->query->getInt('event-invitations-page', 1), 10, [
-            'pageParameterName' => 'event-invitations-page'
-        ]);
+        $eventInvitationsPagination = $this->paginator->paginate(
+            $eventInvitationsQuery,
+            $request->query->getInt('event-invitations-page', 1),
+            10,
+            [
+                'pageParameterName' => 'event-invitations-page',
+            ]
+        );
 
         $eventRequestsQuery = $this->eventRequestRepository->findByEvent($event, true);
-        $eventRequestsPagination = $this->paginator->paginate($eventRequestsQuery, $request->query->getInt('event-requests-page', 1), 10, [
-            'pageParameterName' => 'event-requests-page'
-        ]);
+        $eventRequestsPagination = $this->paginator->paginate(
+            $eventRequestsQuery,
+            $request->query->getInt('event-requests-page', 1),
+            10,
+            [
+                'pageParameterName' => 'event-requests-page',
+            ]
+        );
 
         $eventRejectionsQuery = $this->eventRejectionRepository->findByEvent($event, true);
-        $eventRejectionsPagination = $this->paginator->paginate($eventRejectionsQuery, $request->query->getInt('event-rejections-page', 1), 10,[
-            'pageParameterName' => 'event-rejections-page'
-        ]);
+        $eventRejectionsPagination = $this->paginator->paginate(
+            $eventRejectionsQuery,
+            $request->query->getInt('event-rejections-page', 1),
+            10,
+            [
+                'pageParameterName' => 'event-rejections-page',
+            ]
+        );
 
         $commentQuery = $this->commentRepository->findByEvent(event: $event, isQuery: true);
-        $eventCommentPagination = $this->paginator->paginate($commentQuery, $request->query->getInt('event-comment-page', 1), 10, [
-            'pageParameterName' => 'event-comment-page'
-        ]);
-
+        $eventCommentPagination = $this->paginator->paginate(
+            $commentQuery,
+            $request->query->getInt('event-comment-page', 1),
+            10,
+            [
+                'pageParameterName' => 'event-comment-page',
+            ]
+        );
 
         return $this->render('event/show.html.twig', [
             'event' => $event,

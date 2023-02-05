@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository\Event;
 
 use App\Entity\Event\Event;
@@ -24,19 +26,23 @@ class EventRejectionRepository extends ServiceEntityRepository
 
     public function save(EventRejection $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(EventRejection $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
@@ -64,7 +70,7 @@ class EventRejectionRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-    public function findByEvent(Event $event, bool $isQuery=false)
+    public function findByEvent(Event $event, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('er');
         $qb->andWhere($qb->expr() ->eq('er.event', ':event'))
@@ -72,7 +78,7 @@ class EventRejectionRepository extends ServiceEntityRepository
 
         $qb->orderBy('er.createdAt', 'ASC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 

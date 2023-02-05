@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository\Event;
 
@@ -13,7 +13,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -25,10 +24,10 @@ use function Doctrine\ORM\QueryBuilder;
  */
 class EventRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry           $registry,
-                                private readonly Security $security
-    )
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly Security $security
+    ) {
         parent::__construct($registry, Event::class);
     }
 
@@ -58,7 +57,7 @@ class EventRepository extends ServiceEntityRepository
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -78,23 +77,23 @@ class EventRepository extends ServiceEntityRepository
             )->setParameter('address', '%' . $eventFilterDto->getAddress() . '%');
         }
 
-//        $now = new DateTimeImmutable();
-//        $qb->andWhere($qb->expr()->lte(':now', 'e.startAt'))
-//            ->setParameter('now', $now, Types::DATETIME_IMMUTABLE);
-//
-//        if ($eventFilterDto->getStartAt() instanceof DateTimeImmutable) {
-//            $qb->andWhere(
-//                $qb->expr()
-//                    ->gt('e.startAt', ':startAt')
-//            )->setParameter('startAt', $eventFilterDto->getStartAt(), Types::DATETIME_IMMUTABLE);
-//        }
-//
-//        if ($eventFilterDto->getEndAt() instanceof DateTimeImmutable) {
-//            $qb->andWhere(
-//                $qb->expr()
-//                    ->lt('e.endAt', ':endAt')
-//            )->setParameter('endAt', $eventFilterDto->getEndAt(), Types::DATETIME_IMMUTABLE);
-//        }
+        //        $now = new DateTimeImmutable();
+        //        $qb->andWhere($qb->expr()->lte(':now', 'e.startAt'))
+        //            ->setParameter('now', $now, Types::DATETIME_IMMUTABLE);
+        //
+        //        if ($eventFilterDto->getStartAt() instanceof DateTimeImmutable) {
+        //            $qb->andWhere(
+        //                $qb->expr()
+        //                    ->gt('e.startAt', ':startAt')
+        //            )->setParameter('startAt', $eventFilterDto->getStartAt(), Types::DATETIME_IMMUTABLE);
+        //        }
+        //
+        //        if ($eventFilterDto->getEndAt() instanceof DateTimeImmutable) {
+        //            $qb->andWhere(
+        //                $qb->expr()
+        //                    ->lt('e.endAt', ':endAt')
+        //            )->setParameter('endAt', $eventFilterDto->getEndAt(), Types::DATETIME_IMMUTABLE);
+        //        }
 
         $qb->orderBy('e.createdAt', 'DESC');
         $qb->leftJoin('e.eventUsers', 'eu');
@@ -104,10 +103,8 @@ class EventRepository extends ServiceEntityRepository
         $qb->leftJoin('g.groupUsers', 'gu');
 
         $qb->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->isNull('e.groupEvent'),
-                $qb->expr()->eq( ':userId', 'gu.owner')
-            )
+            $qb->expr()
+                ->orX($qb->expr() ->isNull('e.groupEvent'), $qb->expr() ->eq(':userId', 'gu.owner'))
         )->setParameter('userId', $user->getId(), 'uuid');
 
         if ($isQuery) {
@@ -118,14 +115,11 @@ class EventRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
     public function findByKeyword(mixed $keyword, bool $isQuery = false): mixed
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -136,7 +130,7 @@ class EventRepository extends ServiceEntityRepository
         $qb->andWhere(
             $qb->expr()
                 ->like('lower(e.title)', ':title')
-        )->setParameter('title', '%' . strtolower($keyword) . '%');
+        )->setParameter('title', '%' . strtolower((string)$keyword) . '%');
 
         $qb->andWhere($qb->expr()->lt(':now', 'e.startAt'))
             ->setParameter('now', $now, Types::DATETIME_IMMUTABLE);
@@ -145,6 +139,7 @@ class EventRepository extends ServiceEntityRepository
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

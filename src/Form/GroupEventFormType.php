@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
-use App\Entity\Address;
 use App\Entity\Event\Event;
 use App\Entity\User;
 use Exception;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,14 +19,13 @@ class GroupEventFormType extends AbstractType
 {
     public function __construct(
         private readonly Security $security
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $currentUser = $this->security->getUser();
-        if (!$currentUser instanceof User) {
+        if (! $currentUser instanceof User) {
             throw new Exception('Must be type of User');
         }
 
@@ -42,7 +38,7 @@ class GroupEventFormType extends AbstractType
             ->add('address', TextType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
-                ]
+                ],
             ])
             ->add('startAt', DateTimeType::class, [
                 'html5' => false,

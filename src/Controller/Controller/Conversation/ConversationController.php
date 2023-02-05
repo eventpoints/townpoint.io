@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controller\Controller\Conversation;
 
@@ -25,11 +25,10 @@ class ConversationController extends AbstractController
 {
     public function __construct(
         private readonly ConversationRepository $conversationRepository,
-        private readonly PaginatorInterface     $paginator,
-        private readonly CurrentUserService     $currentUserService,
-        private readonly TranslatorInterface    $translator
-    )
-    {
+        private readonly PaginatorInterface $paginator,
+        private readonly CurrentUserService $currentUserService,
+        private readonly TranslatorInterface $translator
+    ) {
     }
 
     #[Route(path: '/', name: 'conversations')]
@@ -115,7 +114,10 @@ class ConversationController extends AbstractController
         $conversationForm->handleRequest($request);
         if ($conversationForm->isSubmitted() && $conversationForm->isValid()) {
             $this->conversationRepository->add($conversation, true);
-            return $this->redirectToRoute('conversation', ['id' => $conversation->getId()]);
+
+            return $this->redirectToRoute('conversation', [
+                'id' => $conversation->getId(),
+            ]);
         }
 
         return $this->render('conversations/edit.html.twig', [
@@ -123,5 +125,4 @@ class ConversationController extends AbstractController
             'conversationForm' => $conversationForm->createView(),
         ]);
     }
-
 }

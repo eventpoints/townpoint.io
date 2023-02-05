@@ -88,5 +88,4 @@ class EventUserTicket
     {
         $this->token = $token;
     }
-
 }

@@ -33,6 +33,7 @@ class CommentFactory
     {
         $comment = $this->create($user, $content);
         $comment->setGroup($group);
+
         return $comment;
     }
 
@@ -40,6 +41,7 @@ class CommentFactory
     {
         $comment = $this->create($user, $content);
         $comment->setMarketItem($item);
+
         return $comment;
     }
 }

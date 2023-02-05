@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository;
 
@@ -14,7 +14,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -26,10 +25,10 @@ use function Doctrine\ORM\QueryBuilder;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry,
-    private readonly Security $security
-    )
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly Security $security
+    ) {
         parent::__construct($registry, User::class);
     }
 
@@ -60,7 +59,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
@@ -88,11 +87,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findByFilters(
         null|string $firstName,
         null|string $lastName,
-        null|int    $minAge,
-        null|int    $maxAge,
+        null|int $minAge,
+        null|int $maxAge,
         null|string $gender
-    ): Query
-    {
+    ): Query {
         $qb = $this->createQueryBuilder('u');
 
         if ($firstName) {
@@ -125,14 +123,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb->getQuery();
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
-    public function findByKeyword(string $keyword, bool $isQuery = false) : mixed
+    public function findByKeyword(string $keyword, bool $isQuery = false): mixed
     {
         $user = $this->security->getUser();
 
-        if(!$user instanceof User){
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -153,20 +148,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->like('lower(u.email)', ':email')
         )->setParameter('email', '%' . strtolower($keyword) . '%');
 
-        $qb->andWhere(
-            $qb->expr()->eq('u.isVisible', ':true')
-        )->setParameter('true', true);
+        $qb->andWhere($qb->expr() ->eq('u.isVisible', ':true'))
+            ->setParameter('true', true);
 
         $qb->andWhere(
-            $qb->expr()->not(
-                $qb->expr()->eq('u.id', ':userId')
-            )
+            $qb->expr()
+                ->not($qb->expr() ->eq('u.id', ':userId'))
         )->setParameter('userId', $user->getId(), 'uuid');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

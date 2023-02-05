@@ -54,7 +54,7 @@ class EventRequestRepository extends ServiceEntityRepository
 
         $qb->orderBy('er.createdAt', 'ASC');
 
-        if($isQuery){
+        if ($isQuery) {
             return $qb->getQuery();
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Business;
 
 use App\Entity\Business\Business;
@@ -69,7 +71,7 @@ class BusinessController extends AbstractController
     #[Route('/{id}', name: 'app_business_business_delete', methods: ['POST'])]
     public function delete(Request $request, Business $business, BusinessRepository $businessRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$business->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $business->getId(), (string)$request->request->get('_token'))) {
             $businessRepository->remove($business, true);
         }
 

@@ -53,7 +53,7 @@ class Group
     private null|string $type = null;
 
     #[ORM\Column(length: 3)]
-    private ?string $country = 'en';
+    private string $country = 'en';
 
     #[ORM\Column]
     private bool $isVisible = true;
@@ -70,7 +70,10 @@ class Group
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupEvent::class, orphanRemoval: true)]
     private Collection $groupEvents;
 
-    #[ORM\OneToMany(mappedBy: 'groupp', targetEntity: Comment::class)]
+    /**
+     * @var Collection<int,Comment> $comments
+     */
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: Comment::class)]
     private Collection $comments;
 
     public function __construct()
@@ -144,8 +147,8 @@ class Group
     public function removeGroupUser(GroupUser $groupUser): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->groupUsers->removeElement($groupUser) && $groupUser->getGroup() === $this) {
-            $groupUser->setGroup(null);
+        if ($groupUser->getGroup() === $this) {
+            $this->groupUsers->removeElement($groupUser);
         }
 
         return $this;
@@ -285,7 +288,7 @@ class Group
 
     public function addGroupEvent(GroupEvent $groupEvent): self
     {
-        if (!$this->groupEvents->contains($groupEvent)) {
+        if (! $this->groupEvents->contains($groupEvent)) {
             $this->groupEvents->add($groupEvent);
             $groupEvent->setGroup($this);
         }
@@ -295,11 +298,9 @@ class Group
 
     public function removeGroupEvent(GroupEvent $groupEvent): self
     {
-        if ($this->groupEvents->removeElement($groupEvent)) {
-            // set the owning side to null (unless already changed)
-            if ($groupEvent->getGroup() === $this) {
-                $groupEvent->setGroup(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->groupEvents->removeElement($groupEvent) && $groupEvent->getGroup() === $this) {
+            $groupEvent->setGroup(null);
         }
 
         return $this;
@@ -315,7 +316,7 @@ class Group
 
     public function addComment(Comment $comment): self
     {
-        if (!$this->comments->contains($comment)) {
+        if (! $this->comments->contains($comment)) {
             $this->comments->add($comment);
             $comment->setGroup($this);
         }
@@ -325,11 +326,9 @@ class Group
 
     public function removeComment(Comment $comment): self
     {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getGroup() === $this) {
-                $comment->setGroup(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->comments->removeElement($comment) && $comment->getGroup() === $this) {
+            $comment->setGroup(null);
         }
 
         return $this;

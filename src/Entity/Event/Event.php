@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity\Event;
 
@@ -73,7 +73,7 @@ class Event
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventRejection::class)]
     private Collection $eventRejections;
 
-    #[ORM\OneToOne(inversedBy: 'event', targetEntity: GroupEvent::class,cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'event', targetEntity: GroupEvent::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private null|GroupEvent $groupEvent = null;
 
@@ -179,7 +179,7 @@ class Event
 
     public function addEventUser(EventUser $user): self
     {
-        if (!$this->eventUsers->contains($user)) {
+        if (! $this->eventUsers->contains($user)) {
             $this->eventUsers->add($user);
             $user->setEvent($this);
         }
@@ -238,7 +238,7 @@ class Event
 
     public function addEventRequest(EventRequest $eventRequest): self
     {
-        if (!$this->eventRequests->contains($eventRequest)) {
+        if (! $this->eventRequests->contains($eventRequest)) {
             $this->eventRequests->add($eventRequest);
             $eventRequest->setEvent($this);
         }
@@ -295,7 +295,7 @@ class Event
 
     public function addComment(Comment $comment): self
     {
-        if (!$this->comments->contains($comment)) {
+        if (! $this->comments->contains($comment)) {
             $this->comments->add($comment);
             $comment->setEvent($this);
         }
@@ -323,7 +323,7 @@ class Event
 
     public function addEventInvite(EventInvite $eventInvite): self
     {
-        if (!$this->eventInvites->contains($eventInvite)) {
+        if (! $this->eventInvites->contains($eventInvite)) {
             $this->eventInvites->add($eventInvite);
             $eventInvite->setEvent($this);
         }
@@ -371,7 +371,7 @@ class Event
 
     public function addEventRejection(EventRejection $eventRejection): self
     {
-        if (!$this->eventRejections->contains($eventRejection)) {
+        if (! $this->eventRejections->contains($eventRejection)) {
             $this->eventRejections->add($eventRejection);
             $eventRejection->setEvent($this);
         }
@@ -381,11 +381,9 @@ class Event
 
     public function removeEventRejection(EventRejection $eventRejection): self
     {
-        if ($this->eventRejections->removeElement($eventRejection)) {
-            // set the owning side to null (unless already changed)
-            if ($eventRejection->getEvent() === $this) {
-                $eventRejection->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->eventRejections->removeElement($eventRejection) && $eventRejection->getEvent() === $this) {
+            $eventRejection->setEvent(null);
         }
 
         return $this;
@@ -409,10 +407,10 @@ class Event
         $this->groupEvent = $groupEvent;
     }
 
-    public function isSameWeek() : bool
+    public function isSameWeek(): bool
     {
         $date = Carbon::parse($this->createdAt);
+
         return $date->isSameWeek();
     }
-
 }
