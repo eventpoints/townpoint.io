@@ -26,13 +26,13 @@ class Event
     private Uuid $id;
 
     #[ORM\Column(length: 255, nullable: false)]
-    private string $title;
+    private null|string $title;
 
     #[ORM\Column(length: 255, nullable: false)]
-    private string $address;
+    private null|string $address;
 
     #[ORM\Column]
-    private DateTimeImmutable $startAt;
+    private null|DateTimeImmutable $startAt;
 
     #[ORM\Column(nullable: true)]
     private null|DateTimeImmutable $endAt = null;
@@ -41,7 +41,7 @@ class Event
     private DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(inversedBy: 'authoredEvents')]
-    private User $owner;
+    private null|User $owner;
 
     /**
      * @var Collection<int, EventUser>
@@ -68,8 +68,11 @@ class Event
     private Collection $eventInvites;
 
     #[ORM\Column]
-    private bool $isTicketed = false;
+    private null|bool $isTicketed = false;
 
+    /**
+     * @var Collection<int, EventRejection>
+     */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventRejection::class)]
     private Collection $eventRejections;
 
@@ -89,7 +92,11 @@ class Event
 
     public function __toString(): string
     {
-        return $this->getTitle();
+        if (is_string($this->getTitle())) {
+            return $this->getTitle();
+        }
+
+        return 'event not named yet';
     }
 
     public function getId(): ?Uuid
@@ -97,48 +104,48 @@ class Event
         return $this->id;
     }
 
-    public function getTitle(): string
+    public function getTitle(): null|string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(null|string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getAddress(): ?string
+    public function getAddress(): null|string
     {
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    public function setAddress(null|string $address): self
     {
         $this->address = $address;
 
         return $this;
     }
 
-    public function getStartAt(): ?DateTimeImmutable
+    public function getStartAt(): null|DateTimeImmutable
     {
         return $this->startAt;
     }
 
-    public function setStartAt(DateTimeImmutable $startAt): self
+    public function setStartAt(null|DateTimeImmutable $startAt): self
     {
         $this->startAt = $startAt;
 
         return $this;
     }
 
-    public function getEndAt(): ?DateTimeImmutable
+    public function getEndAt(): null|DateTimeImmutable
     {
         return $this->endAt;
     }
 
-    public function setEndAt(?DateTimeImmutable $endAt): self
+    public function setEndAt(null|DateTimeImmutable $endAt): self
     {
         $this->endAt = $endAt;
 
@@ -157,12 +164,12 @@ class Event
         return $this;
     }
 
-    public function getOwner(): User
+    public function getOwner(): null|User
     {
         return $this->owner;
     }
 
-    public function setOwner(User $owner): self
+    public function setOwner(null|User $owner): self
     {
         $this->owner = $owner;
 
@@ -349,12 +356,12 @@ class Event
             });
     }
 
-    public function isIsTicketed(): bool
+    public function isIsTicketed(): null|bool
     {
         return $this->isTicketed;
     }
 
-    public function setIsTicketed(bool $isTicketed): self
+    public function setIsTicketed(null|bool $isTicketed): self
     {
         $this->isTicketed = $isTicketed;
 

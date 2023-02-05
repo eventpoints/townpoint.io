@@ -20,11 +20,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item
 {
-    /**
-     * @var ArrayCollection
-     */
-    public $conversations;
-
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -52,12 +47,18 @@ class Item
     #[ORM\ManyToOne(inversedBy: 'marketItems')]
     private User $owner;
 
+    /**
+     * @var Collection<int, Image>
+     */
     #[ORM\OneToMany(mappedBy: 'marketItem', targetEntity: Image::class, cascade: ['persist'])]
     private Collection $images;
 
     #[ORM\Column(length: 3)]
     private string $currency = 'EUR';
 
+    /**
+     * @var Collection<int, Comment>
+     */
     #[ORM\OneToMany(mappedBy: 'marketItem', targetEntity: Comment::class)]
     private Collection $comments;
 
@@ -69,7 +70,6 @@ class Item
         $this->createdAt = new DateTimeImmutable();
         $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this->conversations = new ArrayCollection();
     }
 
     public function getId(): Uuid
