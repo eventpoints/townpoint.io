@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/market/item')]
+#[Route(path: '/market/items')]
 class ItemController extends AbstractController
 {
     public function __construct(
@@ -33,6 +33,27 @@ class ItemController extends AbstractController
         private readonly PaginatorInterface $paginator
     ) {
     }
+
+    #[Route(path: '/', name: 'market_items')]
+    public function index(Request $request): Response
+    {
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+
+        $itemsQuery = $this->itemRepository->findByUser($currentUser, true);
+        $marketItemsPagination = $this->paginator->paginate(
+            $itemsQuery,
+            $request->query->getInt('item-comments-page', 1),
+            30,
+            [
+                'pageParameterName' => 'items-page',
+            ]
+        );
+
+        return $this->render('market/item/index.html.twig', [
+            'marketItemPagination' => $marketItemsPagination,
+        ]);
+    }
+
 
     #[Route(path: '/create', name: 'create_market_item')]
     public function create(Request $request): Response

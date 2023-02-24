@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -50,15 +50,17 @@ class ConversationRepository extends ServiceEntityRepository
     public function findByTwoUsers(User $currentUser, User $user): Conversation|null
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->innerJoin('c.users', 'users');
 
         $qb->andWhere(
             $qb->expr()
-                ->in('users', ':users')
-        )->setParameter('users', [$currentUser->getId(), $user->getId()]);
+                ->isMemberOf(  ':targetUser', 'c.users')
+        )->setParameter('targetUser', $user->getId(), 'uuid');
 
-        return $qb->getQuery()
-            ->getOneOrNullResult();
+        $qb->andWhere(
+            $qb->expr()->eq('c.owner', ':currentUser')
+        )->setParameter('currentUser', $currentUser->getId(), 'uuid');
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function findByUser(User $user): Query

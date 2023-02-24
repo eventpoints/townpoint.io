@@ -88,7 +88,7 @@
                                              src="{{ message.user.avatar }}"/>
                                     </div>
                                     <div class="col-md-9">
-                                        <div class="bg-grey text-black rounded-2 p-2">{{ message.content }}</div>
+                                        <div class="bg-grey text-black rounded-2 p-2">{{ message.content|what3words }}</div>
                                         <div class="xtra-small text-muted">{{ message.createdAt|format_datetime('short', 'short', 'dd.MM.yy H:mm', app.user.timezone) }}</div>
                                     </div>
                                 </div>

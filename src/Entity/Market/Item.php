@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Entity\Market;
 
+use App\Entity\Bookmark;
 use App\Entity\Comment;
 use App\Entity\Image;
 use App\Entity\User;
@@ -65,11 +66,15 @@ class Item
     #[ORM\Column(nullable: true)]
     private bool $isAcceptingPriceOffers = false;
 
+    #[ORM\OneToMany(mappedBy: 'marketItem', targetEntity: Bookmark::class)]
+    private Collection $bookmarks;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->bookmarks = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -242,6 +247,36 @@ class Item
     public function setIsAcceptingPriceOffers(bool $isAcceptingPriceOffers): self
     {
         $this->isAcceptingPriceOffers = $isAcceptingPriceOffers;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bookmark>
+     */
+    public function getBookmarks(): Collection
+    {
+        return $this->bookmarks;
+    }
+
+    public function addBookmark(Bookmark $bookmark): self
+    {
+        if (!$this->bookmarks->contains($bookmark)) {
+            $this->bookmarks->add($bookmark);
+            $bookmark->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookmark(Bookmark $bookmark): self
+    {
+        if ($this->bookmarks->removeElement($bookmark)) {
+            // set the owning side to null (unless already changed)
+            if ($bookmark->getItem() === $this) {
+                $bookmark->setItem(null);
+            }
+        }
 
         return $this;
     }

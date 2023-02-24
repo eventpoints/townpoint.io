@@ -37,6 +37,14 @@ class CommentFactory
         return $comment;
     }
 
+    public function createUserPost(User $user, string $content): Comment
+    {
+        $comment = $this->create($user, $content);
+        $comment->setPost($user);
+
+        return $comment;
+    }
+
     public function createMarketItem(User $user, string $content, Item $item): Comment
     {
         $comment = $this->create($user, $content);

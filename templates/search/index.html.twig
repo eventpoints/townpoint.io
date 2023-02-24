@@ -44,28 +44,40 @@
                     <div class="tab-pane fade show active" id="people" role="tabpanel"
                          aria-labelledby="v-pills-home-tab"
                          tabindex="0">
-                        {% for user in usersPagination %}
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <a href="{{ path('profile', {id: user.id}) }}"
-                                       class="list-group-item list-group-item-action">
-
-                                        <div class="d-flex align-items-center">
-                                            <img src="{{ user.avatar }}" width="35" class="rounded-circle me-2"/>
-                                            <div>
-                                                <div class="lh-1 fw-bold">{{ user.fullName }}</div>
+                        <div class="row g-2">
+                            {% for user in usersPagination %}
+                                <div class="col-12 col-md-4">
+                                    <div class="card mb-3">
+                                        <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                                                <div class="row g-3">
+                                                    <div class="col-3 col-md-6">
+                                                        <img src="{{ user.avatar }}" class="rounded-circle w-100"/>
+                                                    </div>
+                                                    <div class="col-9 col-md-6 text-end">
+                                                        <div class="h5 m-0">{{ user.fullName }}</div>
+                                                        <span class="badge text-bg-primary"><span class="mdi mdi-flag-outline me-1"></span>{{ user.currentCountry }}</span>
+                                                        <span class="badge text-bg-secondary"><span class="mdi mdi-map-marker-outline me-1"></span>{{ user.countryOfOrigin }}</span>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <a href="{{ path('profile', {id: user.id}) }}"
+                                               class="list-group-item list-group-item-action list-group-item-primary fw-bold text-center">
+                                                {{ 'view-profile'|trans }}
+                                            </a>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    {{ 'no-users-found'|trans }}
+                            {% else %}
+                                <div class="col-12 col-md-12">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            {{ 'no-users-found'|trans }}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
 
                         <div class="col-md-12 d-flex justify-content-center mt-5">
                             {{ knp_pagination_render(usersPagination) }}

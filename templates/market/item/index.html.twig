@@ -2,44 +2,7 @@
 
 {% block body %}
     <div class="container">
-        <div class="row g-3">
-
-            <div class="col-12 col-md-12">
-                {{ include('partials/_nav.html.twig') }}
-            </div>
-
-            <div class="col-12 col-md-4">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <a href="{{ path('create_market_item') }}" class="btn btn-outline-primary">
-                            <span class="mdi mdi-plus"></span>
-                        </a>
-                        <a href="{{ path('market_items') }}" class="btn btn-outline-primary">
-                            <span class="mdi mdi-tag-multiple-outline"></span>
-                        </a>
-                        <a href="{{ path('market_item_bookmarks') }}" class="btn btn-outline-primary">
-                            <span class="mdi mdi-bookmark-multiple-outline"></span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-body">
-                        {{ form_start(marketItemFilterForm) }}
-                        {{ form_row(marketItemFilterForm.title) }}
-                        <div class="input-group">
-                            {{ form_row(marketItemFilterForm.minPrice) }}
-                            {{ form_row(marketItemFilterForm.maxPrice) }}
-                        </div>
-                        {{ form_row(marketItemFilterForm.currency) }}
-                        {{ form_row(marketItemFilterForm.condition) }}
-                        <button type="submit" class="btn btn-outline-primary w-100">
-                            {{ 'search'|trans }}
-                        </button>
-                        {{ form_end(marketItemFilterForm) }}
-                    </div>
-                </div>
-            </div>
+        <div class="row g-3 justify-content-center">
             <div class="col-12 col-md-8">
                 <div class="row g-3">
                     {% for item in marketItemPagination %}
@@ -59,13 +22,9 @@
                                                 </div>
                                             </div>
                                             <div class="btn-group">
-                                                <a {{ turbo_stream_listen('item-bookmark') }} class="btn {{ app.user.hasItemBeenBookmarked(item) ? 'btn-primary' : 'btn-outline-primary' }}"
-                                                   href="{{ path('create_item_bookmark', {id: item.id}) }}">
-                                                    <span class="mdi mdi-bookmark-outline"></span>
-                                                </a>
                                                 <a class="btn btn-outline-primary"
                                                    href="#">
-                                                    <span class="mdi mdi-content-copy"></span>
+                                                    <span class="mdi mdi-pencil-outline"></span>
                                                 </a>
                                                 <a class="btn btn-outline-primary"
                                                    href="{{ path('show_market_item', {id: item.id}) }}">

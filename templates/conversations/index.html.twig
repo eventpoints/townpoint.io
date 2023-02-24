@@ -2,45 +2,96 @@
 
 {% block body %}
     <div class="container">
-        <div class="row justify-content-center mb-3">
+        <div class="row justify-content-center mb-3" {{ stimulus_controller('conversations-action-bar') }}>
             <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="h5 m-0">{{ 'conversations'|trans|capitalize }}</div>
+                <div class="card mb-3 visually-hidden" {{ stimulus_target('conversations-action-bar', 'toolbar') }}>
+                    <div class="card-header">
+                        <div class="h5">{{ 'options'|trans }}</div>
                     </div>
-                    <div class="list-group list-group-flush">
-                        {% for conversation in pagination %}
-                            <a href="{{ path('conversation', {id: conversation.id}) }}"
-                               class="list-group-item list-group-item-action">
-                                {% for user in conversation.users %}
-                                    {% if user != app.user %}
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="{{ user.avatar }}" width="50" class="rounded-circle me-3"/>
-                                            </div>
-                                            <div class="w-100">
-                                                <div class="h5 m-0">{{ user.fullName }}</div>
-                                                {% if conversation.title %}
-                                                    <div class="text-muted">{{ conversation.title }}</div>
-                                                {% endif %}
-                                                {% if conversation.messages.last %}
-                                                    <div class="d-flex justify-content-between align-items-center w-100">
-                                                        <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }}</div>
-                                                        <div class="text-muted small">{{ conversation.messages.last.createdAt|format_date }}</div>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="text-muted">{{ 'no-messages'|trans }}</div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </a>
-                        {% else %}
-                            <div class="list-group-item text-center text-muted">
-                                {{ 'no-conversations'|trans }}
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6 col-md-4">
+                                <a href="#" class="btn btn-outline-primary w-100">
+                                    <span class="mdi mdi-eye-check fs-3"></span>
+                                    <div>{{ 'mark-as-read'|trans }}</div>
+                                </a>
                             </div>
-                        {% endfor %}
+                            <div class="col-6 col-md-4">
+                                <a href="#" class="btn btn-outline-primary w-100">
+                                    <span class="mdi mdi-archive-outline fs-3"></span>
+                                    <div>{{ 'hide'|trans }}</div>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <a href="#" class="btn btn-outline-danger w-100">
+                                    <span class="mdi mdi-close fs-3"></span>
+                                    <div>{{ 'delete'|trans }}</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="mdi mdi-circle-outline"
+                                     style="font-size: 60px;line-height: 1" {{ stimulus_action('conversations-action-bar', 'checkAll', 'click') }} {{ stimulus_target('conversations-action-bar', 'checkAllBtn') }} ></div>
+                                <div class="h5 m-0">{{ 'conversations'|trans|capitalize }}</div>
+                            </div>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {% for conversation in pagination %}
+                                <div class="list-group-item list-group-item-action" {{ stimulus_action('conversations-action-bar', 'mouseover', 'mouseover', {id: conversation.id})|stimulus_action('conversations-action-bar', 'mouseleave', 'mouseout', {id: conversation.id}) }}>
+                                    {% for user in conversation.users %}
+                                        {% if user != app.user %}
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <div class="me-3">
+                                                        <div
+                                                                {{ stimulus_target('conversations-action-bar', 'checkbox') }}
+                                                                id="checkbox-{{ conversation.id }}"
+                                                                data-id="{{ conversation.id }}"
+                                                                class="mdi mdi-circle-outline visually-hidden checkbox"
+                                                                style="font-size: 60px;line-height: 1"
+                                                                {{ stimulus_action('conversations-action-bar', 'check', 'click', {id: conversation.id}) }}
+                                                        ></div>
+
+                                                        <img
+                                                                id="image-{{ conversation.id }}"
+                                                                style="border: 5px solid #eee"
+                                                                src="{{ user.avatar }}" height="60" width="60"
+                                                                class="rounded-circle object-fit-contain"/>
+                                                    </div>
+                                                </div>
+                                                <div class="w-100">
+                                                    <div class="h4">
+                                                        <a class="text-decoration-none"
+                                                           href="{{ path('conversation', {id: conversation.id}) }}"> {{ user.fullName }}</a>
+                                                    </div>
+                                                    {% if conversation.title %}
+                                                        <div class="text-muted">{{ conversation.title }}</div>
+                                                    {% endif %}
+                                                    {% if conversation.messages.last %}
+                                                        <div class="d-flex justify-content-between align-items-center w-100">
+                                                            <div class="lead bg-grey rounded-pill px-2">{{ conversation.messages.last.content|slice(0,50) }}</div>
+                                                            <div class="text-muted small">{{ conversation.messages.last.createdAt|format_date }}</div>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="text-muted">{{ 'no-messages'|trans }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="list-group-item text-center text-muted">
+                                    {{ 'no-conversations'|trans }}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>

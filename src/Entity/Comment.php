@@ -41,6 +41,9 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Item $marketItem = null;
 
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    private ?User $post = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -119,6 +122,18 @@ class Comment
     public function setMarketItem(?Item $marketItem): self
     {
         $this->marketItem = $marketItem;
+
+        return $this;
+    }
+
+    public function getPost(): ?User
+    {
+        return $this->post;
+    }
+
+    public function setPost(?User $post): self
+    {
+        $this->post = $post;
 
         return $this;
     }

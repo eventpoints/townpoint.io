@@ -56,12 +56,13 @@ class ConversationController extends AbstractController
         return $this->redirectToRoute('conversations', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route(path: '/create/{id}', name: 'new_conversation')]
     public function create(User $user): Response
     {
-        $currentUser = $this->getUser();
-        assert($currentUser instanceof User && $currentUser instanceof UserInterface);
-
+        $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $conversation = $this->conversationRepository->findByTwoUsers($currentUser, $user);
 
         if ($conversation instanceof Conversation) {

@@ -204,6 +204,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class)]
     private Collection $marketItems;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bookmark::class)]
+    private Collection $bookmarks;
+
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class)]
+    private Collection $posts;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
@@ -223,6 +229,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->ownedGroups = new ArrayCollection();
         $this->eventRejections = new ArrayCollection();
         $this->marketItems = new ArrayCollection();
+        $this->bookmarks = new ArrayCollection();
+        $this->posts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -990,6 +998,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($marketItem->getOwner() === $this) {
             $this->marketItems->removeElement($marketItem);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bookmark>
+     */
+    public function getBookmarks(): Collection
+    {
+        return $this->bookmarks;
+    }
+
+    public function addBookmark(Bookmark $bookmark): self
+    {
+        if (!$this->bookmarks->contains($bookmark)) {
+            $this->bookmarks->add($bookmark);
+            $bookmark->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookmark(Bookmark $bookmark): self
+    {
+        if ($this->bookmarks->removeElement($bookmark)) {
+            // set the owning side to null (unless already changed)
+            if ($bookmark->getOwner() === $this) {
+                $bookmark->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    public function hasItemBeenBookmarked(Item $item): bool
+    {
+        return $this->getBookmarks()
+            ->exists(function (int $key, Bookmark $bookmark) use ($item): bool {
+                return $bookmark->getItem() === $item;
+            });
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Comment $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Comment $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getPost() === $this) {
+                $post->setPost(null);
+            }
         }
 
         return $this;

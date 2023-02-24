@@ -1,6 +1,5 @@
 
-@import "_variables.scss";
-@import "_cards.scss";
+@import "var/_variables.scss";
 @import "~bootstrap/scss/bootstrap";
 @import "~@mdi/font";
 @import 'tom-select/dist/css/tom-select.bootstrap5.css';
@@ -10,6 +9,18 @@
 @import "trix/dist/trix.css";
 @import "lightgallery/scss/lightgallery";
 @import 'swiper/swiper.css';
+
+ul.nav li a, ul.nav li a:visited {
+    color: $black !important;
+}
+
+ul.nav li a:hover, ul.nav li a:active {
+    color: $black !important;
+}
+
+ul.nav li.active a {
+    color: $black !important;
+}
 
 .card-img-overlay-hover{
     text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
@@ -63,9 +74,9 @@
 }
 
 body{
-    background-color: #ffffff;
+    background-color: rgba(0,0,0,0.04);
     opacity: 1;
-    background-image:  radial-gradient(#6a1b9a 0.5px, transparent 0.5px), radial-gradient(#6a1b9a 0.5px, #ffffff 0.5px);
+    //background-image:  radial-gradient(#6a1b9a 0.5px, transparent 0.5px), radial-gradient(#6a1b9a 0.5px, #ffffff 0.5px);
     background-size: 20px 20px;
     background-position: 0 0,10px 10px;
 }

@@ -8,9 +8,12 @@ use App\DataTransferObjects\MarketItemFilterDto;
 use App\Entity\Market\Item;
 use App\Entity\User;
 use App\Exception\ShouldNotHappenException;
+use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Item>
@@ -60,6 +63,12 @@ class ItemRepository extends ServiceEntityRepository
         }
 
         $qb = $this->createQueryBuilder('i');
+
+        $endDate = Carbon::now()->addMonth();
+        $qb->andWhere(
+            $qb->expr()->lte('i.createdAt', ':endDate')
+        )->setParameter('endDate', $endDate->toDateTime(), Types::DATETIME_MUTABLE);
+
         if ($marketItemFilterDto->getTitle()) {
             $qb->andWhere(
                 $qb->expr()
@@ -94,6 +103,25 @@ class ItemRepository extends ServiceEntityRepository
                     ->eq('i.condition', ':condition')
             )->setParameter('condition', $marketItemFilterDto->getCondition());
         }
+
+        $qb->orderBy('i.createdAt', 'ASC');
+
+        if ($isQuery) {
+            return $qb->getQuery();
+        }
+
+        return $qb->getQuery()
+            ->getResult();
+    }
+
+    public function findByUser(User $user, bool $isQuery = false)
+    {
+
+        $qb = $this->createQueryBuilder('i');
+
+        $qb->andWhere(
+            $qb->expr()->eq('i.owner', ':owner')
+        )->setParameter('owner', $user->getId(), 'uuid');
 
         $qb->orderBy('i.createdAt', 'ASC');
 
