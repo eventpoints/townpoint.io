@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository;
 
@@ -53,14 +53,23 @@ class ConversationRepository extends ServiceEntityRepository
 
         $qb->andWhere(
             $qb->expr()
-                ->isMemberOf(  ':targetUser', 'c.users')
-        )->setParameter('targetUser', $user->getId(), 'uuid');
+                ->andX(
+                    $qb->expr()
+                        ->isMemberOf(':targetUser', 'c.users'),
+                    $qb->expr()
+                        ->isMemberOf(':currentUser', 'c.users')
+                )
+        )->setParameter('targetUser', $user->getId(), 'uuid')
+            ->setParameter('currentUser', $currentUser->getId(), 'uuid');
 
         $qb->andWhere(
-            $qb->expr()->eq('c.owner', ':currentUser')
-        )->setParameter('currentUser', $currentUser->getId(), 'uuid');
+            $qb->expr()
+                ->orX($qb->expr() ->eq('c.owner', ':currentUser'), $qb->expr() ->eq('c.owner', ':targetUser'))
+        )->setParameter('currentUser', $currentUser->getId(), 'uuid')
+            ->setParameter('targetUser', $user->getId(), 'uuid');
 
-        return $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function findByUser(User $user): Query

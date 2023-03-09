@@ -1,0 +1,17 @@
+{{ form_start(projectForm, {
+    action: path('create_project')
+}) }}
+<div class="row">
+    <div class="col-6">
+        {{ form_row(projectForm.title) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(projectForm.endAt) }}
+    </div>
+    {{ form_row(projectForm.description) }}
+</div>
+<div class="text-end">
+    <button type="submit" class="btn btn-outline-primary">{{ 'create-project'|trans }}</button>
+</div>
+{{ form_end(projectForm) }}
+

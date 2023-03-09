@@ -54,7 +54,6 @@ class ItemController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/create', name: 'create_market_item')]
     public function create(Request $request): Response
     {

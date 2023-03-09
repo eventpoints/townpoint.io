@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Repository;
 
 use App\Entity\Bookmark;
 use App\Entity\User;
-use App\Exception\ShouldNotHappenException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Bookmark>
@@ -26,34 +26,38 @@ class BookmarkRepository extends ServiceEntityRepository
 
     public function save(Bookmark $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()
+            ->persist($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
     public function remove(Bookmark $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()
+            ->remove($entity);
 
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $this->getEntityManager()
+                ->flush();
         }
     }
 
-    public function findByUser(User $user, bool $isQuery = false) : mixed
+    public function findByUser(User $user, bool $isQuery = false): mixed
     {
         $qb = $this->createQueryBuilder('b');
 
-        $qb->andWhere(
-            $qb->expr()->eq('b.owner', ':owner')
-        )->setParameter('owner', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('b.owner', ':owner'))
+            ->setParameter('owner', $user->getId(), 'uuid');
 
         if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

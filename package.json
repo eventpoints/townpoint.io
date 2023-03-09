@@ -35,6 +35,7 @@
         "@easepick/core": "^1.2.0",
         "@easepick/time-plugin": "^1.2.0",
         "@mdi/font": "^7.0.96",
+        "@what3words/api": "^4.0.9",
         "animejs": "^3.2.1",
         "axios": "^1.2.1",
         "bootstrap": "^5.2.0",

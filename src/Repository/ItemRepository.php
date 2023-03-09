@@ -13,7 +13,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Item>
@@ -66,7 +65,8 @@ class ItemRepository extends ServiceEntityRepository
 
         $endDate = Carbon::now()->addMonth();
         $qb->andWhere(
-            $qb->expr()->lte('i.createdAt', ':endDate')
+            $qb->expr()
+                ->lte('i.createdAt', ':endDate')
         )->setParameter('endDate', $endDate->toDateTime(), Types::DATETIME_MUTABLE);
 
         if ($marketItemFilterDto->getTitle()) {
@@ -114,14 +114,12 @@ class ItemRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByUser(User $user, bool $isQuery = false)
+    public function findByUser(User $user, bool $isQuery = false): mixed
     {
-
         $qb = $this->createQueryBuilder('i');
 
-        $qb->andWhere(
-            $qb->expr()->eq('i.owner', ':owner')
-        )->setParameter('owner', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('i.owner', ':owner'))
+            ->setParameter('owner', $user->getId(), 'uuid');
 
         $qb->orderBy('i.createdAt', 'ASC');
 

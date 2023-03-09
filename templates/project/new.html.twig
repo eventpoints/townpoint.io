@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+                <turbo-frame id="new-project-frame" target="_top">
+                    <div class="card">
+                        <div class="card-body">
+                            {% if app.user.projects.count == 0 %}
+                                <div class="row justify-content-between text-center my-3">
+                                    <div class="col-4">
+                                        <div class="card position-relative text-bg-primary">
+                                            <div class="mdi mdi-numeric-1 shadow fs-1 bg-white lh-1 rounded-circle text-black position-absolute top-0 start-50 translate-middle"></div>
+                                            <div class="card-body">
+                                                <div class="lead fw-bold mt-2">Create your specific, achievable goal</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="card position-relative text-bg-primary">
+                                            <div class="mdi mdi-numeric-2 shadow fs-1 bg-white lh-1 rounded-circle text-black position-absolute top-0 start-50 translate-middle"></div>
+                                            <div class="card-body">
+                                                <div class="lead fw-bold mt-2">Allow others to assist or join you</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="card position-relative text-bg-primary">
+                                            <div class="mdi mdi-numeric-3 shadow fs-1 bg-white lh-1 rounded-circle text-black position-absolute top-0 start-50 translate-middle"></div>
+                                            <div class="card-body">
+                                                <div class="lead fw-bold mt-2">Celebrate your achievement! 🎉</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            {{ include('project/_form.html.twig') }}
+                        </div>
+                    </div>
+                </turbo-frame>
+            </div>
+        </div>
+    </div>
+{% endblock %}

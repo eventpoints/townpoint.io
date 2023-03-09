@@ -76,63 +76,102 @@
         </div>
         <div class="col-12 col-md-8">
 
-{#            {% if app.user == user %}#}
-{#                <turbo-frame class="mb-3" src="{{ path('new_snippet') }}" id="new-snippet-form-frame" target="_self">#}
-{#                    <div class="d-flex justify-content-center">#}
-{#                        <div class="spinner-border" role="status">#}
-{#                            <span class="visually-hidden">Loading...</span>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </turbo-frame>#}
-{#            {% endif %}#}
+            {#            {% if app.user == user %} #}
+            {#                <turbo-frame class="mb-3" src="{{ path('new_snippet') }}" id="new-snippet-form-frame" target="_self"> #}
+            {#                    <div class="d-flex justify-content-center"> #}
+            {#                        <div class="spinner-border" role="status"> #}
+            {#                            <span class="visually-hidden">Loading...</span> #}
+            {#                        </div> #}
+            {#                    </div> #}
+            {#                </turbo-frame> #}
+            {#            {% endif %} #}
 
-{#            <div class="mt-3" {{ stimulus_controller('multi-audio-player') }}>#}
-{#                <div class="card sticky-top mb-3 shadow-sm">#}
-{#                    <div class="position-relative">#}
-{#                        <div class="card-body">#}
-{#                            <div class="d-flex justify-content-between align-items-center">#}
-{#                                <div class="z-index-25">#}
-{#                                    <a class="btn btn-outline-primary" {{ stimulus_action('multi-audio-player', 'playPause', 'click') }}>#}
-{#                                        <div class="mdi mdi-play fs-4"></div>#}
-{#                                    </a>#}
-{#                                </div>#}
-{#                                <div>#}
-{#                                    <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'title') }}></div>#}
-{#                                </div>#}
-{#                                <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'time') }}>--:--</div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <input min="0" max="100" step="0.1" type="range"#}
-{#                               class="custom-tp-range c-y w-100" {{ stimulus_target('multi-audio-player', 'seek') }} {{ stimulus_action('multi-audio-player', 'seeking', 'change') }} />#}
-{#                        <canvas class="position-absolute z-index-0 top-0 w-100 h-100" {{ stimulus_target('multi-audio-player', 'canvas') }}></canvas>#}
-{#                    </div>#}
-{#                </div>#}
+            {#            <div class="mt-3" {{ stimulus_controller('multi-audio-player') }}> #}
+            {#                <div class="card sticky-top mb-3 shadow-sm"> #}
+            {#                    <div class="position-relative"> #}
+            {#                        <div class="card-body"> #}
+            {#                            <div class="d-flex justify-content-between align-items-center"> #}
+            {#                                <div class="z-index-25"> #}
+            {#                                    <a class="btn btn-outline-primary" {{ stimulus_action('multi-audio-player', 'playPause', 'click') }}> #}
+            {#                                        <div class="mdi mdi-play fs-4"></div> #}
+            {#                                    </a> #}
+            {#                                </div> #}
+            {#                                <div> #}
+            {#                                    <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'title') }}></div> #}
+            {#                                </div> #}
+            {#                                <div class="h5 m-0" {{ stimulus_target('multi-audio-player', 'time') }}>--:--</div> #}
+            {#                            </div> #}
+            {#                        </div> #}
+            {#                        <input min="0" max="100" step="0.1" type="range" #}
+            {#                               class="custom-tp-range c-y w-100" {{ stimulus_target('multi-audio-player', 'seek') }} {{ stimulus_action('multi-audio-player', 'seeking', 'change') }} /> #}
+            {#                        <canvas class="position-absolute z-index-0 top-0 w-100 h-100" {{ stimulus_target('multi-audio-player', 'canvas') }}></canvas> #}
+            {#                    </div> #}
+            {#                </div> #}
 
-{#                {% for snippet in user.snippets %}#}
-{#                    <div class="card mb-3" {{ stimulus_action('multi-audio-player', 'loadTrack', 'click', { title: snippet.title, content: snippet.content }) }}>#}
-{#                        <div class="card-body">#}
-{#                            <div class="d-flex">#}
-{#                                <div>#}
-{#                                    <img src="{{ user.avatar }}" height="50" class="rounded-circle me-3">#}
-{#                                </div>#}
-{#                                <div>#}
-{#                                    <div class="h5 m-0">{{ snippet.title }}</div>#}
-{#                                    <div class="text-muted">{{ snippet.createdAt|format_datetime }}</div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                {% endfor %}#}
-{#            </div>#}
+            {#                {% for snippet in user.snippets %} #}
+            {#                    <div class="card mb-3" {{ stimulus_action('multi-audio-player', 'loadTrack', 'click', { title: snippet.title, content: snippet.content }) }}> #}
+            {#                        <div class="card-body"> #}
+            {#                            <div class="d-flex"> #}
+            {#                                <div> #}
+            {#                                    <img src="{{ user.avatar }}" height="50" class="rounded-circle me-3"> #}
+            {#                                </div> #}
+            {#                                <div> #}
+            {#                                    <div class="h5 m-0">{{ snippet.title }}</div> #}
+            {#                                    <div class="text-muted">{{ snippet.createdAt|format_datetime }}</div> #}
+            {#                                </div> #}
+            {#                            </div> #}
+            {#                        </div> #}
+            {#                    </div> #}
+            {#                {% endfor %} #}
+            {#            </div> #}
 
+            {#            <turbo-frame src="{{ path('user_create_post') }}" id="comment-form-frame" target="_top"> #}
+            {#                <div class="d-flex justify-content-center"> #}
+            {#                    <div class="spinner-border" role="status"> #}
+            {#                        <span class="visually-hidden">Loading...</span> #}
+            {#                    </div> #}
+            {#                </div> #}
+            {#            </turbo-frame> #}
 
-            <turbo-frame src="{{ path('user_create_post') }}" id="comment-form-frame" target="_top">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+            <div class="mb-3">
+                {% if app.user.currentProject is null %}
+                    <turbo-frame id="new-project-frame" src="{{ path('create_project') }}">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </turbo-frame>
+                {% endif %}
+            </div>
+
+            <div class="row justify-content-between">
+                {% for project in app.user.projects %}
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5>{{ project.title }}</h5>
+                                        <div>{{ project.createdAt|format_datetime }}</div>
+                                    </div>
+
+                                    <div>
+                                        {% if project.isTodayBeforeEndAt and project.isComplete is null %}
+                                            {{ project.endAt.diffForHumans }}
+                                        {% else %}
+
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p>{{ project.description|nl2br }}</p>
+                            </div>
+                            <div class="card-footer"></div>
+                        </div>
                     </div>
-                </div>
-            </turbo-frame>
+                {% endfor %}
+            </div>
+
 
         </div>
     </div>

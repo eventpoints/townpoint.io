@@ -66,6 +66,9 @@ class Item
     #[ORM\Column(nullable: true)]
     private bool $isAcceptingPriceOffers = false;
 
+    /**
+     * @var Collection<int, Bookmark>
+     */
     #[ORM\OneToMany(mappedBy: 'marketItem', targetEntity: Bookmark::class)]
     private Collection $bookmarks;
 
@@ -261,7 +264,7 @@ class Item
 
     public function addBookmark(Bookmark $bookmark): self
     {
-        if (!$this->bookmarks->contains($bookmark)) {
+        if (! $this->bookmarks->contains($bookmark)) {
             $this->bookmarks->add($bookmark);
             $bookmark->setItem($this);
         }
@@ -271,11 +274,9 @@ class Item
 
     public function removeBookmark(Bookmark $bookmark): self
     {
-        if ($this->bookmarks->removeElement($bookmark)) {
-            // set the owning side to null (unless already changed)
-            if ($bookmark->getItem() === $this) {
-                $bookmark->setItem(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->bookmarks->removeElement($bookmark) && $bookmark->getItem() === $this) {
+            $bookmark->setItem(null);
         }
 
         return $this;

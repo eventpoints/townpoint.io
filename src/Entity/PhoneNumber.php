@@ -5,7 +5,9 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use App\Repository\PhoneNumberRepository;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
@@ -29,7 +31,7 @@ class PhoneNumber
     #[ORM\JoinColumn(nullable: false)]
     private User $owner;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
     public function __construct()
@@ -78,7 +80,7 @@ class PhoneNumber
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable|CarbonImmutable
     {
         return $this->createdAt;
     }

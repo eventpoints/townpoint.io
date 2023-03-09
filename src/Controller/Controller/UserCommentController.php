@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
-use App\Entity\Group\Group;
 use App\Factory\Comment\CommentFactory;
 use App\Form\CommentFormType;
-use App\Repository\CommentRepository;
 use App\Repository\UserRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
@@ -17,13 +17,11 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/user/comment')]
 class UserCommentController extends AbstractController
 {
-
     public function __construct(
         private readonly CurrentUserService $currentUserService,
-        private readonly CommentFactory     $commentFactory,
-        private readonly UserRepository     $userRepository
-    )
-    {
+        private readonly CommentFactory $commentFactory,
+        private readonly UserRepository $userRepository
+    ) {
     }
 
     #[Route(path: '/create', name: 'user_create_post')]
@@ -50,5 +48,4 @@ class UserCommentController extends AbstractController
             ]),
         ]);
     }
-
 }

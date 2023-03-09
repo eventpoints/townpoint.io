@@ -69,7 +69,7 @@
                             {% if app.user == message.user %}
                                 <div class="d-flex justify-content-end">
                                     <div class="col-md-9">
-                                        <div class="bg-grey text-black rounded-2 p-2 lead">{{ message.content }}</div>
+                                        <div class="bg-grey text-black rounded-2 p-2 lead">{{ message.content|what3words|raw }}</div>
                                         <div class="xtra-small text-muted">{{ message.createdAt|format_date }}</div>
                                     </div>
                                     <div class="col-md-1 d-flex justify-content-end">
@@ -88,7 +88,7 @@
                                              src="{{ message.user.avatar }}"/>
                                     </div>
                                     <div class="col-md-9">
-                                        <div class="bg-grey text-black rounded-2 p-2">{{ message.content|what3words }}</div>
+                                        <div class="bg-grey text-black rounded-2 p-2 lead">{{ message.content|what3words|raw }}</div>
                                         <div class="xtra-small text-muted">{{ message.createdAt|format_datetime('short', 'short', 'dd.MM.yy H:mm', app.user.timezone) }}</div>
                                     </div>
                                 </div>
@@ -97,12 +97,21 @@
                             <div class="lead text-muted text-center">{{ 'no-messages'|trans }}</div>
                         {% endfor %}
                     </div>
-                    <div class="border-top position-relative">
+                    <div class="border-top position-relative" {{ stimulus_controller('current-location', {
+                        path: path('coordinates_to_what_three_words')
+                    }) }}>
                         {{ form_start(messageForm) }}
                         {{ form_row(messageForm.content) }}
-                        <button type="submit" class="btn btn-outline-primary bottom-right no-box-shadow">
-                            {{ 'send'|trans }}
-                        </button>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a {{ stimulus_action('current-location', 'getLocation', 'click') }}
+                                    {{ stimulus_target('current-location', 'locationBtn') }}
+                                    class="btn btn-outline-primary fw-bold" data-bs-toggle="tooltip" data-bs-title="current What3words">
+                                 ///
+                            </a>
+                            <button type="submit" class="btn btn-outline-primary">
+                                {{ 'send'|trans }}
+                            </button>
+                        </div>
                         {{ form_end(messageForm) }}
                     </div>
                 </div>

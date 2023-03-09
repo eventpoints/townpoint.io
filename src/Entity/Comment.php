@@ -8,6 +8,7 @@ use App\Entity\Event\Event;
 use App\Entity\Group\Group;
 use App\Entity\Market\Item;
 use App\Repository\CommentRepository;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +30,7 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private User $owner;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
@@ -78,7 +79,7 @@ class Comment
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable|CarbonImmutable
     {
         return $this->createdAt;
     }

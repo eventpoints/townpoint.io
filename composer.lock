@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8a7d83beea9daeb777ec9fc59c694b5",
+    "content-hash": "9c2eb20283d2f116e0c5ade78cbd72bf",
     "packages": [
         {
             "name": "alcohol/iso4217",
@@ -10656,6 +10656,65 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "what3words/w3w-php-wrapper",
+            "version": "v3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/what3words/w3w-php-wrapper.git",
+                "reference": "5fc3c046378a463e2fd14d4002e620672590f7ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/what3words/w3w-php-wrapper/zipball/5fc3c046378a463e2fd14d4002e620672590f7ef",
+                "reference": "5fc3c046378a463e2fd14d4002e620672590f7ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.3"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": "Thanks from all of us at index.home.raft for using what3words"
+            },
+            "autoload": {
+                "psr-4": {
+                    "What3words\\Geocoder\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "what3words",
+                    "email": "support@what3words.com"
+                },
+                {
+                    "name": "Gary Gale",
+                    "email": "gary@what3words.com",
+                    "homepage": "http://www.garygale.com"
+                }
+            ],
+            "description": "A PHP library to use the what3words RESTful API",
+            "homepage": "https://github.com/what3words/w3w-php-wrapper",
+            "keywords": [
+                "3 word address",
+                "geocoding",
+                "what3words"
+            ],
+            "support": {
+                "docs": "https://developer.what3words.com",
+                "email": "support@what3words.com",
+                "issues": "https://github.com/what3words/w3w-php-wrapper/issues",
+                "source": "https://github.com/what3words/w3w-php-wrapper"
+            },
+            "time": "2019-09-11T13:05:55+00:00"
         }
     ],
     "packages-dev": [

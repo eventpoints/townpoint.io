@@ -204,11 +204,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class)]
     private Collection $marketItems;
 
+    /**
+     * @var Collection<int, Bookmark>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bookmark::class)]
     private Collection $bookmarks;
 
+    /**
+     * @var Collection<int, Comment>
+     */
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class)]
     private Collection $posts;
+
+    /**
+     * @var Collection<int, Project>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Project::class)]
+    private Collection $projects;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private null|Project $currentProject = null;
 
     public function __construct()
     {
@@ -231,6 +246,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->marketItems = new ArrayCollection();
         $this->bookmarks = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1013,7 +1029,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addBookmark(Bookmark $bookmark): self
     {
-        if (!$this->bookmarks->contains($bookmark)) {
+        if (! $this->bookmarks->contains($bookmark)) {
             $this->bookmarks->add($bookmark);
             $bookmark->setOwner($this);
         }
@@ -1023,16 +1039,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeBookmark(Bookmark $bookmark): self
     {
-        if ($this->bookmarks->removeElement($bookmark)) {
-            // set the owning side to null (unless already changed)
-            if ($bookmark->getOwner() === $this) {
-                $bookmark->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->bookmarks->removeElement($bookmark) && $bookmark->getOwner() === $this) {
+            $bookmark->setOwner(null);
         }
 
         return $this;
     }
-
 
     public function hasItemBeenBookmarked(Item $item): bool
     {
@@ -1052,7 +1065,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addPost(Comment $post): self
     {
-        if (!$this->posts->contains($post)) {
+        if (! $this->posts->contains($post)) {
             $this->posts->add($post);
             $post->setPost($this);
         }
@@ -1062,12 +1075,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removePost(Comment $post): self
     {
-        if ($this->posts->removeElement($post)) {
-            // set the owning side to null (unless already changed)
-            if ($post->getPost() === $this) {
-                $post->setPost(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->posts->removeElement($post) && $post->getPost() === $this) {
+            $post->setPost(null);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (! $this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->projects->removeElement($project) && $project->getOwner() === $this) {
+            $project->setOwner(null);
+        }
+
+        return $this;
+    }
+
+    public function getCurrentProject(): null|Project
+    {
+        return $this->currentProject;
+    }
+
+    public function setCurrentProject(null|Project $currentProject): self
+    {
+        $this->currentProject = $currentProject;
 
         return $this;
     }

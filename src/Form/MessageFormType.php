@@ -22,6 +22,7 @@ class MessageFormType extends AbstractType
                     'class' => 'border-0',
                     'rows' => 5,
                     'data-controller' => 'textarea-autogrow',
+                    'data-current-location-target' => 'messageTextarea',
                 ],
                 'row_attr' => [
                     'class' => 'mb-3',

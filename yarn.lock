@@ -1490,6 +1490,11 @@
   resolved "https://registry.yarnpkg.com/@webpack-cli/serve/-/serve-1.7.0.tgz#e1993689ac42d2b16e9194376cfb6753f6254db1"
   integrity sha512-oxnCNGj88fL+xzV+dacXs44HcDwf1ovs3AuEzvP7mqXw7fQntqIhQ1BRmynh4qEKQSSSRSWVyXRjmTbZIX9V2Q==
 
+"@what3words/api@^4.0.9":
+  version "4.0.9"
+  resolved "https://registry.yarnpkg.com/@what3words/api/-/api-4.0.9.tgz#3f8da18563724486e485ce9e2d590dea76394689"
+  integrity sha512-L6jXiJBl9Qvrt6OErfqeEe5DeR7Jjg0L/br4MLigHUyblIN/whOBWdE/jPYAC2w1ypSP1ezpneAECYEtJB3VCw==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"

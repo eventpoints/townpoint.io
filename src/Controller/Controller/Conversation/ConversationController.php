@@ -56,9 +56,6 @@ class ConversationController extends AbstractController
         return $this->redirectToRoute('conversations', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @throws \Exception
-     */
     #[Route(path: '/create/{id}', name: 'new_conversation')]
     public function create(User $user): Response
     {

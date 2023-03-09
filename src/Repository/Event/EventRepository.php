@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository\Event;
 
@@ -25,10 +25,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 class EventRepository extends ServiceEntityRepository
 {
     public function __construct(
-        ManagerRegistry           $registry,
+        ManagerRegistry $registry,
         private readonly Security $security
-    )
-    {
+    ) {
         parent::__construct($registry, Event::class);
     }
 
@@ -58,7 +57,7 @@ class EventRepository extends ServiceEntityRepository
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -120,7 +119,7 @@ class EventRepository extends ServiceEntityRepository
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
