@@ -133,17 +133,19 @@
             {#                </div> #}
             {#            </turbo-frame> #}
 
-            <div class="mb-3">
-                {% if app.user.currentProject is null %}
-                    <turbo-frame id="new-project-frame" src="{{ path('create_project') }}">
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
+            {% if  app.user == user %}
+                <div class="mb-3">
+                    {% if app.user.currentProject is null %}
+                        <turbo-frame id="new-project-frame" src="{{ path('create_project') }}">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
                             </div>
-                        </div>
-                    </turbo-frame>
-                {% endif %}
-            </div>
+                        </turbo-frame>
+                    {% endif %}
+                </div>
+            {% endif %}
 
             <div class="row justify-content-between">
                 {% for project in app.user.projects %}
