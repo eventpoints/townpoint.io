@@ -1,7 +1,9 @@
 parameters:
 	level: 8
 	paths:
-		- ./src/Twig/Extension/InstanceOfExtension.php
+		- ./src
+		- ./config
+		- ./tests
 	ignoreErrors:
 	    - '#Property [a-zA-Z0-9\\_::]+\$id is never written, only read.#'
 	reportUnmatchedIgnoredErrors: false

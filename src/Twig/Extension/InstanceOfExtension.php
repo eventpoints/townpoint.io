@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace App\Twig\Extension;
 
 use ReflectionClass;
-use ReflectionException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
