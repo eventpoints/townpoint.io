@@ -287,6 +287,9 @@
             "config/routes/ux_autocomplete.yaml"
         ]
     },
+    "symfony/ux-dropzone": {
+        "version": "v2.7.1"
+    },
     "symfony/ux-turbo": {
         "version": "v2.4.0"
     },

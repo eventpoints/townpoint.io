@@ -11,6 +11,7 @@ use App\Entity\Event\EventRejection;
 use App\Entity\Event\EventRequest;
 use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
+use App\Entity\Market\Classified;
 use App\Entity\Market\Item;
 use App\Entity\Traits\ProfileTrait;
 use App\Enum\ReactionEnum;
@@ -225,6 +226,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private null|Project $currentProject = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Classified::class, orphanRemoval: true)]
+    private Collection $classifieds;
+
     public function __construct()
     {
         $this->conversations = new ArrayCollection();
@@ -247,6 +251,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bookmarks = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->classifieds = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1119,6 +1124,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCurrentProject(null|Project $currentProject): self
     {
         $this->currentProject = $currentProject;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Classified>
+     */
+    public function getClassifieds(): Collection
+    {
+        return $this->classifieds;
+    }
+
+    public function addClassified(Classified $classified): self
+    {
+        if (!$this->classifieds->contains($classified)) {
+            $this->classifieds->add($classified);
+            $classified->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassified(Classified $classified): self
+    {
+        if ($this->classifieds->removeElement($classified)) {
+            // set the owning side to null (unless already changed)
+            if ($classified->getOwner() === $this) {
+                $classified->setOwner(null);
+            }
+        }
 
         return $this;
     }

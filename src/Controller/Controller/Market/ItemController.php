@@ -59,7 +59,7 @@ class ItemController extends AbstractController
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $item = new Item();
-        $item->setOwner($currentUser);
+
         $itemForm = $this->createForm(MarketItemFormType::class, $item);
 
         $itemForm->handleRequest($request);

@@ -45,9 +45,6 @@ class Item
     #[ORM\Column(length: 255)]
     private ?string $condition = null;
 
-    #[ORM\ManyToOne(inversedBy: 'marketItems')]
-    private User $owner;
-
     /**
      * @var Collection<int, Image>
      */
@@ -71,6 +68,10 @@ class Item
      */
     #[ORM\OneToMany(mappedBy: 'marketItem', targetEntity: Bookmark::class)]
     private Collection $bookmarks;
+
+    #[ORM\ManyToOne(inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Classified $classified = null;
 
     public function __construct()
     {
@@ -158,18 +159,6 @@ class Item
     public function setCondition(string $condition): self
     {
         $this->condition = $condition;
-
-        return $this;
-    }
-
-    public function getOwner(): User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(User $owner): self
-    {
-        $this->owner = $owner;
 
         return $this;
     }
@@ -278,6 +267,18 @@ class Item
         if ($this->bookmarks->removeElement($bookmark) && $bookmark->getItem() === $this) {
             $bookmark->setItem(null);
         }
+
+        return $this;
+    }
+
+    public function getClassified(): ?Classified
+    {
+        return $this->classified;
+    }
+
+    public function setClassified(?Classified $classified): self
+    {
+        $this->classified = $classified;
 
         return $this;
     }

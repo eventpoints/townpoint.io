@@ -1,0 +1,84 @@
+$green: #81c784;
+$green-light: #e8f5e9;
+$yellow: #ffee58;
+$yellow-light: #fffde7;
+$orange: #ff7043;
+$orange-light: #fff3e0;
+$red: #c62828;
+$red-light: #ffebee;
+$purple: #6a1b9a;
+$purple-light: #ede7f6;
+$indigo: #5c6bc0;
+$indigo-light: #e8eaf6;
+$blue: #1976d2;
+$blue-light: #e3f2fd;
+$teal: #26a69a;
+$teal-light: #e0f2f1;
+$cyan: #26c6da;
+$cyan-light: #e0f7fa;
+$white: #ffffff;
+$black: #000000;
+$pink: #f8bbd0;
+$white:    #fff !default;
+
+$gray-light: #F2F3F5 !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+
+$primary:       #191970 !default;
+$secondary:     #800080 !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         #e6e6fa !default;
+$dark:          #191970 !default;
+
+$border-radius: 0.3rem;
+$border-radius-lg: 0.3rem;
+$border-radius-sm: 0.3rem;
+$input-border-radius: 0rem;
+$badge-pill-border-radius: 0.3rem;
+$spacer: 1rem;
+$border-width: 0rem;
+$kbd-padding-y: 0.2rem;
+$grid-gutter-width: 1rem;
+$navbar-padding-x: $spacer;
+$light: $white;
+$input-btn-border-width: 0.05rem;
+$toast-background-color: rgba(white, 0.75);
+$input-border-color: $gray-400;
+$input-btn-padding-y-sm: 0.2rem;
+$headings-font-weight: 900;
+$nav-link-font-weight: 900;
+$prefix: --bs-;
+
+// import functions and vars
+@import "bootstrap/scss/_functions";
+@import "bootstrap/scss/_variables";
+@import "../var/_cards.scss";
+
+$custom-theme-colours: (
+        "gray-light": $gray-light,
+        "primary-light": $purple-light,
+        "success-light": $green-light,
+        "secondary-light": $gray-100,
+        "danger-light": $red-light,
+        "info-light": $blue-light,
+        "warning-light": $yellow-light
+);
+
+$theme-colors: map-merge($custom-theme-colours, $theme-colors);
+
+$font-size-root:              null !default;
+$font-size-base:              .8rem !default; // Assumes the browser default, typically `16px`
+$font-size-sm:                $font-size-base * .55 !default;
+$font-size-lg:                $font-size-base * .85 !default;

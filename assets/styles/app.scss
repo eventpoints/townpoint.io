@@ -10,6 +10,14 @@
 @import "lightgallery/scss/lightgallery";
 @import 'swiper/swiper.css';
 
+
+.min-vh-50{
+    min-height: 50vh!important;
+}
+.min-vh-75{
+    min-height: 75vh!important;
+}
+
 ul.nav li a, ul.nav li a:visited {
     color: $black !important;
 }

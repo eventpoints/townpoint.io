@@ -1,0 +1,67 @@
+<div {{ stimulus_controller('form-collection', {
+    index: classifiedForm.items|length > 0 ? classifiedForm.items|last.vars.name + 1 : 0,
+    prototype: form_widget(classifiedForm.items.vars.prototype)|raw
+}) }}
+>
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h5>{{ 'create-classified-listing'|trans }}</h5>
+            </div>
+        </div>
+    </div>
+    {{ form_start(classifiedForm) }}
+    <div class="card-body">
+        {{ form_row(classifiedForm.title) }}
+    </div>
+
+    <div id="carouselExample" class="carousel min-vh-75 carousel-dark slide">
+        <div class="d-flex justify-content-between p-2">
+            <div>
+                <button {{ stimulus_action('form-collection', 'slide') }} class="btn btn-outline-primary" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="prev">
+                    <span class="mdi mdi-chevron-left fs-1"></span>
+                </button>
+                <button type="button"
+                        {{ stimulus_action('form-collection', 'addCollectionElement') }}
+                        class="btn btn-outline-secondary">
+                    <span class="mdi mdi-tag-plus fs-1"></span>
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-outline-secondary fs-1 disabled">
+                    <span {{ stimulus_target('form-collection', 'current') }}>0</span> /
+                    <span {{ stimulus_target('form-collection', 'counter') }}>0</span>
+                </button>
+                <button {{ stimulus_action('form-collection', 'slide') }} class="btn btn-outline-primary" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="next">
+                    <span class="mdi mdi-chevron-right fs-1"></span>
+                </button>
+            </div>
+        </div>
+        <div class="carousel-inner p-3" {{ stimulus_target('form-collection', 'collectionContainer') }}>
+            <div class="carousel-item active">
+                <div class="card mx-3 card-body shadow d-flex flex-column justify-content-center align-items-center min-vh-50">
+                    <div class="w-75">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item h5">{{ 'market-item-rules'|trans }}</div>
+                            <div class="list-group-item ">{{ 'market-item-rule-common-sense'|trans }}</div>
+                            <div class="list-group-item ">{{ 'market-item-rule-dimensions'|trans }}</div>
+                            <div class="list-group-item ">{{ 'market-item-rule-price'|trans }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-indicators position-relative my-3" {{ stimulus_target('form-collection', 'indicators') }}>
+            <button {{ stimulus_action('form-collection', 'slide') }}  type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></button>
+        </div>
+    </div>
+
+    <div class="card-footer text-end">
+        <button type="submit" class="btn btn-primary">
+            {{ 'save'|trans }}
+        </button>
+    </div>
+    {{ form_end(classifiedForm) }}
+</div>

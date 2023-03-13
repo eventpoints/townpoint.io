@@ -11,7 +11,7 @@
             <div class="col-12 col-md-4">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <a href="{{ path('create_market_item') }}" class="btn btn-outline-primary">
+                        <a href="{{ path('create_market_classified') }}" class="btn btn-outline-primary">
                             <span class="mdi mdi-plus"></span>
                         </a>
                         <a href="{{ path('market_items') }}" class="btn btn-outline-primary">
@@ -73,7 +73,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>classified
                                 </div>
                                 <div id="item-{{ item.id }}-carousel" class="carousel carousel-dark slide gray-light">
                                     <div class="carousel-indicators">
@@ -111,14 +111,14 @@
                                     </button>
                                 </div>
                                 <div class="list-group list-group-flush">
-                                    <a href="{{ path('profile', {id: item.owner.id}) }}"
+                                    <a href="{{ path('profile', {id: item.classified.owner.id}) }}"
                                        class="list-group-item list-group-item-action">
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ item.owner.avatar }}" width="35"
+                                            <img src="{{ item.classified.owner.avatar }}" width="35"
                                                  class="rounded-circle me-2"/>
                                             <div>
-                                                <div class="lh-1 fw-bold">{{ item.owner.fullName }}</div>
-                                                <div class="text-muted small">{{ item.createdAt|format_datetime('short', 'short', 'dd.MM.yy', app.user.timezone) }}</div>
+                                                <div class="lh-1 fw-bold">{{ item.classified.owner.fullName }}</div>
+                                                <div class="text-muted small">{{ item.classified.createdAt|format_datetime('short', 'short', 'dd.MM.yy', app.user.timezone) }}</div>
                                             </div>
                                         </div>
                                     </a>
