@@ -22,9 +22,6 @@ class MarketController extends AbstractController
     ) {
     }
 
-    /**
-     * @throws \App\Exception\ShouldNotHappenException
-     */
     #[Route(path: '/', name: 'market')]
     public function index(Request $request): Response
     {

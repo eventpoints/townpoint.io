@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository\Event;
 
@@ -68,13 +68,15 @@ class EventParticipantRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('eventParticipant');
 
         $qb->andWhere(
-            $qb->expr()->eq('eventParticipant.owner', ':user')
+            $qb->expr()
+                ->eq('eventParticipant.owner', ':user')
         )->setParameter('user', $user->getId(), 'uuid');
 
         if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

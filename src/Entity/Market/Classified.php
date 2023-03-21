@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity\Market;
 
 use App\Entity\User;
@@ -71,7 +73,7 @@ class Classified
 
     public function addItem(Item $item): self
     {
-        if (!$this->items->contains($item)) {
+        if (! $this->items->contains($item)) {
             $this->items->add($item);
             $item->setClassified($this);
         }
@@ -81,11 +83,9 @@ class Classified
 
     public function removeItem(Item $item): self
     {
-        if ($this->items->removeElement($item)) {
-            // set the owning side to null (unless already changed)
-            if ($item->getClassified() === $this) {
-                $item->setClassified(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->items->removeElement($item) && $item->getClassified() === $this) {
+            $item->setClassified(null);
         }
 
         return $this;
@@ -163,20 +163,13 @@ class Classified
         return $this;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getEndAt(): DateTimeImmutable
     {
         return $this->endAt;
     }
 
-    /**
-     * @param DateTimeImmutable $endAt
-     */
     public function setEndAt(DateTimeImmutable $endAt): void
     {
         $this->endAt = $endAt;
     }
-
 }

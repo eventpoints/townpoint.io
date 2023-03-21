@@ -3,10 +3,10 @@
 declare(strict_types = 1);
 
 namespace App\Entity;
-use Symfony\Component\Validator\Constraints as Assert;
-
 
 use App\Repository\ProjectRepository;
+
+
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
@@ -14,6 +14,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -51,7 +52,7 @@ class Project
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[ORM\OneToOne(targetEntity: Project::class)]
+    #[ORM\OneToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(nullable: true)]
     private Project|null $project = null;
 
@@ -169,20 +170,13 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Project|null
-     */
-    public function getProject(): ?Project
+    public function getProject(): ?self
     {
         return $this->project;
     }
 
-    /**
-     * @param Project|null $project
-     */
-    public function setProject(?Project $project): void
+    public function setProject(?self $project): void
     {
         $this->project = $project;
     }
-
 }

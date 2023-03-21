@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository\Event;
 
@@ -26,10 +26,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 class EventRepository extends ServiceEntityRepository
 {
     public function __construct(
-        ManagerRegistry           $registry,
+        ManagerRegistry $registry,
         private readonly Security $security
-    )
-    {
+    ) {
         parent::__construct($registry, Event::class);
     }
 
@@ -59,7 +58,7 @@ class EventRepository extends ServiceEntityRepository
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -121,7 +120,7 @@ class EventRepository extends ServiceEntityRepository
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user required');
         }
 
@@ -152,11 +151,13 @@ class EventRepository extends ServiceEntityRepository
         $qb->leftJoin('event.eventParticipants', 'eventParticipant');
 
         $qb->andWhere(
-            $qb->expr()->eq(':user', 'eventParticipant.owner')
+            $qb->expr()
+                ->eq(':user', 'eventParticipant.owner')
         )->setParameter('user', $user->getId(), 'uuid');
 
         $qb->andWhere(
-            $qb->expr()->lt( ':now', 'event.startAt')
+            $qb->expr()
+                ->lt(':now', 'event.startAt')
         )->setParameter('now', Carbon::now()->toDateTimeImmutable(), Types::DATETIME_IMMUTABLE);
 
         $qb->orderBy('event.startAt', 'ASC');
@@ -165,6 +166,7 @@ class EventRepository extends ServiceEntityRepository
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

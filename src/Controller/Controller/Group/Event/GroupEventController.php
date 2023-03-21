@@ -25,14 +25,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class GroupEventController extends AbstractController
 {
     public function __construct(
-        private readonly CurrentUserService            $currentUserService,
-        private readonly GroupEventFactory             $groupEventFactory,
-        private readonly EventParticipantFactory       $eventUserFactory,
-        private readonly EventInviteFactory            $eventInviteFactory,
-        private readonly EventInviteRepository         $eventInviteRepository,
+        private readonly CurrentUserService $currentUserService,
+        private readonly GroupEventFactory $groupEventFactory,
+        private readonly EventParticipantFactory $eventUserFactory,
+        private readonly EventInviteFactory $eventInviteFactory,
+        private readonly EventInviteRepository $eventInviteRepository,
         private readonly EventParticipantTicketFactory $eventUserTicketFactory,
-        private readonly EventRepository               $eventRepository,
-        private readonly GroupEventRepository          $groupEventRepository
+        private readonly EventRepository $eventRepository,
+        private readonly GroupEventRepository $groupEventRepository
     ) {
     }
 

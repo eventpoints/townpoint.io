@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Twig;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
@@ -8,6 +10,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 class AlertComponent
 {
     public string $type = 'success';
+
     public string $message;
 
     public function getIconClass(): string

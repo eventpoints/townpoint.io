@@ -7,7 +7,6 @@ namespace App\Entity\Market;
 use App\Entity\Bookmark;
 use App\Entity\Comment;
 use App\Entity\Image;
-use App\Entity\User;
 use App\Repository\ItemRepository;
 use Carbon\Carbon;
 use DateTimeImmutable;
@@ -18,7 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item

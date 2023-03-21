@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Repository;
 
@@ -50,18 +50,17 @@ class ProjectRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('project');
 
-        $qb->andWhere(
-            $qb->expr()->eq('project.owner', ':user')
-        )->setParameter('user', $user->getId(), 'uuid');
+        $qb->andWhere($qb->expr() ->eq('project.owner', ':user'))
+            ->setParameter('user', $user->getId(), 'uuid');
 
-        $qb->andWhere(
-            $qb->expr()->eq('project.type', ':type')
-        )->setParameter('type', $type);
+        $qb->andWhere($qb->expr() ->eq('project.type', ':type'))
+            ->setParameter('type', $type);
 
         if ($isQuery) {
             return $qb->getQuery();
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->getResult();
     }
 }

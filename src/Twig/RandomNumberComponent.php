@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Twig;
 
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -18,5 +20,4 @@ class RandomNumberComponent
     {
         return rand(0, $this->max);
     }
-
 }

@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
-use App\Entity\PhoneNumber;
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\Project;
-use App\Entity\User;
 use App\Enum\ProjectEnum;
 use App\Repository\ProjectRepository;
 use App\Service\CurrentUserService;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-use Exception;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -26,19 +23,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProjectFormType extends AbstractType
 {
-
     public function __construct(
-        private readonly ProjectRepository  $projectRepository,
+        private readonly ProjectRepository $projectRepository,
         private readonly CurrentUserService $currentUserService,
-        private readonly Security           $security,
+        private readonly Security $security,
         private readonly TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
-    /**
-     * @throws Exception
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->security->getUser());
@@ -60,7 +52,7 @@ class ProjectFormType extends AbstractType
                     ProjectEnum::spotlight->name => ProjectEnum::spotlight->value,
                     ProjectEnum::starlight->name => ProjectEnum::starlight->value,
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ]);
         } else {
             $builder->add('type', ChoiceType::class, [
@@ -70,7 +62,7 @@ class ProjectFormType extends AbstractType
                 'choices' => [
                     ProjectEnum::starlight->name => ProjectEnum::starlight->value,
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ]);
         }
 
@@ -95,11 +87,14 @@ class ProjectFormType extends AbstractType
                 'class' => 'form-floating mb-3',
             ],
             'class' => Project::class,
-            'query_builder' => function (EntityRepository $er) use ($currentUser){
+            'query_builder' => function (EntityRepository $er) use ($currentUser): QueryBuilder {
                 $qb = $er->createQueryBuilder('project');
-                $qb->andWhere($qb->expr()->eq('project.owner', ':user' ))->setParameter('user', $currentUser->getId(), 'uuid');
-                $qb->andWhere($qb->expr()->eq('project.type', ':type'))->setParameter('type', 'STAR_LIGHT');
+                $qb->andWhere($qb->expr()->eq('project.owner', ':user'))
+                    ->setParameter('user', $currentUser->getId(), 'uuid');
+                $qb->andWhere($qb->expr()->eq('project.type', ':type'))
+                    ->setParameter('type', 'STAR_LIGHT');
                 $qb->orderBy('project.createdAt', 'ASC');
+
                 return $qb;
             },
             'choice_label' => 'title',

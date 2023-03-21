@@ -6,10 +6,10 @@ namespace App\Controller\Controller\Event;
 
 use App\Entity\Event\Event;
 use App\Entity\Event\EventRequest;
-use App\Factory\Event\EventRejectionFactory;
-use App\Factory\Event\EventRequestFactory;
 use App\Factory\Event\EventParticipantFactory;
 use App\Factory\Event\EventParticipantTicketFactory;
+use App\Factory\Event\EventRejectionFactory;
+use App\Factory\Event\EventRequestFactory;
 use App\Repository\Event\EventRejectionRepository;
 use App\Repository\Event\EventRepository;
 use App\Repository\Event\EventRequestRepository;
@@ -23,14 +23,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventRequestController extends AbstractController
 {
     public function __construct(
-        private readonly CurrentUserService            $currentUserService,
-        private readonly EventRepository               $eventRepository,
-        private readonly EventRequestRepository        $eventRequestRepository,
-        private readonly EventParticipantFactory       $eventUserFactory,
-        private readonly EventRequestFactory           $eventRequestFactory,
+        private readonly CurrentUserService $currentUserService,
+        private readonly EventRepository $eventRepository,
+        private readonly EventRequestRepository $eventRequestRepository,
+        private readonly EventParticipantFactory $eventUserFactory,
+        private readonly EventRequestFactory $eventRequestFactory,
         private readonly EventParticipantTicketFactory $eventTicketFactory,
-        private readonly EventRejectionFactory         $eventRejectionFactory,
-        private readonly EventRejectionRepository      $eventRejectionRepository,
+        private readonly EventRejectionFactory $eventRejectionFactory,
+        private readonly EventRejectionRepository $eventRejectionRepository,
     ) {
     }
 

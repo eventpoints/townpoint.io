@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\Controller\Controller\Event;
 
 use App\Entity\Event\EventInvite;
-use App\Factory\Event\EventRejectionFactory;
 use App\Factory\Event\EventParticipantFactory;
 use App\Factory\Event\EventParticipantTicketFactory;
+use App\Factory\Event\EventRejectionFactory;
 use App\Repository\Event\EventInviteRepository;
 use App\Repository\Event\EventRejectionRepository;
 use App\Repository\Event\EventRepository;
@@ -19,12 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventInviteController extends AbstractController
 {
     public function __construct(
-        private readonly EventRepository               $eventRepository,
-        private readonly EventInviteRepository         $eventInviteRepository,
-        private readonly EventParticipantFactory       $eventParticipantFactory,
+        private readonly EventRepository $eventRepository,
+        private readonly EventInviteRepository $eventInviteRepository,
+        private readonly EventParticipantFactory $eventParticipantFactory,
         private readonly EventParticipantTicketFactory $eventTicketFactory,
-        private readonly EventRejectionFactory         $eventRejectionFactory,
-        private readonly EventRejectionRepository      $eventRejectionRepository
+        private readonly EventRejectionFactory $eventRejectionFactory,
+        private readonly EventRejectionRepository $eventRejectionRepository
     ) {
     }
 

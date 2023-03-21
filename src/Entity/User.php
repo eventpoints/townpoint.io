@@ -7,9 +7,9 @@ namespace App\Entity;
 use App\Entity\Business\Business;
 use App\Entity\Event\Event;
 use App\Entity\Event\EventInvite;
+use App\Entity\Event\EventParticipant;
 use App\Entity\Event\EventRejection;
 use App\Entity\Event\EventRequest;
-use App\Entity\Event\EventParticipant;
 use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
 use App\Entity\Market\Classified;
@@ -44,7 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Uuid $id;
 
     #[Assert\NotBlank]
-    #[Assert\Email( message: 'The email {{ value }} is not a valid email.')]
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
     #[ORM\Column(length: 180, unique: true)]
     private string $email;
 
@@ -1141,7 +1141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addClassified(Classified $classified): self
     {
-        if (!$this->classifieds->contains($classified)) {
+        if (! $this->classifieds->contains($classified)) {
             $this->classifieds->add($classified);
             $classified->setOwner($this);
         }
@@ -1151,16 +1151,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeClassified(Classified $classified): self
     {
-        if ($this->classifieds->removeElement($classified)) {
-            // set the owning side to null (unless already changed)
-            if ($classified->getOwner() === $this) {
-                $classified->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->classifieds->removeElement($classified) && $classified->getOwner() === $this) {
+            $classified->setOwner(null);
         }
 
         return $this;
     }
-
 
     /**
      * @return Collection<int, EventParticipant>

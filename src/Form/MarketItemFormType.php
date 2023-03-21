@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Form;
 
@@ -11,17 +11,13 @@ use App\Exception\ShouldNotHappenException;
 use App\Service\ImageUploadService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\Dropzone\Form\DropzoneType;
@@ -29,25 +25,24 @@ use Symfony\UX\Dropzone\Form\DropzoneType;
 class MarketItemFormType extends AbstractType
 {
     public function __construct(
-        private readonly Security            $security,
+        private readonly Security $security,
         private readonly TranslatorInterface $translator,
-        private readonly ImageUploadService  $imageUploadService
-    )
-    {
+        private readonly ImageUploadService $imageUploadService
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $this->security->getUser();
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new ShouldNotHappenException('user is needed to create a market item');
         }
 
         $builder
             ->add('images', DropzoneType::class, [
                 'mapped' => false,
-                'multiple' => true
+                'multiple' => true,
             ])
             ->add('title', TextType::class, [
                 'row_attr' => [
@@ -76,11 +71,12 @@ class MarketItemFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
                 'currency' => $user->getCurrency(),
-            ])->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            ])->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
                 $form = $event->getForm();
                 /** @var Item $item */
                 $item = $event->getData();
-                $files = $form->get('images')->getData();
+                $files = $form->get('images')
+                    ->getData();
 
                 foreach ($files as $file) {
                     $image = new Image();

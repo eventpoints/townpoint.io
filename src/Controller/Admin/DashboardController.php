@@ -6,8 +6,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Conversation;
 use App\Entity\Event\Event;
-use App\Entity\Event\EventRequest;
 use App\Entity\Event\EventParticipant;
+use App\Entity\Event\EventRequest;
 use App\Entity\Snippet;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;

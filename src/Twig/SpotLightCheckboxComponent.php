@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Twig;
 
 use App\Entity\Project;
@@ -11,7 +13,7 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent('spotlight_checkbox')]
-class SpotLightCheckboxComponent  extends AbstractController
+class SpotLightCheckboxComponent extends AbstractController
 {
     use DefaultActionTrait;
 
@@ -20,15 +22,13 @@ class SpotLightCheckboxComponent  extends AbstractController
 
     public function __construct(
         private readonly ProjectRepository $projectRepository
-    )
-    {
+    ) {
     }
 
     #[LiveAction]
-    public function toggleIsComplete() : void
+    public function toggleIsComplete(): void
     {
-        $this->project->setIsComplete(!$this->project->getIsComplete());
+        $this->project->setIsComplete(! $this->project->getIsComplete());
         $this->projectRepository->save($this->project, true);
     }
-
 }

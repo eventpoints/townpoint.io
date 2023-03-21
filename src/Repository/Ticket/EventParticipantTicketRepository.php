@@ -44,5 +44,4 @@ class EventParticipantTicketRepository extends ServiceEntityRepository
                 ->flush();
         }
     }
-
 }
