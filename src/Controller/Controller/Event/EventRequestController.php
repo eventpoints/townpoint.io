@@ -72,13 +72,13 @@ class EventRequestController extends AbstractController
     #[Route(path: '/request/accept/{id}', name: 'accept_event_request')]
     public function accept(EventRequest $eventRequest): Response
     {
-        $eventUser = $this->eventUserFactory->create($eventRequest->getOwner(), $eventRequest->getEvent());
+        $eventParticipant = $this->eventUserFactory->create($eventRequest->getOwner(), $eventRequest->getEvent());
         $eventRequest->getEvent()
-            ->addEventUser($eventUser);
+            ->addEventParticipant($eventParticipant);
 
         if ($eventRequest->getEvent()->isIsTicketed()) {
-            $eventUserTicket = $this->eventTicketFactory->createTicketAndEventUserTicket($eventUser);
-            $eventUser->setEventUserTicket($eventUserTicket);
+            $eventUserTicket = $this->eventTicketFactory->createTicketAndEventUserTicket($eventParticipant);
+            $eventParticipant->setEventUserTicket($eventUserTicket);
         }
 
         $this->eventRepository->save($eventRequest->getEvent(), true);

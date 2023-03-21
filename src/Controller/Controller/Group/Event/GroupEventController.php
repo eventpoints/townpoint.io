@@ -27,7 +27,7 @@ class GroupEventController extends AbstractController
     public function __construct(
         private readonly CurrentUserService $currentUserService,
         private readonly GroupEventFactory $groupEventFactory,
-        private readonly EventParticipantFactory $eventUserFactory,
+        private readonly EventParticipantFactory $eventParticipantFactory,
         private readonly EventInviteFactory $eventInviteFactory,
         private readonly EventInviteRepository $eventInviteRepository,
         private readonly EventParticipantTicketFactory $eventUserTicketFactory,
@@ -42,8 +42,8 @@ class GroupEventController extends AbstractController
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $event = new Event();
         $event->setOwner($currentUser);
-        $eventUser = $this->eventUserFactory->create($currentUser, $event);
-        $event->addEventUser($eventUser);
+        $eventParticipant = $this->eventParticipantFactory->create($currentUser, $event);
+        $event->addEventParticipant($eventParticipant);
 
         $eventForm = $this->createForm(GroupEventFormType::class, $event);
         $eventForm->handleRequest($request);
@@ -61,8 +61,8 @@ class GroupEventController extends AbstractController
             }
 
             if ($event->isIsTicketed()) {
-                $eventUserTicket = $this->eventUserTicketFactory->createTicketAndEventUserTicket($eventUser);
-                $eventUser->setEventUserTicket($eventUserTicket);
+                $eventUserTicket = $this->eventUserTicketFactory->createTicketAndEventUserTicket($eventParticipant);
+                $eventParticipant->setEventUserTicket($eventUserTicket);
             }
 
             $this->eventRepository->save($event, true);

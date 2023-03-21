@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
-use App\Repository\Event\EventParticipantRepository;
 use App\Repository\Event\EventRepository;
 use App\Repository\ProjectRepository;
 use App\Service\CurrentUserService;
@@ -17,7 +16,6 @@ class DashboardController extends AbstractController
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,
-        private readonly EventParticipantRepository $eventParticipantRepository,
         private readonly EventRepository $eventRepository,
         private readonly CurrentUserService $currentUserService
     ) {

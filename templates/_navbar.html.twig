@@ -44,91 +44,108 @@
     </div>
 
     <div class="offcanvas-body">
-        <div class="row justify-content-end g-2">
+        <div class="row justify-content-end align-items-end g-2">
             {% if app.user %}
-                <div class="col-12 text-center">
-                    <div class="d-flex justify-content-center">
-                        <div class="w-50">
-                            <turbo-frame id="user-account-qr-frame" src="{{ path('user_account_qr') }}" loading="lazy">
-                                <div class="d-flex justify-content-center">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            </turbo-frame>
+                <div class="col-12">
+                    <turbo-frame id="user-account-qr-frame" target="_self">
+                        <div class="text-center mb-2">
+                            <a href="{{ path('user_account_qr') }}">
+                                <img src="{{ app.user.avatar }}" class="w-50 img-fluid rounded-circle"/>
+                            </a>
                         </div>
-                    </div>
-                    <div class="h4 my-2">{{ app.user.fullName|capitalize }}</div>
+                    </turbo-frame>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('dashboard') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-format-list-text fs-3"></div>
+                    <a href="{{ path('dashboard') }}"
+                       class="btn btn-outline-primary {{ app.request.attributes.get('_route') == 'dashboard' ? 'active' }} d-flex justify-content-between align-items-center"
+                       aria-current="true">
                         <div class="fw-bold">{{ 'dashboard'|trans|capitalize }}</div>
+                        <div class="mdi mdi-format-list-text fs-3"></div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('market') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-store fs-3"></div>
-                        <div class="fw-bold">{{ 'market'|trans|capitalize }}</div>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="{{ path('groups') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-account-group-outline fs-3"></div>
-                        <div class="fw-bold">{{ 'groups'|trans|capitalize }}</div>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="{{ path('events') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-calendar fs-3"></div>
-                        <div class="fw-bold">{{ 'events'|trans|capitalize }}</div>
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="{{ path('profile', {id: app.user.id}) }}" class="btn btn-outline-dark w-100">
+                    <a href="{{ path('profile', {id: app.user.id}) }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'profile' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ app.user.fullName|capitalize }}</div>
                         <div class="mdi mdi-account-circle-outline fs-3"></div>
-                        <div class="fw-bold">{{ 'profile'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('conversations') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-message-outline fs-3"></div>
+                    <a href="{{ path('market') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'market' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'market'|trans|capitalize }}</div>
+                        <div class="mdi mdi-store fs-3"></div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('groups') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'groups' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'groups'|trans|capitalize }}</div>
+                        <div class="mdi mdi-account-group-outline fs-3"></div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('events') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'events' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'events'|trans|capitalize }}</div>
+                        <div class="mdi mdi-calendar fs-3"></div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('conversations') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'conversations' ? 'active' }}"
+                       aria-current="true">
                         <div class="fw-bold">{{ 'conversations'|trans|capitalize }}</div>
+                        <div class="mdi mdi-message-outline fs-3"></div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('listeners') }}" class="btn btn-outline-dark w-100">
+                    <a href="{{ path('listeners') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'listeners' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'listeners'|trans|capitalize }}</div>
                         <div class="mdi mdi-ear-hearing fs-3"></div>
-                        <div class="fw-bold">{{ 'listening'|trans|capitalize }}</div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('account') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-bank-outline fs-3"></div>
+                    <a href="{{ path('account') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'account' ? 'active' }}"
+                       aria-current="true">
                         <div class="fw-bold">{{ 'account'|trans|capitalize }}</div>
+                        <div class="mdi mdi-bank-outline fs-3"></div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('app_logout') }}" class="btn btn-outline-danger w-100">
-                        <div class="mdi mdi-logout-variant fs-3"></div>
+                    <a href="{{ path('app_logout') }}"
+                       class="btn btn-outline-danger d-flex justify-content-between align-items-center"
+                       aria-current="true">
                         <div class="fw-bold">{{ 'logout'|trans|capitalize }}</div>
+                        <div class="mdi mdi-logout-variant fs-3"></div>
                     </a>
                 </div>
             {% else %}
                 <div class="col-6">
-                    <a href="{{ path('app_login') }}" class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-login-variant fs-3"></div>
-                        <div class="fw-bold">{{ 'login'|trans|capitalize }}</div>
+                    <a href="{{ path('app_register') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'app_register' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'register'|trans|capitalize }}</div>
+                        <div class="mdi mdi-account-plus-outline fs-3"></div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="{{ path('app_register') }}"
-                       class="btn btn-outline-dark w-100">
-                        <div class="mdi mdi-account-plus-outline fs-3"></div>
-                        <div class="fw-bold">{{ 'register'|trans|capitalize }}</div>
+                    <a href="{{ path('app_login') }}"
+                       class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'app_login' ? 'active' }}"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'app_login'|trans|capitalize }}</div>
+                        <div class="mdi mdi-logout-variant fs-3"></div>
                     </a>
                 </div>
             {% endif %}
         </div>
+
     </div>
 </div>
