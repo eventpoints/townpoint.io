@@ -38,6 +38,9 @@ class ClassifiedController extends AbstractController
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $classified = new Classified();
 
+        $item = new Item();
+        $classified->addItem($item);
+
         $classified->setOwner($currentUser);
         $classifiedForm = $this->createForm(ClassifiedFormType::class, $classified);
 

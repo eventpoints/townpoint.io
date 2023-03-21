@@ -30,12 +30,6 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/dashboard', name: 'dashboard')]
-    public function dashboard(): Response
-    {
-        return $this->render('user/dashboard.html.twig');
-    }
-
     #[Route(path: '/account', name: 'account')]
     public function account(Request $request): Response
     {

@@ -44,10 +44,10 @@ class Event
     private null|User $owner;
 
     /**
-     * @var Collection<int, EventUser>
+     * @var Collection<int, EventParticipant>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventUser::class, cascade: ['persist', 'remove'])]
-    private Collection $eventUsers;
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: EventParticipant::class, cascade: ['persist', 'remove'])]
+    private Collection $eventParticipants;
 
     /**
      * @var Collection<int, EventRequest>
@@ -82,7 +82,7 @@ class Event
 
     public function __construct()
     {
-        $this->eventUsers = new ArrayCollection();
+        $this->eventParticipants = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
         $this->eventRequests = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -177,27 +177,27 @@ class Event
     }
 
     /**
-     * @return Collection<int, EventUser>
+     * @return Collection<int, EventParticipant>
      */
-    public function getEventUsers(): Collection
+    public function getEventParticipants(): Collection
     {
-        return $this->eventUsers;
+        return $this->eventParticipants;
     }
 
-    public function addEventUser(EventUser $user): self
+    public function addEventParticipant(EventParticipant $user): self
     {
-        if (! $this->eventUsers->contains($user)) {
-            $this->eventUsers->add($user);
+        if (! $this->eventParticipants->contains($user)) {
+            $this->eventParticipants->add($user);
             $user->setEvent($this);
         }
 
         return $this;
     }
 
-    public function removeEventUser(EventUser $user): self
+    public function removeEventParticipant(EventParticipant $user): self
     {
         // set the owning side to null (unless already changed)
-        $this->eventUsers->removeElement($user);
+        $this->eventParticipants->removeElement($user);
 
         return $this;
     }
@@ -278,9 +278,9 @@ class Event
 
     public function getIsUserAttending(User $user): bool
     {
-        return $this->getEventUsers()
-            ->exists(function (int $key, EventUser $eventUser) use ($user): bool {
-                return $eventUser->getOwner() === $user;
+        return $this->getEventParticipants()
+            ->exists(function (int $key, EventParticipant $eventParticipant) use ($user): bool {
+                return $eventParticipant->getOwner() === $user;
             });
     }
 

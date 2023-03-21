@@ -7,8 +7,8 @@ namespace App\Controller\Controller\Group\Event;
 use App\Entity\Event\Event;
 use App\Entity\Group\Group;
 use App\Factory\Event\EventInviteFactory;
-use App\Factory\Event\EventUserFactory;
-use App\Factory\Event\EventUserTicketFactory;
+use App\Factory\Event\EventParticipantFactory;
+use App\Factory\Event\EventParticipantTicketFactory;
 use App\Factory\Group\Event\GroupEventFactory;
 use App\Form\GroupEventFormType;
 use App\Repository\Event\EventInviteRepository;
@@ -25,14 +25,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class GroupEventController extends AbstractController
 {
     public function __construct(
-        private readonly CurrentUserService $currentUserService,
-        private readonly GroupEventFactory $groupEventFactory,
-        private readonly EventUserFactory $eventUserFactory,
-        private readonly EventInviteFactory $eventInviteFactory,
-        private readonly EventInviteRepository $eventInviteRepository,
-        private readonly EventUserTicketFactory $eventUserTicketFactory,
-        private readonly EventRepository $eventRepository,
-        private readonly GroupEventRepository $groupEventRepository
+        private readonly CurrentUserService            $currentUserService,
+        private readonly GroupEventFactory             $groupEventFactory,
+        private readonly EventParticipantFactory       $eventUserFactory,
+        private readonly EventInviteFactory            $eventInviteFactory,
+        private readonly EventInviteRepository         $eventInviteRepository,
+        private readonly EventParticipantTicketFactory $eventUserTicketFactory,
+        private readonly EventRepository               $eventRepository,
+        private readonly GroupEventRepository          $groupEventRepository
     ) {
     }
 

@@ -76,13 +76,6 @@ class MarketItemFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
                 'currency' => $user->getCurrency(),
-            ])
-            ->add('isAcceptingPriceOffers', CheckboxType::class, [
-                'required' => false,
-                'help' => $this->translator->trans('market-item-accepting-price-offers-explainer'),
-                'label_attr' => [
-                    'class' => 'checkbox-switch',
-                ],
             ])->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $form = $event->getForm();
                 /** @var Item $item */

@@ -3,6 +3,8 @@
 declare(strict_types = 1);
 
 namespace App\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 use App\Repository\ProjectRepository;
 use Carbon\Carbon;
@@ -23,7 +25,8 @@ class Project
     private Uuid $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[Assert\NotBlank]
+    private string $title;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
@@ -39,10 +42,18 @@ class Project
     private DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeImmutable $endAt;
+    private DateTimeImmutable|CarbonImmutable $endAt;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[Assert\Choice(choices: ['SPOT_LIGHT', 'STAR_LIGHT'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
+    #[ORM\OneToOne(targetEntity: Project::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private Project|null $project = null;
 
     public function __construct()
     {
@@ -78,7 +89,7 @@ class Project
         return $this;
     }
 
-    public function isIsComplete(): null|bool
+    public function getIsComplete(): null|bool
     {
         return $this->isComplete;
     }
@@ -145,4 +156,33 @@ class Project
     {
         return Carbon::today()->isBefore($this->getCreatedAt());
     }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Project|null
+     */
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    /**
+     * @param Project|null $project
+     */
+    public function setProject(?Project $project): void
+    {
+        $this->project = $project;
+    }
+
 }

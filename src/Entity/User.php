@@ -9,6 +9,7 @@ use App\Entity\Event\Event;
 use App\Entity\Event\EventInvite;
 use App\Entity\Event\EventRejection;
 use App\Entity\Event\EventRequest;
+use App\Entity\Event\EventParticipant;
 use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
 use App\Entity\Market\Classified;
@@ -26,10 +27,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['handle'], message: 'This handle is taken')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use ProfileTrait;
@@ -40,6 +43,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
     private Uuid $id;
 
+    #[Assert\NotBlank]
+    #[Assert\Email( message: 'The email {{ value }} is not a valid email.')]
     #[ORM\Column(length: 180, unique: true)]
     private string $email;
 
@@ -50,14 +55,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotCompromisedPassword]
     private string $password;
 
+    #[Assert\NotBlank]
+    #[Assert\Type(type: Types::STRING)]
     #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Type(type: Types::STRING)]
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Choice(choices: ['male', 'female'])]
     #[ORM\Column(length: 255)]
     private ?string $gender = null;
 
@@ -70,12 +82,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::TEXT)]
     private ?string $avatar = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Positive]
+    #[Assert\LessThan(125)]
     #[ORM\Column]
     private ?int $age = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Country]
     #[ORM\Column(length: 255)]
     private ?string $countryOfOrigin = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Country]
     #[ORM\Column(length: 255)]
     private ?string $currentCountry = null;
 
@@ -94,14 +113,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reaction::class)]
     private Collection $reactions;
 
+    #[Assert\NotBlank]
+    #[Assert\Language]
     #[ORM\Column(length: 2)]
     private ?string $language = 'en';
 
+    #[Assert\NotBlank]
+    #[Assert\Currency]
     #[ORM\Column(length: 3)]
-    private ?string $currency = 'eur';
+    private ?string $currency = 'EUR';
 
+    #[Assert\NotBlank]
+    #[Assert\Timezone]
     #[ORM\Column(length: 255, nullable: true)]
-    private null|string $timezone = null;
+    private null|string $timezone = 'UTC';
 
     /**
      * @var Collection<int, Listener> $listening
@@ -133,6 +158,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Address::class)]
     private Collection $addresses;
 
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[a-z\d_.]{5,20}$/i')]
     #[ORM\Column(length: 255, unique: true)]
     private string $handle;
 
@@ -150,6 +177,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Event::class)]
     private Collection $authoredEvents;
+
+    /**
+     * @var Collection<int, EventParticipant>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: EventParticipant::class)]
+    private Collection $eventParticipants;
 
     /**
      * @var Collection<int, EventRequest>
@@ -200,12 +233,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private null|bool $isSuspended = false;
 
     /**
-     * @var Collection<int, Item>
-     */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class)]
-    private Collection $marketItems;
-
-    /**
      * @var Collection<int, Bookmark>
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bookmark::class)]
@@ -226,6 +253,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private null|Project $currentProject = null;
 
+    /**
+     * @var Collection<int, Classified>
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Classified::class, orphanRemoval: true)]
     private Collection $classifieds;
 
@@ -240,6 +270,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->addresses = new ArrayCollection();
         $this->snippets = new ArrayCollection();
         $this->authoredEvents = new ArrayCollection();
+        $this->eventParticipants = new ArrayCollection();
         $this->eventRequests = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->businesses = new ArrayCollection();
@@ -247,7 +278,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->groupRequests = new ArrayCollection();
         $this->ownedGroups = new ArrayCollection();
         $this->eventRejections = new ArrayCollection();
-        $this->marketItems = new ArrayCollection();
         $this->bookmarks = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->projects = new ArrayCollection();
@@ -998,33 +1028,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Item>
-     */
-    public function getMarketItems(): Collection
-    {
-        return $this->marketItems;
-    }
-
-    public function addMarketItem(Item $marketItem): self
-    {
-        if (! $this->marketItems->contains($marketItem)) {
-            $this->marketItems->add($marketItem);
-            $marketItem->setOwner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMarketItem(Item $marketItem): self
-    {
-        if ($marketItem->getOwner() === $this) {
-            $this->marketItems->removeElement($marketItem);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Bookmark>
      */
     public function getBookmarks(): Collection
@@ -1153,6 +1156,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($classified->getOwner() === $this) {
                 $classified->setOwner(null);
             }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, EventParticipant>
+     */
+    public function getEventParticipants(): Collection
+    {
+        return $this->eventParticipants;
+    }
+
+    public function addEventParticipant(EventParticipant $eventUser): self
+    {
+        if (! $this->eventParticipants->contains($eventUser)) {
+            $this->eventParticipants->add($eventUser);
+            $eventUser->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventParticipant(EventParticipant $eventUser): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($eventUser->getOwner() === $this) {
+            $this->eventParticipants->removeElement($eventUser);
         }
 
         return $this;

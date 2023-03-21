@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller\Event;
 
-use App\Entity\Event\EventUserTicket;
-use App\Repository\Ticket\EventUserTicketRepository;
+use App\Entity\Event\EventParticipantTicket;
+use App\Repository\Ticket\EventParticipantTicketRepository;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -17,16 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route(path: '/event/ticketing')]
-class EventUserTicketController extends AbstractController
+class EventParticipantTicketController extends AbstractController
 {
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly EventUserTicketRepository $eventUserTicketRepository
+        private readonly EventParticipantTicketRepository $eventUserTicketRepository
     ) {
     }
 
     #[Route(path: '/show/{id}', name: 'show_event_user_ticket')]
-    public function show(EventUserTicket $eventUserTicket): Response
+    public function show(EventParticipantTicket $eventUserTicket): Response
     {
         $url = $this->urlGenerator->generate('event_qr_validate', [
             'token' => $eventUserTicket->getToken(),
@@ -51,7 +51,7 @@ class EventUserTicketController extends AbstractController
     }
 
     #[Route(path: '/create', name: 'new_event_ticket')]
-    public function create(EventUserTicket $eventTicket): Response
+    public function create(EventParticipantTicket $eventTicket): Response
     {
         return $this->render('');
     }
@@ -63,7 +63,7 @@ class EventUserTicketController extends AbstractController
             'token' => $token,
         ]);
 
-        if (! $eventUserTicket instanceof EventUserTicket) {
+        if (! $eventUserTicket instanceof EventParticipantTicket) {
             return $this->render('event/ticket/invalid.html.twig');
         }
 

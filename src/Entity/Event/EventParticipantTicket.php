@@ -5,15 +5,15 @@ declare(strict_types = 1);
 namespace App\Entity\Event;
 
 use App\Entity\Ticket\Ticket;
-use App\Repository\Ticket\EventUserTicketRepository;
+use App\Repository\Ticket\EventParticipantTicketRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
-#[ORM\Entity(repositoryClass: EventUserTicketRepository::class)]
-class EventUserTicket
+#[ORM\Entity(repositoryClass: EventParticipantTicketRepository::class)]
+class EventParticipantTicket
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -21,8 +21,8 @@ class EventUserTicket
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
     private Uuid $id;
 
-    #[ORM\OneToOne(mappedBy: 'eventUserTicket', targetEntity: EventUser::class, orphanRemoval: true)]
-    private EventUser $eventUser;
+    #[ORM\OneToOne(mappedBy: 'eventUserTicket', targetEntity: EventParticipant::class, orphanRemoval: true)]
+    private EventParticipant $eventUser;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -45,12 +45,12 @@ class EventUserTicket
         return $this->id;
     }
 
-    public function getEventUser(): EventUser
+    public function getEventUser(): EventParticipant
     {
         return $this->eventUser;
     }
 
-    public function setEventUser(EventUser $eventUser): void
+    public function setEventUser(EventParticipant $eventUser): void
     {
         $this->eventUser = $eventUser;
     }

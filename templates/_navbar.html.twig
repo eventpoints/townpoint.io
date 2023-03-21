@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand bg-light mb-3">
     <div class="container">
         <a class="navbar-brand" href="{{ path('app_register') }}">
-            <img src="{{ asset('/images/logo.png') }}" height="20">
+            <img src="{{ asset('/images/townpoint-logo.png') }}" height="40">
         </a>
         {% if app.user %}
             <div class="w-50">
@@ -59,6 +59,12 @@
                         </div>
                     </div>
                     <div class="h4 my-2">{{ app.user.fullName|capitalize }}</div>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('dashboard') }}" class="btn btn-outline-dark w-100">
+                        <div class="mdi mdi-format-list-text fs-3"></div>
+                        <div class="fw-bold">{{ 'dashboard'|trans|capitalize }}</div>
+                    </a>
                 </div>
                 <div class="col-6">
                     <a href="{{ path('market') }}" class="btn btn-outline-dark w-100">

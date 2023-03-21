@@ -51,11 +51,7 @@
                                             <div>
                                                 <div class="h5 m-0">{{ item.title }}</div>
                                                 <div class="lead">
-                                                    {% if item.isAcceptingPriceOffers %}
-                                                        {{ 'open-to-offers'|trans }}
-                                                    {% else %}
-                                                        {{ item.price|format_currency(item.currency) }}
-                                                    {% endif %}
+                                                    {{ item.price == 0 ? 'FREE' : item.price|format_currency(item.currency) }}
                                                 </div>
                                             </div>
                                             <div class="btn-group">

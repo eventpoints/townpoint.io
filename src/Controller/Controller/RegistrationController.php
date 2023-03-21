@@ -21,7 +21,6 @@ class RegistrationController extends AbstractController
 {
     public function __construct(
         private readonly AvatarService $avatarService,
-        private readonly AvailableHandleGenerator $availableHandleGenerator,
     ) {
     }
 
@@ -34,9 +33,7 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager
     ): ?Response {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user, [
-            'suggestions' => $this->availableHandleGenerator->generate(),
-        ]);
+        $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,7 +53,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'form' => $form
         ]);
     }
 }

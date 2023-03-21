@@ -17,6 +17,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 class Item
@@ -25,16 +27,18 @@ class Item
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
-    private Uuid $id;
+    private null|Uuid $id = null;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    private null|string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    private null|string $description = null;
 
+    #[Assert\Positive]
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $price = null;
+    private null|string $price = null;
 
     #[ORM\Column]
     private bool $isApproved = false;
@@ -42,8 +46,9 @@ class Item
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
 
+    #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
-    private ?string $condition = null;
+    private null|string $condition = null;
 
     /**
      * @var Collection<int, Image>
@@ -51,6 +56,7 @@ class Item
     #[ORM\OneToMany(mappedBy: 'marketItem', targetEntity: Image::class, cascade: ['persist'])]
     private Collection $images;
 
+    #[Assert\Currency]
     #[ORM\Column(length: 3)]
     private string $currency = 'EUR';
 
@@ -61,7 +67,7 @@ class Item
     private Collection $comments;
 
     #[ORM\Column(nullable: true)]
-    private bool $isAcceptingPriceOffers = false;
+    private bool $isSold = false;
 
     /**
      * @var Collection<int, Bookmark>
@@ -71,7 +77,7 @@ class Item
 
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Classified $classified = null;
+    private null|Classified $classified = null;
 
     public function __construct()
     {
@@ -81,7 +87,7 @@ class Item
         $this->bookmarks = new ArrayCollection();
     }
 
-    public function getId(): Uuid
+    public function getId(): null|Uuid
     {
         return $this->id;
     }
@@ -231,14 +237,14 @@ class Item
         return $this;
     }
 
-    public function getIsAcceptingPriceOffers(): ?bool
+    public function getIsSold(): ?bool
     {
-        return $this->isAcceptingPriceOffers;
+        return $this->isSold;
     }
 
-    public function setIsAcceptingPriceOffers(bool $isAcceptingPriceOffers): self
+    public function setIsSold(bool $isSold): self
     {
-        $this->isAcceptingPriceOffers = $isAcceptingPriceOffers;
+        $this->isSold = $isSold;
 
         return $this;
     }

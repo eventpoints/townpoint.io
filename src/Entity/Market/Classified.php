@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints\Valid;
 
 #[ORM\Entity(repositoryClass: ClassifiedRepository::class)]
 class Classified
@@ -18,16 +19,20 @@ class Classified
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
-    private Uuid $id;
+    private null|Uuid $id = null;
 
     /**
      * @var Collection<int, Item>
      */
     #[ORM\OneToMany(mappedBy: 'classified', targetEntity: Item::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Valid]
     private Collection $items;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(nullable: true)]
+    private DateTimeImmutable $endAt;
 
     #[ORM\ManyToOne(inversedBy: 'classifieds')]
     #[ORM\JoinColumn(nullable: false)]
@@ -51,7 +56,7 @@ class Classified
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): null|Uuid
     {
         return $this->id;
     }
@@ -157,4 +162,21 @@ class Classified
 
         return $this;
     }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getEndAt(): DateTimeImmutable
+    {
+        return $this->endAt;
+    }
+
+    /**
+     * @param DateTimeImmutable $endAt
+     */
+    public function setEndAt(DateTimeImmutable $endAt): void
+    {
+        $this->endAt = $endAt;
+    }
+
 }

@@ -4,28 +4,28 @@ declare(strict_types = 1);
 
 namespace App\Factory\Event;
 
-use App\Entity\Event\EventUser;
-use App\Entity\Event\EventUserTicket;
+use App\Entity\Event\EventParticipant;
+use App\Entity\Event\EventParticipantTicket;
 use App\Entity\Ticket\Ticket;
 use App\Factory\Ticket\TicketFactory;
 
-class EventUserTicketFactory
+class EventParticipantTicketFactory
 {
     public function __construct(
         private readonly TicketFactory $ticketFactory
     ) {
     }
 
-    public function create(EventUser $eventUser, Ticket $ticket): EventUserTicket
+    public function create(EventParticipant $eventUser, Ticket $ticket): EventParticipantTicket
     {
-        $eventTicket = new EventUserTicket();
+        $eventTicket = new EventParticipantTicket();
         $eventTicket->setEventUser($eventUser);
         $eventTicket->setTicket($ticket);
 
         return $eventTicket;
     }
 
-    public function createTicketAndEventUserTicket(EventUser $eventUser): EventUserTicket
+    public function createTicketAndEventUserTicket(EventParticipant $eventUser): EventParticipantTicket
     {
         $ticket = $this->ticketFactory->create($eventUser->getOwner());
 

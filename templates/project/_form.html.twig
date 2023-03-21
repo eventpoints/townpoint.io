@@ -2,8 +2,12 @@
     action: path('create_project')
 }) }}
 <div class="row">
+    {{ form_row(projectForm.title) }}
     <div class="col-6">
-        {{ form_row(projectForm.title) }}
+        <div class="input-group">
+            {{ form_row(projectForm.type) }}
+            {{ form_row(projectForm.project) }}
+        </div>
     </div>
     <div class="col-6">
         {{ form_row(projectForm.endAt) }}

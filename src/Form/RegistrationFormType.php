@@ -101,11 +101,13 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => $this->translator->trans('password'),
+                'always_empty' => false,
                 'row_attr' => [
-                    'class' => 'form-floating mb-3',
+                    'class' => 'form-floating',
                 ],
                 'mapped' => false,
                 'attr' => [
+                    'data-password-visibility-target' => 'input',
                     'autocomplete' => 'new-password',
                     'placeholder' => 'password',
                 ],
@@ -147,7 +149,6 @@ class RegistrationFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['suggestions']);
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);

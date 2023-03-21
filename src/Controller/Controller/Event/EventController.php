@@ -7,8 +7,8 @@ namespace App\Controller\Controller\Event;
 use App\DataTransferObjects\EventFilterDto;
 use App\Entity\Event\Event;
 use App\Factory\Event\EventInviteFactory;
-use App\Factory\Event\EventUserFactory;
-use App\Factory\Event\EventUserTicketFactory;
+use App\Factory\Event\EventParticipantFactory;
+use App\Factory\Event\EventParticipantTicketFactory;
 use App\Form\EventFormType;
 use App\Form\Filter\EventFilterForm;
 use App\Repository\CommentRepository;
@@ -16,7 +16,7 @@ use App\Repository\Event\EventInviteRepository;
 use App\Repository\Event\EventRejectionRepository;
 use App\Repository\Event\EventRepository;
 use App\Repository\Event\EventRequestRepository;
-use App\Repository\Event\EventUserRepository;
+use App\Repository\Event\EventParticipantRepository;
 use App\Service\CurrentUserService;
 use App\ValueObject\FlashValueObject;
 use Knp\Component\Pager\PaginatorInterface;
@@ -29,17 +29,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventController extends AbstractController
 {
     public function __construct(
-        private readonly CurrentUserService $currentUserService,
-        private readonly EventRepository $eventRepository,
-        private readonly EventInviteRepository $eventInviteRepository,
-        private readonly EventRejectionRepository $eventRejectionRepository,
-        private readonly EventRequestRepository $eventRequestRepository,
-        private readonly EventUserFactory $eventUserFactory,
-        private readonly EventUserRepository $eventUserRepository,
-        private readonly EventInviteFactory $eventInviteFactory,
-        private readonly PaginatorInterface $paginator,
-        private readonly EventUserTicketFactory $eventUserTicketFactory,
-        private readonly CommentRepository $commentRepository
+        private readonly CurrentUserService            $currentUserService,
+        private readonly EventRepository               $eventRepository,
+        private readonly EventInviteRepository         $eventInviteRepository,
+        private readonly EventRejectionRepository      $eventRejectionRepository,
+        private readonly EventRequestRepository        $eventRequestRepository,
+        private readonly EventParticipantFactory       $eventParticipantFactory,
+        private readonly EventParticipantRepository    $eventUserRepository,
+        private readonly EventInviteFactory            $eventInviteFactory,
+        private readonly PaginatorInterface            $paginator,
+        private readonly EventParticipantTicketFactory $eventUserTicketFactory,
+        private readonly CommentRepository             $commentRepository
     ) {
     }
 
@@ -75,8 +75,8 @@ class EventController extends AbstractController
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $event = new Event();
         $event->setOwner($currentUser);
-        $eventUser = $this->eventUserFactory->create($currentUser, $event);
-        $event->addEventUser($eventUser);
+        $eventParticipant = $this->eventParticipantFactory->create($currentUser, $event);
+        $event->addEventParticipant($eventParticipant);
 
         $eventForm = $this->createForm(EventFormType::class, $event);
         $eventForm->handleRequest($request);
@@ -92,8 +92,8 @@ class EventController extends AbstractController
             }
 
             if ($event->isIsTicketed()) {
-                $eventUserTicket = $this->eventUserTicketFactory->createTicketAndEventUserTicket($eventUser);
-                $eventUser->setEventUserTicket($eventUserTicket);
+                $eventUserTicket = $this->eventUserTicketFactory->createTicketAndEventUserTicket($eventParticipant);
+                $eventParticipant->setEventUserTicket($eventUserTicket);
             }
 
             $this->eventRepository->save($eventForm->getData(), true);

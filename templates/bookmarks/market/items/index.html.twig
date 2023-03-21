@@ -13,11 +13,7 @@
                                         <div>
                                             <div class="h5 m-0">{{ bookmark.title }}</div>
                                             <div class="lead">
-                                                {% if bookmark.item.isAcceptingPriceOffers %}
-                                                    {{ 'open-to-offers'|trans }}
-                                                {% else %}
-                                                    {{ bookmark.item.price|format_currency(bookmark.item.currency) }}
-                                                {% endif %}
+                                                {{ bookmark.item.price == 0 ? 'FREE' : bookmark.item.price|format_currency(bookmark.item.currency) }}
                                             </div>
                                         </div>
                                         <div class="btn-group">
@@ -74,13 +70,13 @@
                                 </button>
                             </div>
                             <div class="list-group list-group-flush">
-                                <a href="{{ path('profile', {id: bookmark.item.owner.id}) }}"
+                                <a href="{{ path('profile', {id: bookmark.item.classified.owner.id}) }}"
                                    class="list-group-item list-group-item-action">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ bookmark.item.owner.avatar }}" width="35"
+                                        <img src="{{ bookmark.item.classified.owner.avatar }}" width="35"
                                              class="rounded-circle me-2"/>
                                         <div>
-                                            <div class="lh-1 fw-bold">{{ bookmark.item.owner.fullName }}</div>
+                                            <div class="lh-1 fw-bold">{{ bookmark.item.classified.owner.fullName }}</div>
                                             <div class="text-muted small">{{ bookmark.item.createdAt|format_datetime('short', 'short', 'dd.MM.yy', app.user.timezone) }}</div>
                                         </div>
                                     </div>

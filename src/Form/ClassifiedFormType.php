@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Uid\Uuid;
+use Symfony\UX\LiveComponent\Form\Type\LiveCollectionType;
 
 class ClassifiedFormType extends AbstractType
 {
@@ -27,14 +28,18 @@ class ClassifiedFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ]
             ])
-            ->add('items', CollectionType::class,
+            ->add('items', LiveCollectionType::class,
                 [
                     'label' => false,
                     'entry_type' => MarketItemFormType::class,
-                    'entry_options' => ['label' => false],
-                    'allow_delete' => true,
                     'allow_add' => true,
-                    'by_reference' => false,
+                    'allow_delete' => true,
+                    'button_delete_options' => [
+                        'label' => 'remove item',
+                        'attr' => [
+                            'class' => 'w-100 btn btn-outline-danger',
+                        ],
+                    ]
                 ]);
     }
 

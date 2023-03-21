@@ -1116,6 +1116,11 @@
 "@symfony/ux-dropzone@file:vendor/symfony/ux-dropzone/assets":
   version "1.1.0"
 
+"@symfony/ux-live-component@file:vendor/symfony/ux-live-component/assets":
+  version "1.0.0"
+  dependencies:
+    morphdom "^2.6.1"
+
 "@symfony/ux-swup@file:vendor/symfony/ux-swup/assets":
   version "1.1.0"
 
@@ -3266,6 +3271,11 @@ minimatch@^3.1.1:
   dependencies:
     brace-expansion "^1.1.7"
 
+morphdom@^2.6.1:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/morphdom/-/morphdom-2.7.0.tgz#9ef0c4bc15ac8725df398d127c6984f62e7f89e8"
+  integrity sha512-8L8DwbdjjWwM/aNqj7BSoSn4G7SQLNiDcxCnMWbf506jojR6lNQ5YOmQqXEIE8u3C492UlkN4d0hQwz97+M1oQ==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -4315,6 +4325,11 @@ stimulus-clipboard@^3.2.2:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/stimulus-clipboard/-/stimulus-clipboard-3.3.0.tgz#e6ff1528bc028f481a537810081bdcfb57eb05f7"
   integrity sha512-msD0UKxyzv4L3KoTP18Rma3+PIT+rplTVlbIJ1ndAuP8jPBmQbDZsE9qRti3B/6aPJ/K6hQiQdXGg33cDdi+Fw==
+
+stimulus-password-visibility@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/stimulus-password-visibility/-/stimulus-password-visibility-2.1.1.tgz#b366223c7650704507a38a3e5d126e8474abad3e"
+  integrity sha512-FnscC06Ux7mgfJo9s7OceOQ59yU1Tm8sWByG89hnMPcWvYSX/1yx3wFxNOgKhtxaDPdvtb+ERgmv6F9JvPJc7w==
 
 stimulus-scroll-progress@^4.0.0:
   version "4.1.0"
