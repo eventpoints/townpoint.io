@@ -1,0 +1,39 @@
+<div {{ attributes }}>
+
+    {{ form_start(form, {
+        attr: {
+            'data-model' : 'on(change)|*'
+        }
+    }) }}
+
+    <div class="input-group">
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.lastName) }}
+    </div>
+
+    <div class="input-group">
+        {{ form_row(form.gender) }}
+        {{ form_row(form.age) }}
+    </div>
+
+    {{ form_row(form.email) }}
+    <div class="input-group">
+        {{ form_row(form.countryOfOrigin) }}
+        {{ form_row(form.currentCountry) }}
+    </div>
+    <div class="input-group mb-3" {{ stimulus_controller('password-visibility') }}>
+        {{ form_row(form.plainPassword) }}
+        <button class="btn btn-outline-primary" type="button" data-action="password-visibility#toggle">
+            <span class="mdi mdi-eye-outline" data-password-visibility-target="icon"></span>
+            <span data-password-visibility-target="icon" class="eye-off-outline hidden"></span>
+        </button>
+    </div>
+    {{ form_row(form.handle) }}
+    {{ form_row(form.agreeTerms) }}
+    <div class="text-end">
+        <button type="submit" class="btn btn-outline-primary w-25">Register</button>
+    </div>
+    {{ form_rest(form) }}
+
+    {{ form_end(form) }}
+</div>

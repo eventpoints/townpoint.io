@@ -47,12 +47,12 @@
                             <div class="text-muted">{{ item.createdAtAgo }}</div>
                         </div>
                         <div class="list-group-item lead">{{ item.description }}</div>
-                        <a href="{{ path('profile', {id: item.owner.id}) }}"
+                        <a href="{{ path('profile', {id: item.classified.owner.id}) }}"
                            class="list-group-item list-group-item-action">
                             <div class="d-flex align-items-center">
-                                <img src="{{ item.owner.avatar }}" width="35" class="rounded-circle me-2"/>
+                                <img src="{{ item.classified.owner.avatar }}" width="35" class="rounded-circle me-2"/>
                                 <div>
-                                    <div class="lh-1 fw-bold">{{ item.owner.fullName }}</div>
+                                    <div class="lh-1 fw-bold">{{ item.classified.owner.fullName }}</div>
                                 </div>
                             </div>
                         </a>

@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace App\Controller\Controller\Event;
 
 use App\Entity\Event\EventInvite;
+use App\Factory\Event\EventParticipantFactory;
+use App\Factory\Event\EventParticipantTicketFactory;
 use App\Factory\Event\EventRejectionFactory;
-use App\Factory\Event\EventUserFactory;
-use App\Factory\Event\EventUserTicketFactory;
 use App\Repository\Event\EventInviteRepository;
 use App\Repository\Event\EventRejectionRepository;
 use App\Repository\Event\EventRepository;
@@ -21,8 +21,8 @@ class EventInviteController extends AbstractController
     public function __construct(
         private readonly EventRepository $eventRepository,
         private readonly EventInviteRepository $eventInviteRepository,
-        private readonly EventUserFactory $eventUserFactory,
-        private readonly EventUserTicketFactory $eventTicketFactory,
+        private readonly EventParticipantFactory $eventParticipantFactory,
+        private readonly EventParticipantTicketFactory $eventTicketFactory,
         private readonly EventRejectionFactory $eventRejectionFactory,
         private readonly EventRejectionRepository $eventRejectionRepository
     ) {
@@ -37,13 +37,13 @@ class EventInviteController extends AbstractController
     #[Route(path: '/invite/accept/{id}', name: 'accept_event_invite')]
     public function accept(EventInvite $eventInvite): Response
     {
-        $eventUser = $this->eventUserFactory->create($eventInvite->getOwner(), $eventInvite->getEvent());
+        $eventParticipant = $this->eventParticipantFactory->create($eventInvite->getOwner(), $eventInvite->getEvent());
         $eventInvite->getEvent()
-            ->addEventUser($eventUser);
+            ->addEventParticipant($eventParticipant);
 
         if ($eventInvite->getEvent()->isIsTicketed()) {
-            $eventUserTicket = $this->eventTicketFactory->createTicketAndEventUserTicket($eventUser);
-            $eventUser->setEventUserTicket($eventUserTicket);
+            $eventUserTicket = $this->eventTicketFactory->createTicketAndEventUserTicket($eventParticipant);
+            $eventParticipant->setEventUserTicket($eventUserTicket);
         }
 
         $this->eventRepository->save($eventInvite->getEvent(), true);

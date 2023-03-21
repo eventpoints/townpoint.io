@@ -5,14 +5,14 @@ declare(strict_types = 1);
 namespace App\Entity\Event;
 
 use App\Entity\User;
-use App\Repository\Event\EventUserRepository;
+use App\Repository\Event\EventParticipantRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: EventUserRepository::class)]
-class EventUser
+#[ORM\Entity(repositoryClass: EventParticipantRepository::class)]
+class EventParticipant
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -20,7 +20,7 @@ class EventUser
     #[ORM\CustomIdGenerator(UuidGenerator::class)]
     private Uuid $id;
 
-    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'acceptedEvents')]
     private User $owner;
 
     #[ORM\Column]
@@ -31,7 +31,7 @@ class EventUser
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
-    private null|EventUserTicket $eventUserTicket;
+    private null|EventParticipantTicket $eventUserTicket;
 
     public function __construct()
     {
@@ -79,12 +79,12 @@ class EventUser
         return $this;
     }
 
-    public function getEventUserTicket(): null|EventUserTicket
+    public function getEventUserTicket(): null|EventParticipantTicket
     {
         return $this->eventUserTicket;
     }
 
-    public function setEventUserTicket(null|EventUserTicket $eventUserTicket): self
+    public function setEventUserTicket(null|EventParticipantTicket $eventUserTicket): self
     {
         $this->eventUserTicket = $eventUserTicket;
 

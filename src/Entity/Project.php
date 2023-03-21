@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+
+
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
@@ -12,6 +14,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -23,7 +26,8 @@ class Project
     private Uuid $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[Assert\NotBlank]
+    private string $title;
 
     #[ORM\ManyToOne(inversedBy: 'projects')]
     #[ORM\JoinColumn(nullable: false)]
@@ -39,10 +43,18 @@ class Project
     private DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    private DateTimeImmutable $endAt;
+    private DateTimeImmutable|CarbonImmutable $endAt;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[Assert\Choice(choices: ['SPOT_LIGHT', 'STAR_LIGHT'])]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $type = null;
+
+    #[ORM\OneToOne(targetEntity: self::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private Project|null $project = null;
 
     public function __construct()
     {
@@ -78,7 +90,7 @@ class Project
         return $this;
     }
 
-    public function isIsComplete(): null|bool
+    public function getIsComplete(): null|bool
     {
         return $this->isComplete;
     }
@@ -144,5 +156,27 @@ class Project
     public function getIsTodayBeforeEndAt(): bool
     {
         return Carbon::today()->isBefore($this->getCreatedAt());
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getProject(): ?self
+    {
+        return $this->project;
+    }
+
+    public function setProject(?self $project): void
+    {
+        $this->project = $project;
     }
 }

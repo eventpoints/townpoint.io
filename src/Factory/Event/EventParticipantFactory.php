@@ -5,14 +5,14 @@ declare(strict_types = 1);
 namespace App\Factory\Event;
 
 use App\Entity\Event\Event;
-use App\Entity\Event\EventUser;
+use App\Entity\Event\EventParticipant;
 use App\Entity\User;
 
-class EventUserFactory
+class EventParticipantFactory
 {
-    public function create(User $user, Event $event): EventUser
+    public function create(User $user, Event $event): EventParticipant
     {
-        $eventUser = new EventUser();
+        $eventUser = new EventParticipant();
         $eventUser->setOwner($user);
         $eventUser->setEvent($event);
 

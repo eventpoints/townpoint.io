@@ -16,7 +16,10 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\UX\Autocomplete\AutocompleteBundle;
+use Symfony\UX\Dropzone\DropzoneBundle;
+use Symfony\UX\LiveComponent\LiveComponentBundle;
 use Symfony\UX\Turbo\TurboBundle;
+use Symfony\UX\TwigComponent\TwigComponentBundle;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
 
@@ -71,6 +74,15 @@ return [
         'all' => true,
     ],
     MercureBundle::class => [
+        'all' => true,
+    ],
+    DropzoneBundle::class => [
+        'all' => true,
+    ],
+    TwigComponentBundle::class => [
+        'all' => true,
+    ],
+    LiveComponentBundle::class => [
         'all' => true,
     ],
 ];

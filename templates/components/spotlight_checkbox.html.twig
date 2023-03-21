@@ -1,0 +1,12 @@
+<div {{ attributes }}>
+    <div class="d-flex justify-content-start align-items-start">
+        <a href="#" type="button" data-action="live#action" data-action-name="prevent|toggleIsComplete" class="mdi {{ project.isComplete ? 'mdi-check-circle text-primary' : 'mdi-checkbox-blank-circle-outline' }} display-5 lh-1 me-3"></a>
+        <div class="w-100 d-flex justify-content-between align-items-start">
+            <div>
+                <div class="fw-bold">{{ project.title }}</div>
+                <p class="mb-1">{{ project.description }}</p>
+            </div>
+            <div>{{ project.endAt.diffForHumans({syntax: 1, short: true}) }}</div>
+        </div>
+    </div>
+</div>

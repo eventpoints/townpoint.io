@@ -7,8 +7,8 @@ namespace App\Controller\Controller\Group\Event;
 use App\Entity\Event\Event;
 use App\Entity\Group\Group;
 use App\Factory\Event\EventInviteFactory;
-use App\Factory\Event\EventUserFactory;
-use App\Factory\Event\EventUserTicketFactory;
+use App\Factory\Event\EventParticipantFactory;
+use App\Factory\Event\EventParticipantTicketFactory;
 use App\Factory\Group\Event\GroupEventFactory;
 use App\Form\GroupEventFormType;
 use App\Repository\Event\EventInviteRepository;
@@ -27,10 +27,10 @@ class GroupEventController extends AbstractController
     public function __construct(
         private readonly CurrentUserService $currentUserService,
         private readonly GroupEventFactory $groupEventFactory,
-        private readonly EventUserFactory $eventUserFactory,
+        private readonly EventParticipantFactory $eventParticipantFactory,
         private readonly EventInviteFactory $eventInviteFactory,
         private readonly EventInviteRepository $eventInviteRepository,
-        private readonly EventUserTicketFactory $eventUserTicketFactory,
+        private readonly EventParticipantTicketFactory $eventUserTicketFactory,
         private readonly EventRepository $eventRepository,
         private readonly GroupEventRepository $groupEventRepository
     ) {
@@ -42,8 +42,8 @@ class GroupEventController extends AbstractController
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
         $event = new Event();
         $event->setOwner($currentUser);
-        $eventUser = $this->eventUserFactory->create($currentUser, $event);
-        $event->addEventUser($eventUser);
+        $eventParticipant = $this->eventParticipantFactory->create($currentUser, $event);
+        $event->addEventParticipant($eventParticipant);
 
         $eventForm = $this->createForm(GroupEventFormType::class, $event);
         $eventForm->handleRequest($request);
@@ -61,8 +61,8 @@ class GroupEventController extends AbstractController
             }
 
             if ($event->isIsTicketed()) {
-                $eventUserTicket = $this->eventUserTicketFactory->createTicketAndEventUserTicket($eventUser);
-                $eventUser->setEventUserTicket($eventUserTicket);
+                $eventUserTicket = $this->eventUserTicketFactory->createTicketAndEventUserTicket($eventParticipant);
+                $eventParticipant->setEventUserTicket($eventUserTicket);
             }
 
             $this->eventRepository->save($event, true);

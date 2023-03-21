@@ -1,51 +1,45 @@
 import {Controller} from '@hotwired/stimulus';
 
 export default class extends Controller {
+    static targets = ["collectionContainer", "current", "counter", 'indicators']
 
-    static targets = ['fields', 'field', 'addButton', 'submitButton']
     static values = {
+        index: Number,
         prototype: String,
-        minItems: Number,
-        maxItems: Number,
-        itemsCount: Number,
     }
 
     connect() {
-        const isUnderMinOptions = this.itemsCountValue < this.minItemsValue
-        this.submitButtonTarget.classList.toggle('disabled', isUnderMinOptions)
-
-        this.index = this.itemsCountValue = this.fieldTargets.length
     }
 
-    addItem() {
-        let prototype = JSON.parse(this.prototypeValue)
-        const newField = prototype.replace(/__name__/g, this.index)
-        this.fieldsTarget.insertAdjacentHTML('beforeend', newField)
-        this.index++
-        this.itemsCountValue++
+    slide() {
+        let current = document.querySelector('.carousel-indicators .active').getAttribute('data-bs-slide-to')
+
+        console.log(parseInt(current)+1)
+
+        this.currentTarget.innerHTML = parseInt(current)+1
     }
 
-    removeItem(event) {
-        this.fieldTargets.forEach(element => {
-            if (element.contains(event.target)) {
-                element.remove()
-                this.itemsCountValue--
-            }
-        })
+    addCollectionElement(event) {
+        const item = document.createElement('div');
+        item.classList.add('carousel-item')
+
+        const card = document.createElement('div');
+        card.classList.add('card')
+        card.classList.add('card-body')
+        card.classList.add('shadow')
+        card.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
+        item.appendChild(card)
+
+        this.collectionContainerTarget.prepend(item);
+        this.indexValue++;
+        this.counterTarget.innerHTML = this.indexValue
+
+        let indicator = document.createElement('button')
+        indicator.setAttribute('type', 'button')
+        indicator.setAttribute('data-bs-target', '#carouselExample')
+        indicator.setAttribute('data-bs-slide-to', this.indexValue)
+        indicator.setAttribute('data-action', 'click->form-collection#slide')
+
+        this.indicatorsTarget.append(indicator)
     }
-
-    itemsCountValueChanged() {
-        const isUnderMinOptions = this.itemsCountValue < this.minItemsValue
-        console.log(isUnderMinOptions)
-        this.submitButtonTarget.classList.toggle('disabled', isUnderMinOptions)
-
-        if (false === this.hasAddButtonTarget || 0 === this.maxItemsValue) {
-            return
-        }
-
-
-        const maxItemsReached = this.itemsCountValue >= this.maxItemsValue
-        this.addButtonTarget.classList.toggle('disabled', maxItemsReached)
-    }
-
 }

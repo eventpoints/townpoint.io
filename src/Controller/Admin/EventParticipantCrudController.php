@@ -4,17 +4,17 @@ declare(strict_types = 1);
 
 namespace App\Controller\Admin;
 
-use App\Entity\Event\EventUser;
+use App\Entity\Event\EventParticipant;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
-class EventUserCrudController extends AbstractCrudController
+class EventParticipantCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return EventUser::class;
+        return EventParticipant::class;
     }
 
     public function configureFields(string $pageName): iterable
