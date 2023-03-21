@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace App\Form;
 
-use Doctrine\ORM\QueryBuilder;
 use App\Entity\Project;
 use App\Enum\ProjectEnum;
 use App\Repository\ProjectRepository;
 use App\Service\CurrentUserService;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;

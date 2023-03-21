@@ -2,26 +2,26 @@
 
 declare(strict_types = 1);
 
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
+use EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle;
+use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
+use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MakerBundle\MakerBundle;
+use Symfony\Bundle\MercureBundle\MercureBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
-use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
-use Symfony\Bundle\SecurityBundle\SecurityBundle;
-use Symfony\Bundle\MonologBundle\MonologBundle;
-use Symfony\Bundle\MakerBundle\MakerBundle;
-use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
-use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
-use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
-use EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle;
-use Symfony\UX\Turbo\TurboBundle;
 use Symfony\UX\Autocomplete\AutocompleteBundle;
-use Symfony\Bundle\MercureBundle\MercureBundle;
 use Symfony\UX\Dropzone\DropzoneBundle;
-use Symfony\UX\TwigComponent\TwigComponentBundle;
 use Symfony\UX\LiveComponent\LiveComponentBundle;
+use Symfony\UX\Turbo\TurboBundle;
+use Symfony\UX\TwigComponent\TwigComponentBundle;
+use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
+use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
 
 return [
     FrameworkBundle::class => [
