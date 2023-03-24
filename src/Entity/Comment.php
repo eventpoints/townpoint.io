@@ -6,7 +6,7 @@ namespace App\Entity;
 
 use App\Entity\Event\Event;
 use App\Entity\Group\Group;
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use App\Repository\CommentRepository;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;

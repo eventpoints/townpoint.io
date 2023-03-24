@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Factory\Bookmark;
 
 use App\Entity\Bookmark;
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use App\Entity\User;
 
 class BookmarkFactory

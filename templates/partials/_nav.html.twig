@@ -1,10 +1,10 @@
 <div class="card">
     <div class="">
         <nav class="nav nav-pills flex-row">
-            <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'market' %}active{% endif %}"
-               aria-current="page" href="{{ path('market') }}">
-                <span class="mdi mdi-store fs-3"></span>
-                <div>{{ 'market'|trans|capitalize }}</div>
+            <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'auction_index' %}active{% endif %}"
+               aria-current="page" href="{{ path('auction_index') }}">
+                <span class="mdi mdi-gavel fs-3"></span>
+                <div>{{ 'auction'|trans|capitalize }}</div>
             </a>
             <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'events' %}active{% endif %}"
                href="{{ path('events') }}">

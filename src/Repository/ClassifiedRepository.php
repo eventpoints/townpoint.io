@@ -4,26 +4,26 @@ declare(strict_types = 1);
 
 namespace App\Repository;
 
-use App\Entity\Market\Classified;
+use App\Entity\Auction\Auction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Classified>
+ * @extends ServiceEntityRepository<Auction>
  *
- * @method Classified|null find($id, $lockMode = null, $lockVersion = null)
- * @method Classified|null findOneBy(array $criteria, array $orderBy = null)
- * @method Classified[]    findAll()
- * @method Classified[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Auction|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Auction|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Auction[]    findAll()
+ * @method Auction[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ClassifiedRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Classified::class);
+        parent::__construct($registry, Auction::class);
     }
 
-    public function save(Classified $entity, bool $flush = false): void
+    public function save(Auction $entity, bool $flush = false): void
     {
         $this->getEntityManager()
             ->persist($entity);
@@ -34,7 +34,7 @@ class ClassifiedRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Classified $entity, bool $flush = false): void
+    public function remove(Auction $entity, bool $flush = false): void
     {
         $this->getEntityManager()
             ->remove($entity);
@@ -46,7 +46,7 @@ class ClassifiedRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Classified[] Returns an array of Classified objects
+//     * @return Auction[] Returns an array of Auction objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -60,7 +60,7 @@ class ClassifiedRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Classified
+//    public function findOneBySomeField($value): ?Auction
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

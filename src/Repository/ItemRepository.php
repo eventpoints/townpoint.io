@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Repository;
 
-use App\DataTransferObjects\MarketItemFilterDto;
-use App\Entity\Market\Item;
+use App\DataTransferObjects\ItemFilterDto;
+use App\Entity\Auction\Item;
 use App\Entity\User;
 use App\Exception\ShouldNotHappenException;
 use Carbon\Carbon;
@@ -53,7 +53,7 @@ class ItemRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByFilter(MarketItemFilterDto $marketItemFilterDto, bool $isQuery = false): mixed
+    public function findByFilter(ItemFilterDto $marketItemFilterDto, bool $isQuery = false): mixed
     {
         $user = $this->security->getUser();
 

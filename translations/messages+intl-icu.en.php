@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'market-item-rules' => 'Market Rules',
-    'market-item-rule-common-sense' => 'Please use your common sense, do not advertise illegal items or services.',
-    'market-item-rule-dimensions' => 'Add item dimensions to the description if it\'s applicable',
-    'market-item-rule-price' => 'If you post an item for 0.00, this will be show as free. If you are open to offers ensure you check accepting offers checkbox',
-    'market-item-accepting-price-offers-explainer' => 'The price field will be ignored if this is checked',
+    'auction-item-rules' => 'Market Rules',
+    'auction-item-rule-common-sense' => 'Please use your common sense, do not advertise illegal items or services.',
+    'auction-item-rule-dimensions' => 'Add item dimensions to the description if it\'s applicable',
+    'auction-item-rule-price' => 'If you post an item for 0.00, this will be show as free. If you are open to offers ensure you check accepting offers checkbox',
+    'auction-item-accepting-price-offers-explainer' => 'The price field will be ignored if this is checked',
     'email-address' => 'E-mail Address',
     'firstName' => 'firstName',
     'lastName' => 'lastName',

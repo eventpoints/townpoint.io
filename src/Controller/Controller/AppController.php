@@ -13,7 +13,7 @@ class AppController extends AbstractController
     #[Route(path: '/', name: 'index')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('register_step_one');
     }
 
     #[Route(path: '/terms', name: 'app_terms')]

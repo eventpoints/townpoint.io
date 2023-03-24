@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use App\Repository\BookmarkRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;

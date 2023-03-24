@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use App\Repository\ImageRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -25,7 +25,7 @@ class Image
     private string $content;
 
     #[ORM\ManyToOne(inversedBy: 'images')]
-    private null|Item $marketItem = null;
+    private null|Item $item = null;
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
@@ -64,14 +64,14 @@ class Image
         return $this;
     }
 
-    public function getMarketItem(): null|Item
+    public function getItem(): null|Item
     {
-        return $this->marketItem;
+        return $this->item;
     }
 
-    public function setMarketItem(null|Item $marketItem): self
+    public function setItem(null|Item $item): self
     {
-        $this->marketItem = $marketItem;
+        $this->item = $item;
 
         return $this;
     }

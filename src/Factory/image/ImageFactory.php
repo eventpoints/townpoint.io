@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Factory\image;
 
 use App\Entity\Image;
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 
 class ImageFactory
 {
@@ -13,7 +13,7 @@ class ImageFactory
     {
         $image = new Image();
         $image->setContent($content);
-        $image->setMarketItem($item);
+        $image->setItem($item);
 
         return $image;
     }

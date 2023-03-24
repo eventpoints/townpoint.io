@@ -37,10 +37,4 @@ class SecurityController extends AbstractController
             'This method can be blank - it will be intercepted by the logout key on your firewall.'
         );
     }
-
-    #[Route(path: '/over-time-limit', name: 'over_time_limit')]
-    public function overTimeLimit(): Response
-    {
-        return $this->render('security/over-time-limit.html.twig');
-    }
 }

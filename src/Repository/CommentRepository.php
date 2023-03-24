@@ -7,7 +7,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use App\Entity\Event\Event;
 use App\Entity\Group\Group;
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

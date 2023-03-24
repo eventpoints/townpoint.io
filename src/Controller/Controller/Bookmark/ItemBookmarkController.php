@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Controller\Controller\Bookmark;
 
 use App\Entity\Bookmark;
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use App\Factory\Bookmark\BookmarkFactory;
 use App\Repository\BookmarkRepository;
 use App\Service\CurrentUserService;
@@ -38,14 +38,14 @@ class ItemBookmarkController extends AbstractController
         if ($bookmark instanceof Bookmark) {
             $this->bookmarkRepository->remove($bookmark, true);
 
-            return $this->redirectToRoute('market');
+            return $this->redirectToRoute('auction');
         }
 
         $bookmark = $this->bookmarkFactory->createItemBookmark(user: $currentUser, item: $item);
 
         $this->bookmarkRepository->save($bookmark, true);
 
-        return $this->redirectToRoute('market');
+        return $this->redirectToRoute('auction');
     }
 
     #[Route(path: '/', name: 'market_item_bookmarks')]

@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Form;
 
 use App\Entity\Image;
-use App\Entity\Market\Item;
+use App\Entity\Auction\Item;
 use App\Entity\User;
 use App\Exception\ShouldNotHappenException;
 use App\Service\ImageUploadService;
@@ -36,7 +36,7 @@ class MarketItemFormType extends AbstractType
         $user = $this->security->getUser();
 
         if (! $user instanceof User) {
-            throw new ShouldNotHappenException('user is needed to create a market item');
+            throw new ShouldNotHappenException('user is needed to create a auction item');
         }
 
         $builder

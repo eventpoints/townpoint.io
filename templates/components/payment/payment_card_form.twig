@@ -1,0 +1,14 @@
+<div>
+    {{ form_start(form) }}
+    {{ form_row(form.holder) }}
+    <div class="input-group">
+        {{ form_row(form.number) }}
+        {{ form_row(form.securityCode) }}
+    </div>
+    {{ form_row(form.expireAt) }}
+    <div class="text-end">
+        <button type="submit" class="btn btn-outline-primary">{{ 'save'|trans }}</button>
+    </div>
+
+    {{ form_end(form) }}
+</div>

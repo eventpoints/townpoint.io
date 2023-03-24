@@ -2425,7 +2425,7 @@ class AvailableHandleGenerator
             'maria',
             'marimba',
             'mark',
-            'market',
+            'auction',
             'married',
             'mary',
             'mascara',
