@@ -77,6 +77,9 @@ class Item
     #[ORM\JoinColumn(nullable: false)]
     private null|Auction $auction = null;
 
+    /**
+     * @var Collection<int, Bid>
+     */
     #[ORM\OneToMany(mappedBy: 'item', targetEntity: Bid::class)]
     private Collection $bids;
 
@@ -304,7 +307,7 @@ class Item
 
     public function addBid(Bid $bid): self
     {
-        if (!$this->bids->contains($bid)) {
+        if (! $this->bids->contains($bid)) {
             $this->bids->add($bid);
             $bid->setItem($this);
         }
@@ -314,11 +317,9 @@ class Item
 
     public function removeBid(Bid $bid): self
     {
-        if ($this->bids->removeElement($bid)) {
-            // set the owning side to null (unless already changed)
-            if ($bid->getItem() === $this) {
-                $bid->setItem(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->bids->removeElement($bid) && $bid->getItem() === $this) {
+            $bid->setItem(null);
         }
 
         return $this;

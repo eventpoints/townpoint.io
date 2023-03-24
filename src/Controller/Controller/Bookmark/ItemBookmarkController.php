@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller\Bookmark;
 
-use App\Entity\Bookmark;
 use App\Entity\Auction\Item;
+use App\Entity\Bookmark;
 use App\Factory\Bookmark\BookmarkFactory;
 use App\Repository\BookmarkRepository;
 use App\Service\CurrentUserService;

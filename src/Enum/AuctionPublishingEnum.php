@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Enum;
 
-enum AuctionPublishingEnum : string
+enum AuctionPublishingEnum: string
 {
     case DRAFT = 'draft';
     case REVIEWED = 'reviewed';

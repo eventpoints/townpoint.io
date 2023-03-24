@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Form\Type;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Component\Form\AbstractType;
@@ -11,14 +12,17 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @implements DataTransformerInterface<mixed, mixed>
+ */
 class MonthYearType extends AbstractType implements DataTransformerInterface
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addModelTransformer($this);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'attr' => [
@@ -28,12 +32,12 @@ class MonthYearType extends AbstractType implements DataTransformerInterface
         ]);
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return TextType::class;
     }
 
-    public function transform($value)
+    public function transform(mixed $value): mixed
     {
         if ($value instanceof DateTimeInterface) {
             return $value->format('m/Y');
@@ -42,9 +46,9 @@ class MonthYearType extends AbstractType implements DataTransformerInterface
         return null;
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value)
     {
-        if (!$value) {
+        if (! $value) {
             return null;
         }
 

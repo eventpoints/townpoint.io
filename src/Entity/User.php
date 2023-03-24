@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Auction\Auction;
+use App\Entity\Auction\Bid;
+use App\Entity\Auction\Item;
 use App\Entity\Business\Business;
 use App\Entity\Event\Event;
 use App\Entity\Event\EventInvite;
@@ -12,14 +15,9 @@ use App\Entity\Event\EventRejection;
 use App\Entity\Event\EventRequest;
 use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
-use App\Entity\Auction\Auction;
-use App\Entity\Auction\Bid;
-use App\Entity\Auction\Item;
 use App\Entity\Traits\ProfileTrait;
 use App\Enum\ReactionEnum;
-use App\Enum\RegistrationWorkflowEnum;
 use App\Repository\UserRepository;
-use App\Workflow\StateMachine\RegistrationStateMachine;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ReadableCollection;
@@ -257,11 +255,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private null|Project $currentProject = null;
 
     /**
-     * @var Collection<int, Auction>
+     * @var Collection<int, Auction> $auctions
      */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Auction::class, orphanRemoval: true)]
-    private Collection $classifieds;
+    private Collection $auctions;
 
+    /**
+     * @var Collection<int, Bid> $bids
+     */
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bid::class)]
     private Collection $bids;
 
@@ -290,7 +291,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bookmarks = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->projects = new ArrayCollection();
-        $this->classifieds = new ArrayCollection();
+        $this->auctions = new ArrayCollection();
         $this->bids = new ArrayCollection();
     }
 
@@ -1144,15 +1145,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Auction>
      */
-    public function getClassifieds(): Collection
+    public function getAuctions(): Collection
     {
-        return $this->classifieds;
+        return $this->auctions;
     }
 
     public function addClassified(Auction $classified): self
     {
-        if (! $this->classifieds->contains($classified)) {
-            $this->classifieds->add($classified);
+        if (! $this->auctions->contains($classified)) {
+            $this->auctions->add($classified);
             $classified->setOwner($this);
         }
 
@@ -1162,7 +1163,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeClassified(Auction $classified): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->classifieds->removeElement($classified) && $classified->getOwner() === $this) {
+        if ($this->auctions->removeElement($classified) && $classified->getOwner() === $this) {
             $classified->setOwner(null);
         }
 
@@ -1207,7 +1208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addBid(Bid $bid): self
     {
-        if (!$this->bids->contains($bid)) {
+        if (! $this->bids->contains($bid)) {
             $this->bids->add($bid);
             $bid->setOwner($this);
         }
@@ -1217,27 +1218,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeBid(Bid $bid): self
     {
-        if ($this->bids->removeElement($bid)) {
-            // set the owning side to null (unless already changed)
-            if ($bid->getOwner() === $this) {
-                $bid->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->bids->removeElement($bid) && $bid->getOwner() === $this) {
+            $bid->setOwner(null);
         }
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getState(): null|string
     {
         return $this->state;
     }
 
-    /**
-     * @param string $state
-     */
     public function setState(string $state): void
     {
         $this->state = $state;

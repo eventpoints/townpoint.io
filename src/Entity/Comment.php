@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Auction\Item;
 use App\Entity\Event\Event;
 use App\Entity\Group\Group;
-use App\Entity\Auction\Item;
 use App\Repository\CommentRepository;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;

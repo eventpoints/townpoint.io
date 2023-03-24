@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Factory\Bookmark;
 
-use App\Entity\Bookmark;
 use App\Entity\Auction\Item;
+use App\Entity\Bookmark;
 use App\Entity\User;
 
 class BookmarkFactory

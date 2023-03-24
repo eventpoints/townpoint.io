@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Enum;
 
-enum RegistrationWorkflowEnum : string
+enum RegistrationWorkflowEnum: string
 {
     case STATE_PERSONAL_INFO = 'personal_information';
     case STATE_PAYMENT_INFO = 'payment_information';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Controller\Controller;
 
 use App\Form\Payment\CardFormType;
@@ -13,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentController extends AbstractController
 {
     #[Route('/add', name: 'create_payment')]
-    public function create(Request $request) : Response
+    public function create(Request $request): Response
     {
         $card = new Card();
         $paymentForm = $this->createForm(CardFormType::class, $card);
@@ -26,7 +28,5 @@ class PaymentController extends AbstractController
         return $this->render('payment/new.html.twig', [
             'cardForm' => $paymentForm,
         ]);
-
     }
-
 }

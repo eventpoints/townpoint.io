@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 use App\Entity\Auction\Auction;
 use App\Entity\User;
 use App\Enum\RegistrationWorkflowEnum;
-use App\Model\Card;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\Workflow\Transition;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('framework', [
@@ -21,16 +19,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'type' => 'method',
                     'property' => 'status',
                 ],
-                'supports' => [
-                    Auction::class,
-                ],
+                'supports' => [Auction::class],
                 'initial_marking' => 'draft',
-                'places' => [
-                    'draft',
-                    'reviewed',
-                    'rejected',
-                    'published',
-                ],
+                'places' => ['draft', 'reviewed', 'rejected', 'published'],
                 'transitions' => [
                     'to_review' => [
                         'from' => 'draft',
@@ -55,9 +46,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'type' => 'method',
                     'property' => 'state',
                 ],
-                'supports' => [
-                    User::class
-                ],
+                'supports' => [User::class],
                 'initial_marking' => RegistrationWorkflowEnum::STATE_PERSONAL_INFO->value,
                 'places' => [
                     RegistrationWorkflowEnum::STATE_PERSONAL_INFO->value,
@@ -65,11 +54,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     RegistrationWorkflowEnum::STATE_COMPLETE->value,
                 ],
                 'transitions' => [
-                    RegistrationWorkflowEnum::TRANSITION_TO_PAYMENT_FORM->value => [ 'from' => RegistrationWorkflowEnum::STATE_PERSONAL_INFO->value, 'to' => RegistrationWorkflowEnum::STATE_PAYMENT_INFO->value],
-                    RegistrationWorkflowEnum::TRANSITION_TO_COMPLETE->value => ['from' => RegistrationWorkflowEnum::STATE_PAYMENT_INFO->value, 'to' => RegistrationWorkflowEnum::STATE_COMPLETE->value]
+                    RegistrationWorkflowEnum::TRANSITION_TO_PAYMENT_FORM->value => [
+                        'from' => RegistrationWorkflowEnum::STATE_PERSONAL_INFO->value,
+                        'to' => RegistrationWorkflowEnum::STATE_PAYMENT_INFO->value,
+                    ],
+                    RegistrationWorkflowEnum::TRANSITION_TO_COMPLETE->value => [
+                        'from' => RegistrationWorkflowEnum::STATE_PAYMENT_INFO->value,
+                        'to' => RegistrationWorkflowEnum::STATE_COMPLETE->value,
+                    ],
                 ],
             ],
-
         ],
     ]);
 };

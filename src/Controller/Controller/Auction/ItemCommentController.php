@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Controller\Controller\Auction;
 
-use App\Entity\Comment;
 use App\Entity\Auction\Item;
+use App\Entity\Comment;
 use App\Exception\ShouldNotHappenException;
 use App\Factory\Comment\CommentFactory;
 use App\Form\CommentFormType;

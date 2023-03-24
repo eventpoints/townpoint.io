@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Form;
 
-use App\Entity\Image;
 use App\Entity\Auction\Item;
+use App\Entity\Image;
 use App\Entity\User;
 use App\Exception\ShouldNotHappenException;
 use App\Service\ImageUploadService;

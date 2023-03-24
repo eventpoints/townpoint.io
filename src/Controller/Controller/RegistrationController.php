@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Controller\Controller;
 
@@ -11,8 +11,6 @@ use App\Form\RegistrationFormType;
 use App\Model\Card;
 use App\Security\UserWebAuthenticator;
 use App\Service\AvatarService;
-use App\Service\Workflow\Registration\RegistrationWorkflowHelper;
-use App\Workflow\StateMachine\RegistrationStateMachine;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,24 +18,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Component\Workflow\StateMachine;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class RegistrationController extends AbstractController
 {
     public function __construct(
-        private readonly AvatarService          $avatarService,
+        private readonly AvatarService $avatarService,
         private readonly EntityManagerInterface $entityManager,
-        private readonly WorkflowInterface      $registrationStateMachine,
-    )
-    {
+        private readonly WorkflowInterface $registrationStateMachine,
+    ) {
     }
 
     #[Route('/register', name: 'register_step_one')]
-    public function stepOne(Request $request, UserPasswordHasherInterface $userPasswordHasher,
-    ): ?Response
+    public function stepOne(Request $request, UserPasswordHasherInterface $userPasswordHasher): ?Response
     {
-
         $session = $request->getSession();
         if ($session->has('user_data')) {
             $session->remove('user_data');
@@ -65,25 +59,23 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'user' => $user,
-            'userForm' => $userForm
+            'userForm' => $userForm,
         ]);
     }
 
-
     #[Route('/register/step-two', name: 'register_step_two')]
     public function stepTwo(
-        Request                    $request,
+        Request $request,
         UserAuthenticatorInterface $userAuthenticator,
-        UserWebAuthenticator       $authenticator,
-        WorkflowInterface          $registrationStateMachine,
-    ): ?Response
-    {
+        UserWebAuthenticator $authenticator,
+        WorkflowInterface $registrationStateMachine,
+    ): ?Response {
         $session = $request->getSession();
         /** @var User $user */
         $user = $session->get('user_data');
 
-        if($user == null){
-           return $this->redirectToRoute('register_step_one');
+        if (! $user instanceof User) {
+            return $this->redirectToRoute('register_step_one');
         }
 
         $card = new Card();
@@ -98,12 +90,13 @@ class RegistrationController extends AbstractController
             $registrationStateMachine->apply($user, RegistrationWorkflowEnum::TRANSITION_TO_COMPLETE->value);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
+
             return $userAuthenticator->authenticateUser($user, $authenticator, $request);
         }
 
         return $this->render('payment/new.html.twig', [
             'user' => $user,
-            'cardForm' => $cardForm
+            'cardForm' => $cardForm,
         ]);
     }
 }

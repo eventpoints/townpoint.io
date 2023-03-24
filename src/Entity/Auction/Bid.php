@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Entity\Auction;
 
 use App\Entity\User;
 use App\Repository\BidRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: BidRepository::class)]
 class Bid
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\CustomIdGenerator(UuidGenerator::class)]
+    private null|Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'bids')]
     private ?Item $item = null;
@@ -30,7 +35,7 @@ class Bid
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }

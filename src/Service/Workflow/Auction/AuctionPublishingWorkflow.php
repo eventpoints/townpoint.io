@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Service\Workflow\Auction;
 
 use App\Entity\Auction\Auction;
@@ -9,18 +11,17 @@ use Symfony\Component\Workflow\WorkflowInterface;
 
 class AuctionPublishingWorkflow
 {
-
     public function __construct(
         private readonly WorkflowInterface $auctionPublishingWorkflow
-    )
-    {}
+    ) {
+    }
 
     public function toReview(Auction $auction): void
     {
         try {
             $this->auctionPublishingWorkflow->apply($auction, AuctionPublishingEnum::REVIEWED->value);
         } catch (LogicException $logicException) {
-            throw new $logicException;
+            throw new $logicException();
         }
     }
 
@@ -29,7 +30,7 @@ class AuctionPublishingWorkflow
         try {
             $this->auctionPublishingWorkflow->apply($auction, AuctionPublishingEnum::PUBLISHED->value);
         } catch (LogicException $logicException) {
-            throw new $logicException;
+            throw new $logicException();
         }
     }
 
@@ -38,8 +39,7 @@ class AuctionPublishingWorkflow
         try {
             $this->auctionPublishingWorkflow->apply($auction, AuctionPublishingEnum::PUBLISHED->value);
         } catch (LogicException $logicException) {
-            throw new $logicException;
+            throw new $logicException();
         }
     }
-
 }
