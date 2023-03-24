@@ -8,7 +8,6 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -20,11 +19,6 @@ class RegistrationFormComponent extends AbstractController
     use ComponentWithFormTrait;
 
     public User $user;
-
-    public function __construct(
-        private readonly WorkflowInterface $registrationStateMachine
-    ) {
-    }
 
     protected function instantiateForm(): FormInterface
     {
