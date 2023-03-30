@@ -130,4 +130,24 @@ class ItemRepository extends ServiceEntityRepository
         return $qb->getQuery()
             ->getResult();
     }
+
+
+    public function findByRadius(float $longitude, float $latitude, int $radius = 10, bool $isQuery = false) : mixed
+    {
+        $qb = $this->createQueryBuilder('item');
+
+        $qb->select('item')
+            ->addSelect('(6371 * acos(cos(radians(:latitude)) * cos(radians(item.latitude)) * cos(radians(item.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(o.latitude)))) AS distance')
+            ->setParameter('latitude', $latitude)
+            ->setParameter('longitude', $longitude)
+            ->having('distance <= :radius')
+            ->setParameter('radius', $radius);
+
+        if ($isQuery) {
+            return $qb->getQuery();
+        }
+
+        return $qb->getQuery()
+            ->getResult();
+    }
 }

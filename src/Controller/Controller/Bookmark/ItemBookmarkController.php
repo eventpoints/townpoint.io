@@ -9,6 +9,7 @@ use App\Entity\Bookmark;
 use App\Factory\Bookmark\BookmarkFactory;
 use App\Repository\BookmarkRepository;
 use App\Service\CurrentUserService;
+use App\ValueObject\FlashValueObject;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,12 @@ class ItemBookmarkController extends AbstractController
     public function create(Item $item, Request $request): Response
     {
         $currentUser = $this->currentUserService->getCurrentUser($this->getUser());
+
+        if($item->getOwner() === $currentUser){
+            $this->addFlash(FlashValueObject::TYPE_WARNING, 'don\'t watch your own item...');
+            return $this->redirectToRoute('dashboard');
+        }
+
         $bookmark = $this->bookmarkRepository->findOneBy([
             'owner' => $currentUser,
             'item' => $item,

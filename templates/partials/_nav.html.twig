@@ -1,19 +1,19 @@
 <div class="card">
     <div class="">
-        <nav class="nav nav-pills flex-row">
+        <nav class="nav bg-transparent nav-pills flex-row">
             <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'auction_index' %}active{% endif %}"
                aria-current="page" href="{{ path('auction_index') }}">
-                <span class="mdi mdi-gavel fs-3"></span>
+                <span class="mdi mdi-gavel fs-4"></span>
                 <div>{{ 'auction'|trans|capitalize }}</div>
             </a>
             <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'events' %}active{% endif %}"
                href="{{ path('events') }}">
-                <span class="mdi mdi-calendar fs-3"></span>
+                <span class="mdi mdi-calendar fs-4"></span>
                 <div>{{ 'events'|trans|capitalize }}</div>
             </a>
             <a class="flex-fill text-center nav-link {% if app.request.attributes.get('_route') == 'groups' %}active{% endif %}"
                href="{{ path('groups') }}">
-                <span class="mdi mdi-account-group fs-3"></span>
+                <span class="mdi mdi-account-group fs-4"></span>
                 <div>{{ 'groups'|trans|capitalize }}</div>
             </a>
         </nav>

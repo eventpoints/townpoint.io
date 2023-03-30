@@ -40,7 +40,8 @@
                             <div class="list-group list-group-flush">
                                 <div class="list-group-item">
                                     <div class="alert alert-info m-0" role="alert">
-                                        Spotlight goals are small, short term, manageable objectives that make up a
+                                        Spotlight goals are small, short term, manageable objectives that collectively
+                                        make up a
                                         starlight goal.
                                     </div>
                                 </div>
@@ -131,23 +132,26 @@
                              aria-labelledby="pills-home-tab" tabindex="0">
                             <div class="list-group list-group-flush">
                                 {% for event in acceptedEvents %}
-                                    <div class="list-group-item list-group-item-action">
-                                        <a class="link-primary"
-                                           href="{{ path('show_event', {id: event.id}) }}">
-                                            <div class="h5 m-0">{{ event.title }}</div>
-                                        </a>
-                                        <div class="d-flex justify-content-center align-items-center my-2">
-                                            <div class="d-flex align-items-center">
-                                                <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
-                                                <span class="lh-1"> {{ event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
-                                            </div>
-                                            <span class="mdi lh-1 mdi-ray-vertex fs-4 mx-2"></span>
-                                            <div class="d-flex align-items-center">
-                                                <span class="lh-1 me-2"> {{ event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
-                                                <span class="mdi lh-1 mdi-ray-end fs-4"></span>
+                                    {% if event.startAt.isCurrentWeek and event.startAt.isFuture %}
+                                        <div class="list-group-item text-center">{{ 'events-this-week'|trans }}</div>
+                                        <div class="list-group-item list-group-item-action">
+                                            <a class="link-primary"
+                                               href="{{ path('show_event', {id: event.id}) }}">
+                                                <div class="h5 m-0">{{ event.title }}</div>
+                                            </a>
+                                            <div class="d-flex justify-content-center align-items-center my-2">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
+                                                    <span class="lh-1"> {{ event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                                </div>
+                                                <span class="mdi lh-1 mdi-ray-vertex fs-4 mx-2"></span>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="lh-1 me-2"> {{ event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                                                    <span class="mdi lh-1 mdi-ray-end fs-4"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 {% else %}
                                     <div class="list-group-item text-center text-muted fw-bold">
                                         {{ 'no-upcoming-events'|trans }}
@@ -255,17 +259,16 @@
                         <div class="tab-pane fade show active" id="market-selling" role="tabpanel"
                              aria-labelledby="pills-home-tab" tabindex="0">
                             <div class="list-group list-group-flush">
-                                {% for classified in app.user.classifieds %}
-                                    <a href="{{ path('show_market_classified', {id: classified.id}) }}"
+                                {% for item in app.user.items %}
+                                    <a href="{{ path('show_auction', {id: item.id}) }}"
                                        class="list-group-item list-group-item-action">
                                         <div class="w-100 d-flex justify-content-between align-items-start">
                                             <div>
                                                 <div class="d-flex align-items-start fw-bold">
-                                                    <div class="me-3">{{ classified.title }}</div>
-                                                    <div class="badge rounded-pill text-bg-primary lh-1">{{ classified.items|length }}</div>
+                                                    <div class="me-3">{{ item.title }}</div>
                                                 </div>
                                             </div>
-                                            <div>{{ classified.createdAt.diffForHumans({short: true}) }}</div>
+                                            <div>{{ item.createdAt.diffForHumans({short: true}) }}</div>
                                         </div>
                                     </a>
                                 {% else %}
@@ -282,17 +285,16 @@
                              aria-labelledby="pills-profile-tab" tabindex="0">
                             <div class="list-group list-group-flush">
                                 {% for bookmark in app.user.bookmarks %}
-                                    <a href="{{ path('show_market_classified', {id: bookmark.item.classified.id}) }}"
+                                    <a href="{{ path('show_auction', {id: bookmark.item.id}) }}"
                                        class="list-group-item list-group-item-action">
-                                        <div class="w-100 d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <div class="d-flex align-items-start fw-bold">
-                                                    <div class="me-2">{{ bookmark.item.title }}</div>
-                                                    <div class="me-2">{{ bookmark.item.price == 0 ? 'FREE' : bookmark.item.price|format_currency(bookmark.item.currency) }}</div>
-                                                    <div class="badge rounded-pill text-bg-secondary">{{ bookmark.item.isSold ? 'sold' : 'active' }}</div>
-                                                </div>
-                                            </div>
-                                            <div>{{ bookmark.createdAt.diffForHumans({short: true}) }}</div>
+                                        <div class="d-flex w-100 justify-content-between align-items-start">
+                                            <h5 class="mb-1">{{ bookmark.item.title }}</h5>
+                                            {% if bookmark.item.isSold %}
+                                                <div class="badge rounded-pill text-bg-warning">{{ bookmark.item.isSold ? 'sold' }}</div>
+                                                <div class="badge rounded-pill {{ bookmark.item.isActive ? 'text-bg-secondary' : 'text-bg-warning' }}">{{ bookmark.item.isActive ? 'auction active' : 'closed' }}</div>
+                                            {% else %}
+                                                <small>{{ bookmark.item.price == 0 ? 'FREE' : bookmark.item.price|format_currency(bookmark.item.currency) }}</small>
+                                            {% endif %}
                                         </div>
                                     </a>
                                 {% else %}

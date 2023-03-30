@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a49b2c59059d7e9258e5549db96b4e43",
+    "content-hash": "f795ed7dbf4c8d079c2838a188b133c7",
     "packages": [
         {
             "name": "alcohol/iso4217",
@@ -735,21 +735,21 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.8.3",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "fd67ba64db3c806f626a33dcab15a4db0c77652e"
+                "reference": "9819c00c2eea750b99902f244309b824911b72b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/fd67ba64db3c806f626a33dcab15a4db0c77652e",
-                "reference": "fd67ba64db3c806f626a33dcab15a4db0c77652e",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/9819c00c2eea750b99902f244309b824911b72b2",
+                "reference": "9819c00c2eea750b99902f244309b824911b72b2",
                 "shasum": ""
             },
             "require": {
                 "doctrine/cache": "^1.11 || ^2.0",
-                "doctrine/dbal": "^3.4.0",
+                "doctrine/dbal": "^3.6.0",
                 "doctrine/persistence": "^2.2 || ^3",
                 "doctrine/sql-formatter": "^1.0.1",
                 "php": "^7.4 || ^8.0",
@@ -765,11 +765,12 @@
             "conflict": {
                 "doctrine/annotations": ">=3.0",
                 "doctrine/orm": "<2.11 || >=3.0",
-                "twig/twig": "<1.34 || >=2.0,<2.4"
+                "twig/twig": "<1.34 || >=2.0 <2.4"
             },
             "require-dev": {
                 "doctrine/annotations": "^1 || ^2",
                 "doctrine/coding-standard": "^9.0",
+                "doctrine/deprecations": "^1.0",
                 "doctrine/orm": "^2.11 || ^3.0",
                 "friendsofphp/proxy-manager-lts": "^1.0",
                 "phpunit/phpunit": "^9.5.26 || ^10.0",
@@ -830,7 +831,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.8.3"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.9.0"
             },
             "funding": [
                 {
@@ -846,7 +847,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-03T09:32:42+00:00"
+            "time": "2023-03-23T20:02:57+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -1934,6 +1935,254 @@
             "time": "2023-01-30T10:40:19+00:00"
         },
         {
+            "name": "geocoder-php/common-http",
+            "version": "4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/php-common-http.git",
+                "reference": "4ee2cee60d21631e2a09c196bf6b9fd296bca728"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/php-common-http/zipball/4ee2cee60d21631e2a09c196bf6b9fd296bca728",
+                "reference": "4ee2cee60d21631e2a09c196bf6b9fd296bca728",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0",
+                "php-http/client-implementation": "^1.0",
+                "php-http/discovery": "^1.6",
+                "php-http/httplug": "^1.0 || ^2.0",
+                "php-http/message-factory": "^1.0.2",
+                "psr/http-message": "^1.0",
+                "psr/http-message-implementation": "^1.0",
+                "willdurand/geocoder": "^4.0"
+            },
+            "require-dev": {
+                "nyholm/psr7": "^1.0",
+                "php-http/message": "^1.0",
+                "php-http/mock-client": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/stopwatch": "~2.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Geocoder\\Http\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                }
+            ],
+            "description": "Common files for HTTP based Geocoders",
+            "homepage": "http://geocoder-php.org",
+            "keywords": [
+                "http geocoder"
+            ],
+            "support": {
+                "source": "https://github.com/geocoder-php/php-common-http/tree/4.5.0"
+            },
+            "time": "2022-07-30T12:09:30+00:00"
+        },
+        {
+            "name": "geocoder-php/locationiq-provider",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/locationiq-provider.git",
+                "reference": "68a4c3a79edb60e42c5af779c61cedc0ac63c533"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/locationiq-provider/zipball/68a4c3a79edb60e42c5af779c61cedc0ac63c533",
+                "reference": "68a4c3a79edb60e42c5af779c61cedc0ac63c533",
+                "shasum": ""
+            },
+            "require": {
+                "geocoder-php/common-http": "^4.0",
+                "php": "^7.4 || ^8.0",
+                "willdurand/geocoder": "^4.0"
+            },
+            "provide": {
+                "geocoder-php/provider-implementation": "1.0"
+            },
+            "require-dev": {
+                "geocoder-php/provider-integration-tests": "^1.0",
+                "php-http/curl-client": "^2.2",
+                "php-http/message": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Geocoder\\Provider\\LocationIQ\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Srihari Thalla",
+                    "email": "srihari@unwiredlabs.com"
+                }
+            ],
+            "description": "Geocoder LocationIQ adapter",
+            "homepage": "http://geocoder-php.org/Geocoder/",
+            "keywords": [
+                "address",
+                "geocoder",
+                "geocoding",
+                "locationiq"
+            ],
+            "support": {
+                "source": "https://github.com/geocoder-php/locationiq-provider/tree/1.4.0"
+            },
+            "time": "2022-07-30T12:09:30+00:00"
+        },
+        {
+            "name": "geocoder-php/nominatim-provider",
+            "version": "5.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/nominatim-provider.git",
+                "reference": "a50486161f6babad7b1ed7ee7bf86147b0844413"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/nominatim-provider/zipball/a50486161f6babad7b1ed7ee7bf86147b0844413",
+                "reference": "a50486161f6babad7b1ed7ee7bf86147b0844413",
+                "shasum": ""
+            },
+            "require": {
+                "geocoder-php/common-http": "^4.1",
+                "php": "^7.4 || ^8.0",
+                "willdurand/geocoder": "^4.0"
+            },
+            "provide": {
+                "geocoder-php/provider-implementation": "1.0"
+            },
+            "require-dev": {
+                "geocoder-php/provider-integration-tests": "^1.0",
+                "php-http/curl-client": "^2.2",
+                "php-http/message": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Geocoder\\Provider\\Nominatim\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "Geocoder Nominatim adapter",
+            "homepage": "http://geocoder-php.org/Geocoder/",
+            "support": {
+                "source": "https://github.com/geocoder-php/nominatim-provider/tree/5.7.0"
+            },
+            "time": "2023-03-01T10:18:27+00:00"
+        },
+        {
+            "name": "geocoder-php/plugin",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/plugin.git",
+                "reference": "ecda7277f9c3742cd6cf4eeea01b69065a8c2d28"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/plugin/zipball/ecda7277f9c3742cd6cf4eeea01b69065a8c2d28",
+                "reference": "ecda7277f9c3742cd6cf4eeea01b69065a8c2d28",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0",
+                "php-http/promise": "^1.0",
+                "psr/log": "^1.0|^2.0|^3.0",
+                "psr/simple-cache": "^1.0|^2.0|^3.0",
+                "willdurand/geocoder": "^4.0"
+            },
+            "require-dev": {
+                "cache/void-adapter": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Geocoder\\Plugin\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com"
+                }
+            ],
+            "description": "Plugins to Geocoder providers",
+            "homepage": "http://geocoder-php.org",
+            "keywords": [
+                "geocoder plugin"
+            ],
+            "support": {
+                "source": "https://github.com/geocoder-php/plugin/tree/1.5.0"
+            },
+            "time": "2022-07-30T13:42:14+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.5.8",
             "source": {
@@ -2241,6 +2490,64 @@
                 }
             ],
             "time": "2022-06-20T21:43:03+00:00"
+        },
+        {
+            "name": "http-interop/http-factory-guzzle",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/http-interop/http-factory-guzzle.git",
+                "reference": "8f06e92b95405216b237521cc64c804dd44c4a81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/http-interop/http-factory-guzzle/zipball/8f06e92b95405216b237521cc64c804dd44c4a81",
+                "reference": "8f06e92b95405216b237521cc64c804dd44c4a81",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/psr7": "^1.7||^2.0",
+                "php": ">=7.3",
+                "psr/http-factory": "^1.0"
+            },
+            "provide": {
+                "psr/http-factory-implementation": "^1.0"
+            },
+            "require-dev": {
+                "http-interop/http-factory-tests": "^0.9",
+                "phpunit/phpunit": "^9.5"
+            },
+            "suggest": {
+                "guzzlehttp/psr7": "Includes an HTTP factory starting in version 2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Http\\Factory\\Guzzle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "An HTTP Factory using Guzzle PSR7",
+            "keywords": [
+                "factory",
+                "http",
+                "psr-17",
+                "psr-7"
+            ],
+            "support": {
+                "issues": "https://github.com/http-interop/http-factory-guzzle/issues",
+                "source": "https://github.com/http-interop/http-factory-guzzle/tree/1.2.0"
+            },
+            "time": "2021-07-21T13:50:14+00:00"
         },
         {
             "name": "intervention/image",
@@ -3440,6 +3747,80 @@
             "time": "2022-11-09T09:25:29+00:00"
         },
         {
+            "name": "php-http/discovery",
+            "version": "1.15.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-http/discovery.git",
+                "reference": "5cc428320191ac1d0b6520034c2dc0698628ced5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/5cc428320191ac1d0b6520034c2dc0698628ced5",
+                "reference": "5cc428320191ac1d0b6520034c2dc0698628ced5",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0|^2.0",
+                "php": "^7.1 || ^8.0"
+            },
+            "conflict": {
+                "nyholm/psr7": "<1.0"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "*",
+                "php-http/client-implementation": "*",
+                "psr/http-client-implementation": "*",
+                "psr/http-factory-implementation": "*",
+                "psr/http-message-implementation": "*"
+            },
+            "require-dev": {
+                "composer/composer": "^1.0.2|^2.0",
+                "graham-campbell/phpspec-skip-example-extension": "^5.0",
+                "php-http/httplug": "^1.0 || ^2.0",
+                "php-http/message-factory": "^1.0",
+                "phpspec/phpspec": "^5.1 || ^6.1 || ^7.3",
+                "symfony/phpunit-bridge": "^6.2"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Http\\Discovery\\Composer\\Plugin",
+                "plugin-optional": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Http\\Discovery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                }
+            ],
+            "description": "Finds and installs PSR-7, PSR-17, PSR-18 and HTTPlug implementations",
+            "homepage": "http://php-http.org",
+            "keywords": [
+                "adapter",
+                "client",
+                "discovery",
+                "factory",
+                "http",
+                "message",
+                "psr17",
+                "psr7"
+            ],
+            "support": {
+                "issues": "https://github.com/php-http/discovery/issues",
+                "source": "https://github.com/php-http/discovery/tree/1.15.2"
+            },
+            "time": "2023-02-11T08:28:41+00:00"
+        },
+        {
             "name": "php-http/guzzle6-adapter",
             "version": "v2.0.2",
             "source": {
@@ -4216,6 +4597,61 @@
             "time": "2020-06-29T06:28:15+00:00"
         },
         {
+            "name": "psr/http-factory",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-factory.git",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "reference": "12ac7fcd07e5b077433f5f2bee95b3a771bf61be",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/http-message": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "psr",
+                "psr-17",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-factory/tree/master"
+            },
+            "time": "2019-04-30T12:38:16+00:00"
+        },
+        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -4375,6 +4811,57 @@
             "time": "2021-07-14T16:46:02+00:00"
         },
         {
+            "name": "psr/simple-cache",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/simple-cache/tree/3.0.0"
+            },
+            "time": "2021-10-29T13:26:27+00:00"
+        },
+        {
             "name": "ralouphie/getallheaders",
             "version": "3.0.3",
             "source": {
@@ -4419,95 +4906,17 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
-            "name": "sensio/framework-extra-bundle",
-            "version": "v6.2.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "2f886f4b31f23c76496901acaedfedb6936ba61f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/2f886f4b31f23c76496901acaedfedb6936ba61f",
-                "reference": "2f886f4b31f23c76496901acaedfedb6936ba61f",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/annotations": "^1.0|^2.0",
-                "php": ">=7.2.5",
-                "symfony/config": "^4.4|^5.0|^6.0",
-                "symfony/dependency-injection": "^4.4|^5.0|^6.0",
-                "symfony/framework-bundle": "^4.4|^5.0|^6.0",
-                "symfony/http-kernel": "^4.4|^5.0|^6.0"
-            },
-            "conflict": {
-                "doctrine/doctrine-cache-bundle": "<1.3.1",
-                "doctrine/persistence": "<1.3"
-            },
-            "require-dev": {
-                "doctrine/dbal": "^2.10|^3.0",
-                "doctrine/doctrine-bundle": "^1.11|^2.0",
-                "doctrine/orm": "^2.5",
-                "symfony/browser-kit": "^4.4|^5.0|^6.0",
-                "symfony/doctrine-bridge": "^4.4|^5.0|^6.0",
-                "symfony/dom-crawler": "^4.4|^5.0|^6.0",
-                "symfony/expression-language": "^4.4|^5.0|^6.0",
-                "symfony/finder": "^4.4|^5.0|^6.0",
-                "symfony/monolog-bridge": "^4.0|^5.0|^6.0",
-                "symfony/monolog-bundle": "^3.2",
-                "symfony/phpunit-bridge": "^4.4.9|^5.0.9|^6.0",
-                "symfony/security-bundle": "^4.4|^5.0|^6.0",
-                "symfony/twig-bundle": "^4.4|^5.0|^6.0",
-                "symfony/yaml": "^4.4|^5.0|^6.0",
-                "twig/twig": "^1.34|^2.4|^3.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "6.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Sensio\\Bundle\\FrameworkExtraBundle\\": "src/"
-                },
-                "exclude-from-classmap": [
-                    "/tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "This bundle provides a way to configure your controllers with annotations",
-            "keywords": [
-                "annotations",
-                "controllers"
-            ],
-            "support": {
-                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.2.10"
-            },
-            "abandoned": "Symfony",
-            "time": "2023-02-24T14:57:12+00:00"
-        },
-        {
             "name": "stripe/stripe-php",
-            "version": "v10.9.1",
+            "version": "v10.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "be1de500a70b9eada6dbe72b0c8e21c845570903"
+                "reference": "899f50664d47ddac4f9c1ce871a4aca402f963a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/be1de500a70b9eada6dbe72b0c8e21c845570903",
-                "reference": "be1de500a70b9eada6dbe72b0c8e21c845570903",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/899f50664d47ddac4f9c1ce871a4aca402f963a0",
+                "reference": "899f50664d47ddac4f9c1ce871a4aca402f963a0",
                 "shasum": ""
             },
             "require": {
@@ -4553,9 +4962,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v10.9.1"
+                "source": "https://github.com/stripe/stripe-php/tree/v10.11.0"
             },
-            "time": "2023-03-14T19:16:20+00:00"
+            "time": "2023-03-23T21:41:24+00:00"
         },
         {
             "name": "symfony/asset",
@@ -9475,16 +9884,16 @@
         },
         {
             "name": "symfony/ux-autocomplete",
-            "version": "2.x-dev",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-autocomplete.git",
-                "reference": "5fa5b0973135263783d4bb778ad0add657d66fa4"
+                "reference": "41b9d8d2462536c84a50d8f1155ea9ed45ad39fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/5fa5b0973135263783d4bb778ad0add657d66fa4",
-                "reference": "5fa5b0973135263783d4bb778ad0add657d66fa4",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/41b9d8d2462536c84a50d8f1155ea9ed45ad39fd",
+                "reference": "41b9d8d2462536c84a50d8f1155ea9ed45ad39fd",
                 "shasum": ""
             },
             "require": {
@@ -9513,7 +9922,6 @@
                 "zenstruck/browser": "^1.1",
                 "zenstruck/foundry": "^1.19"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "thanks": {
@@ -9542,7 +9950,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-autocomplete/tree/2.x"
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.7.1"
             },
             "funding": [
                 {
@@ -9558,7 +9966,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-17T14:05:18+00:00"
+            "time": "2023-01-24T15:40:19+00:00"
         },
         {
             "name": "symfony/ux-dropzone",
@@ -9643,12 +10051,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-live-component.git",
-                "reference": "7db9ed02b28753d246936e479f6dd34bd703a9a2"
+                "reference": "0415e32c5248169194a6a13ebd36fe703d419211"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/7db9ed02b28753d246936e479f6dd34bd703a9a2",
-                "reference": "7db9ed02b28753d246936e479f6dd34bd703a9a2",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/0415e32c5248169194a6a13ebd36fe703d419211",
+                "reference": "0415e32c5248169194a6a13ebd36fe703d419211",
                 "shasum": ""
             },
             "require": {
@@ -9664,10 +10072,13 @@
                 "doctrine/annotations": "^1.0",
                 "doctrine/doctrine-bundle": "^2.0",
                 "doctrine/orm": "^2.7",
+                "doctrine/persistence": "^2.5.2|^3.0",
+                "phpdocumentor/reflection-docblock": "5.x-dev",
                 "symfony/dependency-injection": "^5.4|^6.0",
                 "symfony/form": "^5.4|^6.0",
                 "symfony/framework-bundle": "^5.4|^6.0",
                 "symfony/phpunit-bridge": "^6.0",
+                "symfony/property-info": "^5.4|^6.0",
                 "symfony/security-csrf": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
                 "symfony/validator": "^5.4|^6.0",
@@ -9721,7 +10132,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-16T19:41:32+00:00"
+            "time": "2023-03-22T18:54:08+00:00"
         },
         {
             "name": "symfony/ux-swup",
@@ -9963,12 +10374,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-twig-component.git",
-                "reference": "fcc15ae4ae57f9a96faa7a3baedb2e05da98bda8"
+                "reference": "9a6ce4b5b25bed8e38ababb12fe05ef779726367"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/fcc15ae4ae57f9a96faa7a3baedb2e05da98bda8",
-                "reference": "fcc15ae4ae57f9a96faa7a3baedb2e05da98bda8",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/9a6ce4b5b25bed8e38ababb12fe05ef779726367",
+                "reference": "9a6ce4b5b25bed8e38ababb12fe05ef779726367",
                 "shasum": ""
             },
             "require": {
@@ -10035,7 +10446,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-15T17:24:48+00:00"
+            "time": "2023-03-20T15:45:23+00:00"
         },
         {
             "name": "symfony/validator",
@@ -11083,6 +11494,171 @@
                 "source": "https://github.com/what3words/w3w-php-wrapper"
             },
             "time": "2019-09-11T13:05:55+00:00"
+        },
+        {
+            "name": "willdurand/geocoder",
+            "version": "4.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/php-common.git",
+                "reference": "be3d9ed0fddf8c698ee079d8a07ae9520b4a49a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/php-common/zipball/be3d9ed0fddf8c698ee079d8a07ae9520b4a49a1",
+                "reference": "be3d9ed0fddf8c698ee079d8a07ae9520b4a49a1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "nyholm/nsa": "^1.1",
+                "phpunit/phpunit": "^9.5",
+                "symfony/stopwatch": "~2.5"
+            },
+            "suggest": {
+                "symfony/stopwatch": "If you want to use the TimedGeocoder"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Geocoder\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com"
+                }
+            ],
+            "description": "Common files for PHP Geocoder",
+            "homepage": "http://geocoder-php.org",
+            "keywords": [
+                "abstraction",
+                "geocoder",
+                "geocoding",
+                "geoip"
+            ],
+            "support": {
+                "source": "https://github.com/geocoder-php/php-common/tree/4.6.0"
+            },
+            "time": "2022-07-30T11:09:43+00:00"
+        },
+        {
+            "name": "willdurand/geocoder-bundle",
+            "version": "5.19.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geocoder-php/BazingaGeocoderBundle.git",
+                "reference": "f4530ab17c9453f1308f1f89ad736300f34455a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geocoder-php/BazingaGeocoderBundle/zipball/f4530ab17c9453f1308f1f89ad736300f34455a1",
+                "reference": "f4530ab17c9453f1308f1f89ad736300f34455a1",
+                "shasum": ""
+            },
+            "require": {
+                "geocoder-php/plugin": "^1.5",
+                "php": "^7.4 || ^8.0",
+                "php-http/discovery": "^1.14",
+                "symfony/console": "^4.4 || ^5.0 || ^6.0",
+                "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0",
+                "symfony/options-resolver": "^4.4 || ^5.0 || ^6.0",
+                "willdurand/geocoder": "^4.6"
+            },
+            "conflict": {
+                "geocoder-php/nominatim-provider": "<5.0"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.8",
+                "fakerphp/faker": "^1.20",
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "geocoder-php/algolia-places-provider": "^0.4",
+                "geocoder-php/arcgis-online-provider": "^4.4",
+                "geocoder-php/bing-maps-provider": "^4.3",
+                "geocoder-php/cache-provider": "^4.4.0",
+                "geocoder-php/chain-provider": "^4.5",
+                "geocoder-php/free-geoip-provider": "^4.5",
+                "geocoder-php/geo-plugin-provider": "^4.3",
+                "geocoder-php/geoip2-provider": "^4.3",
+                "geocoder-php/geoips-provider": "^4.0",
+                "geocoder-php/geonames-provider": "^4.4",
+                "geocoder-php/google-maps-places-provider": "^1.4",
+                "geocoder-php/google-maps-provider": "^4.7",
+                "geocoder-php/here-provider": "^0.7",
+                "geocoder-php/host-ip-provider": "^4.4",
+                "geocoder-php/ip-info-db-provider": "^4.3",
+                "geocoder-php/ip-info-provider": "^0.4",
+                "geocoder-php/ipstack-provider": "^0.4",
+                "geocoder-php/locationiq-provider": "^1.4",
+                "geocoder-php/mapbox-provider": "^1.4",
+                "geocoder-php/mapquest-provider": "^4.3",
+                "geocoder-php/mapzen-provider": "^4.0",
+                "geocoder-php/maxmind-binary-provider": "^4.3",
+                "geocoder-php/maxmind-provider": "^4.4",
+                "geocoder-php/nominatim-provider": "^5.6",
+                "geocoder-php/open-cage-provider": "^4.6",
+                "geocoder-php/openrouteservice-provider": "^1.3",
+                "geocoder-php/pickpoint-provider": "^4.3",
+                "geocoder-php/tomtom-provider": "^4.4",
+                "geocoder-php/yandex-provider": "^4.5",
+                "geoip/geoip": "~1.17",
+                "nyholm/nsa": "^1.3",
+                "nyholm/psr7": "^1.5",
+                "nyholm/symfony-bundle-test": "dev-master",
+                "php-http/curl-client": "^2.2",
+                "php-http/message": "^1.13",
+                "phpstan/phpstan": "^1.9.2",
+                "symfony/config": "^4.4 || ^5.0 || ^6.0",
+                "symfony/phpunit-bridge": "^5.2 || ^6.0",
+                "symfony/validator": "^4.4 || ^5.0 || ^6.0",
+                "symfony/yaml": "^4.4 || ^5.0 || ^6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bazinga\\GeocoderBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "will+git@drnd.me"
+                }
+            ],
+            "description": "Integration of Geocoder into Symfony",
+            "keywords": [
+                "geocoder",
+                "geocoding"
+            ],
+            "support": {
+                "issues": "https://github.com/geocoder-php/BazingaGeocoderBundle/issues",
+                "source": "https://github.com/geocoder-php/BazingaGeocoderBundle/tree/5.19.0"
+            },
+            "time": "2022-12-05T13:56:11+00:00"
         }
     ],
     "packages-dev": [
@@ -11383,16 +11959,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.6",
+            "version": "1.10.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "50d089a3e0904b0fe7e2cf2d4fd37d427d64235a"
+                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/50d089a3e0904b0fe7e2cf2d4fd37d427d64235a",
-                "reference": "50d089a3e0904b0fe7e2cf2d4fd37d427d64235a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0166aef76e066f0dd2adc2799bdadfa1635711e9",
+                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9",
                 "shasum": ""
             },
             "require": {
@@ -11421,8 +11997,11 @@
                 "static analysis"
             ],
             "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.10.6"
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
             },
             "funding": [
                 {
@@ -11438,7 +12017,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T16:55:12+00:00"
+            "time": "2023-03-24T10:28:16+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -11760,16 +12339,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.5",
+            "version": "9.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5"
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86e761949019ae83f49240b2f2123fb5ab3b2fc5",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b65d59a059d3004a040c16a82e07bbdf6cfdd115",
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115",
                 "shasum": ""
             },
             "require": {
@@ -11842,7 +12421,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.5"
+                "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.6"
             },
             "funding": [
                 {
@@ -11858,20 +12438,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T06:34:10+00:00"
+            "time": "2023-03-27T11:43:46+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "0.15.21",
+            "version": "0.15.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "1cee8cc5d6d836e1bf9a3006d7b062adde3a6022"
+                "reference": "f4984ebd62b3613002869b0ddd6868261d62819e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/1cee8cc5d6d836e1bf9a3006d7b062adde3a6022",
-                "reference": "1cee8cc5d6d836e1bf9a3006d7b062adde3a6022",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f4984ebd62b3613002869b0ddd6868261d62819e",
+                "reference": "f4984ebd62b3613002869b0ddd6868261d62819e",
                 "shasum": ""
             },
             "require": {
@@ -11911,7 +12491,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.15.21"
+                "source": "https://github.com/rectorphp/rector/tree/0.15.23"
             },
             "funding": [
                 {
@@ -11919,7 +12499,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-06T11:44:29+00:00"
+            "time": "2023-03-22T15:22:45+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13425,16 +14005,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "11.2.10",
+            "version": "11.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/easy-coding-standard/easy-coding-standard.git",
-                "reference": "5fc343df9b86e154516ddf506f7fe0b421d7d5ef"
+                "reference": "d4159e06c0970e71a2a58d350160241e7cb3994b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/5fc343df9b86e154516ddf506f7fe0b421d7d5ef",
-                "reference": "5fc343df9b86e154516ddf506f7fe0b421d7d5ef",
+                "url": "https://api.github.com/repos/easy-coding-standard/easy-coding-standard/zipball/d4159e06c0970e71a2a58d350160241e7cb3994b",
+                "reference": "d4159e06c0970e71a2a58d350160241e7cb3994b",
                 "shasum": ""
             },
             "require": {
@@ -13442,7 +14022,8 @@
             },
             "conflict": {
                 "friendsofphp/php-cs-fixer": "<3.0",
-                "squizlabs/php_codesniffer": "<3.6"
+                "squizlabs/php_codesniffer": "<3.6",
+                "symplify/coding-standard": "<11.3"
             },
             "bin": [
                 "bin/ecs"
@@ -13458,9 +14039,15 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer",
+            "keywords": [
+                "Code style",
+                "automation",
+                "fixer",
+                "static analysis"
+            ],
             "support": {
                 "issues": "https://github.com/easy-coding-standard/easy-coding-standard/issues",
-                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/11.2.10"
+                "source": "https://github.com/easy-coding-standard/easy-coding-standard/tree/11.3.2"
             },
             "funding": [
                 {
@@ -13472,7 +14059,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-27T10:00:30+00:00"
+            "time": "2023-03-22T15:28:51+00:00"
         },
         {
             "name": "theseer/tokenizer",

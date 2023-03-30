@@ -11,6 +11,13 @@
 @import 'swiper/swiper.css';
 
 
+.read-more-content{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--read-more-line-clamp, 2);
+}
+
 .min-vh-50{
     min-height: 50vh!important;
 }
@@ -41,12 +48,8 @@ ul.nav li.active a {
     background-color: rgba(0,0,0,0.7);
 }
 
-.gallery-item{
-    margin-bottom: 20px;
-}
-
 .grid-sizer,
-.gallery-item { width: 20%; }
+.grid-item { width: 25%; margin-bottom: 20px; }
 
 .trix-button-group--file-tools,
 .trix-button--icon-attach,

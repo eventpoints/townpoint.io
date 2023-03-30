@@ -61,18 +61,6 @@
             "tests/bootstrap.php"
         ]
     },
-    "sensio/framework-extra-bundle": {
-        "version": "6.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "5.2",
-            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
-        },
-        "files": [
-            "config/packages/sensio_framework_extra.yaml"
-        ]
-    },
     "symfony/console": {
         "version": "6.1",
         "recipe": {
@@ -155,7 +143,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "0.3",
-            "ref": "7c7e63c36530052a174f28a6be4e451c4709be83"
+            "ref": "851667ac03fd113c5bd2215fb743974f6709bc62"
         },
         "files": [
             "config/packages/mercure.yaml"
@@ -378,5 +366,17 @@
     },
     "twig/extra-bundle": {
         "version": "v3.4.0"
+    },
+    "willdurand/geocoder-bundle": {
+        "version": "5.19",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "5.0",
+            "ref": "b272ad4fbfcd45a20e7cbfdc4ad1b0e27a62fd3b"
+        },
+        "files": [
+            "config/packages/bazinga_geocoder.yaml"
+        ]
     }
 }

@@ -72,8 +72,16 @@
                     <a href="{{ path('profile', {id: app.user.id}) }}"
                        class="btn btn-outline-primary d-flex justify-content-between align-items-center {{ app.request.attributes.get('_route') == 'profile' ? 'active' }}"
                        aria-current="true">
-                        <div class="fw-bold">{{ app.user.fullName|capitalize }}</div>
+                        <div class="fw-bold">{{ app.user.firstName|capitalize }}</div>
                         <div class="mdi mdi-account-circle-outline fs-3"></div>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ path('feed') }}"
+                       class="btn btn-outline-primary {{ app.request.attributes.get('_route') == 'feed' ? 'active' }} d-flex justify-content-between align-items-center"
+                       aria-current="true">
+                        <div class="fw-bold">{{ 'harth'|trans|capitalize }}</div>
+                        <div class="mdi mdi-fireplace fs-3"></div>
                     </a>
                 </div>
                 <div class="col-6">

@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use App\Entity\Auction\Auction;
-use App\Entity\Auction\Bid;
+use App\Entity\Auction\Offer;
 use App\Entity\Auction\Item;
 use App\Entity\Business\Business;
 use App\Entity\Event\Event;
@@ -15,6 +15,7 @@ use App\Entity\Event\EventRejection;
 use App\Entity\Event\EventRequest;
 use App\Entity\Group\Group;
 use App\Entity\Group\GroupRequest;
+use App\Entity\Sponsor\Sponsor;
 use App\Entity\Traits\ProfileTrait;
 use App\Enum\ReactionEnum;
 use App\Repository\UserRepository;
@@ -255,19 +256,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private null|Project $currentProject = null;
 
     /**
-     * @var Collection<int, Auction> $auctions
+     * @var Collection<int, Item> $items
      */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Auction::class, orphanRemoval: true)]
-    private Collection $auctions;
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Item::class, orphanRemoval: true)]
+    private Collection $items;
 
     /**
-     * @var Collection<int, Bid> $bids
+     * @var Collection<int, Offer> $bids
      */
-    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Bid::class)]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Offer::class)]
     private Collection $bids;
 
     #[ORM\Column(nullable: true)]
     private null|string $state = null;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Sponsor::class)]
+    private Collection $sponsorees;
+
+    #[ORM\Column(length: 255)]
+    private ?string $stripeToken = null;
 
     public function __construct()
     {
@@ -291,8 +298,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->bookmarks = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->projects = new ArrayCollection();
-        $this->auctions = new ArrayCollection();
+        $this->items = new ArrayCollection();
         $this->bids = new ArrayCollection();
+        $this->sponsorees = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -1143,28 +1151,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Auction>
+     * @return Collection<int, Item>
      */
-    public function getAuctions(): Collection
+    public function getItems(): Collection
     {
-        return $this->auctions;
+        return $this->items;
     }
 
-    public function addClassified(Auction $classified): self
+    public function addItem(Item $item): self
     {
-        if (! $this->auctions->contains($classified)) {
-            $this->auctions->add($classified);
-            $classified->setOwner($this);
+        if (! $this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setOwner($this);
         }
 
         return $this;
     }
 
-    public function removeClassified(Auction $classified): self
+    public function removeItem(Item $item): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->auctions->removeElement($classified) && $classified->getOwner() === $this) {
-            $classified->setOwner(null);
+        if ($this->items->removeElement($item) && $item->getOwner() === $this) {
+            $item->setOwner(null);
         }
 
         return $this;
@@ -1199,14 +1207,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Bid>
+     * @return Collection<int, Offer>
      */
     public function getBids(): Collection
     {
         return $this->bids;
     }
 
-    public function addBid(Bid $bid): self
+    public function addBid(Offer $bid): self
     {
         if (! $this->bids->contains($bid)) {
             $this->bids->add($bid);
@@ -1216,7 +1224,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeBid(Bid $bid): self
+    public function removeBid(Offer $bid): self
     {
         // set the owning side to null (unless already changed)
         if ($this->bids->removeElement($bid) && $bid->getOwner() === $this) {
@@ -1234,5 +1242,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setState(string $state): void
     {
         $this->state = $state;
+    }
+
+    /**
+     * @return Collection<int, Sponsor>
+     */
+    public function getSponsorees(): Collection
+    {
+        return $this->sponsorees;
+    }
+
+    public function addSponsoree(Sponsor $sponsoree): self
+    {
+        if (!$this->sponsorees->contains($sponsoree)) {
+            $this->sponsorees->add($sponsoree);
+            $sponsoree->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSponsoree(Sponsor $sponsoree): self
+    {
+        if ($this->sponsorees->removeElement($sponsoree)) {
+            // set the owning side to null (unless already changed)
+            if ($sponsoree->getOwner() === $this) {
+                $sponsoree->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStripeToken(): ?string
+    {
+        return $this->stripeToken;
+    }
+
+    public function setStripeToken(string $stripeToken): self
+    {
+        $this->stripeToken = $stripeToken;
+
+        return $this;
     }
 }

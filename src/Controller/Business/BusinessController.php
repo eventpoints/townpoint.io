@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/business/business')]
+#[Route('/business')]
 class BusinessController extends AbstractController
 {
     #[Route('/', name: 'app_business_business_index', methods: ['GET'])]

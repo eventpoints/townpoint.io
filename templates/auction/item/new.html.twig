@@ -6,23 +6,11 @@
             <div class="col-12 col-md-12">
                 {{ include('partials/_nav.html.twig') }}
             </div>
-            <div class="col-12 col-md-4">
-                <div class="card">
-                <div class="list-group list-group-flush">
-                    <div class="list-group-item h5">{{ 'auction-item-rules'|trans }}</div>
-                    <div class="list-group-item ">{{ 'auction-item-rule-common-sense'|trans }}</div>
-                    <div class="list-group-item ">{{ 'auction-item-rule-dimensions'|trans }}</div>
-                    <div class="list-group-item ">{{ 'auction-item-rule-price'|trans }}</div>
-                </div>
-                </div>
-            </div>
             <div class="col-12 col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="h5">{{ 'sell-item'|trans }}</div>
-                    {{ include('auction/item/_form.html.twig') }}
-                </div>
-            </div>
+                {{ component('auction_form', {
+                    form: itemForm,
+                    item: item.id ? item : null
+                }) }}
             </div>
         </div>
     </div>

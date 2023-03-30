@@ -3,9 +3,9 @@ import Masonry from 'masonry-layout'
 
 export default class extends Controller {
     connect() {
-        new Masonry( this.element, {
+        const masonry = new Masonry( this.element, {
             columnWidth: '.grid-sizer',
-            itemSelector: '.gallery-item',
+            itemSelector: '.grid-item',
             percentPosition: true,
             gutter: 20
         });

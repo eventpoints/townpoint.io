@@ -9,6 +9,7 @@ use App\Entity\Group\GroupEvent;
 use App\Entity\User;
 use App\Repository\Event\EventRepository;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -128,7 +129,7 @@ class Event
         return $this;
     }
 
-    public function getStartAt(): null|DateTimeImmutable
+    public function getStartAt(): null|DateTimeImmutable|CarbonImmutable
     {
         return $this->startAt;
     }
@@ -140,7 +141,7 @@ class Event
         return $this;
     }
 
-    public function getEndAt(): null|DateTimeImmutable
+    public function getEndAt(): null|DateTimeImmutable|CarbonImmutable
     {
         return $this->endAt;
     }
@@ -152,7 +153,7 @@ class Event
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable|CarbonImmutable
     {
         return $this->createdAt;
     }

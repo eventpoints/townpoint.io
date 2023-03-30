@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Form\Payment;
 
@@ -21,23 +21,39 @@ class CardFormType extends AbstractType
     {
         $builder->add('holder', TextType::class, [
             'label' => 'form.credit_card.holder',
+            'attr' => [
+                'name' => ''
+            ],
             'row_attr' => [
                 'class' => 'form-floating mb-3',
             ],
         ])
             ->add('number', TextType::class, [
                 'label' => 'form.credit_card.number',
+                'attr' => [
+                    'name' => ''
+                ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
             ])
             ->add('securityCode', TextType::class, [
                 'label' => 'form.credit_card.security_code',
+                'attr' => [
+                    'name' => ''
+                ],
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('expireAt', MonthYearType::class);
+            ->add('expireAt', MonthYearType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+                'attr' => [
+                    'name' => ''
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

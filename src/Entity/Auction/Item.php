@@ -7,8 +7,9 @@ namespace App\Entity\Auction;
 use App\Entity\Bookmark;
 use App\Entity\Comment;
 use App\Entity\Image;
+use App\Entity\User;
 use App\Repository\ItemRepository;
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,8 +18,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
+use Bazinga\GeocoderBundle\Mapping\Annotations as Geocoder;
+
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
+#[ORM\Index(columns: ['title', 'price'], name: 'item_index')]
+#[Geocoder\Geocodeable]
 class Item
 {
     #[ORM\Id]
@@ -43,6 +48,12 @@ class Item
 
     #[ORM\Column]
     private DateTimeImmutable $createdAt;
+
+    #[ORM\Column]
+    private DateTimeImmutable $startAt;
+
+    #[ORM\Column]
+    private DateTimeImmutable $endAt;
 
     #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
@@ -73,26 +84,44 @@ class Item
     #[ORM\OneToMany(mappedBy: 'item', targetEntity: Bookmark::class)]
     private Collection $bookmarks;
 
-    #[ORM\ManyToOne(inversedBy: 'items')]
-    #[ORM\JoinColumn(nullable: false)]
-    private null|Auction $auction = null;
-
     /**
-     * @var Collection<int, Bid>
+     * @var Collection<int, Offer>
      */
-    #[ORM\OneToMany(mappedBy: 'item', targetEntity: Bid::class)]
-    private Collection $bids;
+    #[ORM\OneToMany(mappedBy: 'item', targetEntity: Offer::class)]
+    private Collection $offers;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\ManyToOne]
+    private null|Offer $offer = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private null|string $status = null;
+
+    #[Assert\NotBlank]
+    #[Geocoder\Address]
+    #[ORM\Column(length: 255, nullable: true)]
+    private null|string $address = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Geocoder\Longitude]
+    private null|float $longitude = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Geocoder\Latitude]
+    private null|float $latitude = null;
+
+    #[ORM\ManyToOne(inversedBy: 'classifieds')]
+    #[ORM\JoinColumn(nullable: false)]
+    private null|User $owner = null;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->startAt = CarbonImmutable::now()->addDay()->toDateTimeImmutable();
+        $this->endAt = CarbonImmutable::now()->addWeek()->toDateTimeImmutable();
         $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->bookmarks = new ArrayCollection();
-        $this->bids = new ArrayCollection();
+        $this->offers = new ArrayCollection();
     }
 
     public function getId(): null|Uuid
@@ -148,14 +177,9 @@ class Item
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): null|DateTimeImmutable|CarbonImmutable
     {
         return $this->createdAt;
-    }
-
-    public function getCreatedAtAgo(): ?string
-    {
-        return Carbon::parse($this->createdAt)->diffForHumans();
     }
 
     public function setCreatedAt(DateTimeImmutable $createdAt): self
@@ -285,40 +309,28 @@ class Item
         return $this;
     }
 
-    public function getAuction(): ?Auction
-    {
-        return $this->auction;
-    }
-
-    public function setAuction(?Auction $auction): self
-    {
-        $this->auction = $auction;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Bid>
+     * @return Collection<int, Offer>
      */
-    public function getBids(): Collection
+    public function getOffers(): Collection
     {
-        return $this->bids;
+        return $this->offers;
     }
 
-    public function addBid(Bid $bid): self
+    public function addBid(Offer $bid): self
     {
-        if (! $this->bids->contains($bid)) {
-            $this->bids->add($bid);
+        if (! $this->offers->contains($bid)) {
+            $this->offers->add($bid);
             $bid->setItem($this);
         }
 
         return $this;
     }
 
-    public function removeBid(Bid $bid): self
+    public function removeBid(Offer $bid): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->bids->removeElement($bid) && $bid->getItem() === $this) {
+        if ($this->offers->removeElement($bid) && $bid->getItem() === $this) {
             $bid->setItem(null);
         }
 
@@ -336,4 +348,110 @@ class Item
 
         return $this;
     }
+
+    /**
+     * @return Offer|null
+     */
+    public function getOffer(): ?Offer
+    {
+        return $this->offer;
+    }
+
+    /**
+     * @param Offer|null $offer
+     */
+    public function setOffer(?Offer $offer): void
+    {
+        $this->offer = $offer;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(float $longitude): self
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(float $latitude): self
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string|null $address
+     */
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getStartAt(): null|DateTimeImmutable|CarbonImmutable
+    {
+        return $this->startAt;
+    }
+
+    /**
+     * @param DateTimeImmutable $startAt
+     */
+    public function setStartAt(DateTimeImmutable $startAt): void
+    {
+        $this->startAt = $startAt;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getEndAt(): null|DateTimeImmutable|CarbonImmutable
+    {
+        return $this->endAt;
+    }
+
+    /**
+     * @param DateTimeImmutable $endAt
+     */
+    public function setEndAt(DateTimeImmutable $endAt): void
+    {
+        $this->endAt = $endAt;
+    }
+
+    public function getIsActive() : bool
+    {
+        return CarbonImmutable::now()->isBetween($this->startAt, $this->endAt);
+    }
+
 }

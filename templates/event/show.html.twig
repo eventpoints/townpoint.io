@@ -5,77 +5,77 @@
 {% block body %}
     <div class="container">
         <div class="row g-3 justify-content-center">
-            <div class="col-12 col-md-6">
-
+            <div class="col-12 col-md-3">
                 <div class="card mb-3">
-                    <div class="card-body">
-                        <h1>{{ event.title }}</h1>
-                        <div class="d-flex align-items-start justify-content-between mb-3">
-                            <div class="lead">
-                                <div class="d-flex align-items-center">
-                                    <span class="mdi lh-1 mdi-ray-start fs-4 me-2"></span>
-                                    <span class="lh-1"> {{ event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <span class="mdi lh-1 mdi-ray-end fs-4 me-2"></span>
-                                    <span class="lh-1"> {{ event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <span class="mdi lh-1 mdi-ray-start-end fs-4 me-2"></span>
-                                    <span class="lh-1 lead"> {{ event.duration }} hours</span>
-                                </div>
-                            </div>
+                    <div class="card-header bg-grey">
+                        <div class="h5 m-0 text-primary">{{ event.title }}</div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="mdi lh-1 mdi-ray-start fs-4"></span>
+                            <span class="lh-1"> {{ event.startAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                        </div>
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="mdi lh-1 mdi-ray-end fs-4"></span>
+                            <span class="lh-1"> {{ event.endAt|format_datetime('short', 'short', 'dd.MM.yy @H:mm', app.user.timezone) }}</span>
+                        </div>
+                        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <span class="mdi lh-1 mdi-ray-start-end fs-4"></span>
+                            <span class="lh-1"> {{ event.duration }} hours</span>
                         </div>
                         {% if event.isUserAttending(app.user) %}
-                            <div class="d-flex" data-controller="copy"
-                                 data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
-                                <div class="h5 me-2" data-copy-target="source">
-                                    {{ event.address }}
-                                </div>
-                                <a class="btn-link link-primary" type="button"
-                                   data-action="copy#copy"
-                                   data-copy-target="button">
-                                <span class="mdi mdi-content-copy h5" data-bs-toggle="tooltip" data-bs-placement="right"
+                            <div class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                                <div class="mdi mdi-map-marker fs-4"></div>
+                                <div class="d-flex align-items-center justify-content-between" data-controller="copy"
+                                     data-copy-success-content="<span class='mdi mdi-check-bold text-success'></span>">
+                                    <div class="me-2" data-copy-target="source">
+                                        {{ event.address }}
+                                    </div>
+                                    <a class="btn-link link-primary" type="button"
+                                       data-action="copy#copy"
+                                       data-copy-target="button">
+                                <span class="mdi mdi-content-copy" data-bs-toggle="tooltip"
+                                      data-bs-placement="right"
                                       data-bs-title="{{ 'copy'|trans }}"></span>
-                                </a>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if app.user == event.owner %}
+                            <div class="list-group-item list-group-item-action text-center">
+                                {{ 'you-own-this-event'|trans }}
+                            </div>
+                        {% elseif event.isUserAttending(app.user) %}
+                            <div class="list-group-item list-group-item-action">
+                                {{ 'attending-event'|trans }}
+                            </div>
+                        {% elseif event.hasBeenInvited(app.user) %}
+                            <a class="list-group-item list-group-item-action"
+                               href="{{ path('invitations') }}">{{ 'respond-to-event-invitation'|trans }}</a>
+                        {% elseif event.hasUserRequested(app.user) %}
+                            <div class="list-group-item list-group-item-action">
+                                {{ 'request-pending'|trans }}
+                            </div>
+                        {% elseif event.hasBeenRejected(app.user) %}
+                            <div class="list-group-item list-group-item-action">
+                                {{ 'request-rejected'|trans }}
+                            </div>
+                        {% elseif event.userRejectedInvitation(app.user) %}
+                            <div class="list-group-item list-group-item-action">
+                                {{ 'invitation-declined'|trans }}
+                            </div>
+                        {% else %}
+                            <div class="list-group-item list-group-item-action">
+                                <a href="{{ path('create_event_request', {id: event.id}) }}"
+                                   class="btn btn-outline-primary w-100">{{ 'request-invite'|trans }}</a>
                             </div>
                         {% endif %}
                     </div>
-
-                    {% if app.user == event.owner %}
-                    {% elseif event.isUserAttending(app.user) %}
-                        <div class="card-footer text-center">
-                            {{ 'attending-event'|trans }}
-                        </div>
-                    {% elseif event.hasBeenInvited(app.user) %}
-                        <div class="card-footer text-center">
-                            <a class="link-dark"
-                               href="{{ path('invitations') }}">{{ 'respond-to-event-invitation'|trans }}</a>
-                        </div>
-                    {% elseif event.hasUserRequested(app.user) %}
-                        <div class="card-footer text-center">
-                            {{ 'request-pending'|trans }}
-                        </div>
-                    {% elseif event.hasBeenRejected(app.user) %}
-                        <div class="card-footer text-center">
-                            {{ 'request-rejected'|trans }}
-                        </div>
-                    {% elseif event.userRejectedInvitation(app.user) %}
-                        <div class="card-footer text-center text-muted">
-                            {{ 'invitation-declined'|trans }}
-                        </div>
-                    {% else %}
-                        <div class="card-footer">
-                            <a href="{{ path('create_event_request', {id: event.id}) }}"
-                               class="btn btn-outline-primary w-100">{{ 'request-invite'|trans }}</a>
-                        </div>
-                    {% endif %}
                 </div>
-
+            </div>
+            <div class="col-12 col-md-6">
                 <div class="card mb-3">
-                    <div class="card-header">
+                    <div class="card-header bg-grey">
                         <div class="nav nav-pills" id="event-participants-tab" role="tablist">
                             <div class="nav-item" role="presentation">
                                 <button class="nav-link active" id="participants-tab" data-bs-toggle="pill"
@@ -85,7 +85,6 @@
                                     {{ 'participants'|trans|capitalize }}
                                 </button>
                             </div>
-
                             {% if event.owner == app.user %}
                                 <div class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-requests-tab" data-bs-toggle="pill"
@@ -95,7 +94,6 @@
                                     </button>
                                 </div>
                             {% endif %}
-
                             {% if event.owner == app.user %}
                                 <div class="nav-item" role="presentation">
                                     <button class="nav-link" id="event-invitations-tab" data-bs-toggle="pill"
@@ -105,7 +103,6 @@
                                     </button>
                                 </div>
                             {% endif %}
-
                             {% if event.owner == app.user or event.userRejectedInvitation(app.user) or event.isUserAttending(app.user) or event.hasBeenInvited(app.user) %}
                                 <div class="nav-item" role="presentation">
                                     <button class="nav-link" id="pills-requests-tab" data-bs-toggle="pill"
@@ -131,7 +128,7 @@
                                                      class="rounded-circle me-3"/>
                                                 <div class="h5 m-0">{{ eventUser.owner.fullName }}</div>
                                             </a>
-                                            {% if app.user == eventUser.owner %}
+                                            {% if eventUser.event.owner == eventUser.owner %}
                                                 <span class="mdi mdi-account-supervisor-circle fs-3"></span>
                                             {% endif %}
                                         </div>
@@ -185,7 +182,7 @@
                                         </div>
                                     {% else %}
                                         <div class="list-group-item text-center text-muted">
-                                            {{ 'no-rejections'|trans }}
+                                            {{ 'no-declined-invitations-or-requests'|trans }}
                                         </div>
                                     {% endfor %}
                                     {{ knp_pagination_render(eventRejectionsPagination) }}
@@ -226,6 +223,17 @@
                                 </div>
                             </div>
                         {% endif %}
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header text-primary bg-grey">
+                        <div class="h5 m-0">{{ 'sponsorship'|trans }}</div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item list-group-item-action">
+                            {{ 'sponsorship-explainer'|trans }}
+                        </div>
                     </div>
                 </div>
 

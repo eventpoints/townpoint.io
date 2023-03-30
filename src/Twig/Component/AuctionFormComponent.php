@@ -5,7 +5,9 @@ declare(strict_types = 1);
 namespace App\Twig\Component;
 
 use App\Entity\Auction\Auction;
+use App\Entity\Auction\Item;
 use App\Form\AuctionFormType;
+use App\Form\ItemFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -20,10 +22,10 @@ class AuctionFormComponent extends AbstractController
     use DefaultActionTrait;
 
     #[LiveProp(fieldName: 'data')]
-    public null|Auction $classified = null;
+    public null|Item $item = null;
 
     protected function instantiateForm(): FormInterface
     {
-        return $this->createForm(AuctionFormType::class, $this->classified);
+        return $this->createForm(ItemFormType::class, $this->item);
     }
 }

@@ -1,0 +1,6 @@
+{{ form_start(form, {action: path('create_item_offer', {id: item.id})}) }}
+<div class="input-group">
+    {{ form_row(form.price) }}
+    <button type="submit" class="btn btn-outline-primary">{{ 'offer'|trans }}</button>
+</div>
+{{ form_end(form) }}

@@ -10,6 +10,8 @@ class FlashValueObject
 
     final public const TYPE_ERROR = 'error';
 
+    final public const TYPE_WARNING = 'warning';
+
     final public const TYPE_SUCCESS = 'success';
 
     final public const MESSAGE_SUCCESS_SAVED = 'all changes saved';

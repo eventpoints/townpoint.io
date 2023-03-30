@@ -2,6 +2,10 @@
 
 {% block title %}Payment{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="container">
         <div class="row justify-content-center g-4 mt-3">
@@ -147,45 +151,53 @@
                         </ul>
                     </div>
                     <div class="card-body">
-                        <h5>{{ 'add-payment-method'|trans }}</h5>
-                        {{ component('payment_card_form', {
-                            form: cardForm
-                        }) }}
+                        <h5>{{ 'payment-method'|trans }}</h5>
+                        <form id='checkout-form' method='post'
+                              action="{{ path('register_step_two') }}" {{ stimulus_controller('stripe_checkout') }}>
+                            <input {{ stimulus_target('stripe_checkout','stripeToken') }} type='hidden'
+                                                                                          name='stripeToken'/>
+                            <div {{ stimulus_target('stripe_checkout','cardElement') }} class="form-control"></div>
+                            <div class="text-end mt-3">
+                                <a {{ stimulus_target('stripe_checkout','submitBtn') }} {{ stimulus_action('stripe_checkout', 'click', 'getTokenAndSubmitForm') }}
+                                        class="btn btn-primary">{{ 'complete-registration'|trans }}</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="container-fluid">
+        <div class="bg-secondary text-white row py-3">
+            <div class="col mb-3">
+                <a href="{{ path('register_step_one') }}"
+                   class="d-flex mx-3 align-items-center mb-3 link-dark text-decoration-none">
+                    <img class="img-fluid" alt="logo" src="{{ asset('images/townpoint-logo-white-with-text.png') }}"/>
+                </a>
+                <p class="text-white text-center">© {{ 'now'|date('Y') }}</p>
+            </div>
 
-    <footer class="bg-secondary text-white row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 mt-5 border-top">
-        <div class="col mb-3">
-            <a href="{{ path('register_step_one') }}"
-               class="d-flex mx-3 align-items-center mb-3 link-dark text-decoration-none">
-                <img class="img-fluid" alt="logo" src="{{ asset('images/townpoint-logo-white-with-text.png') }}"/>
-            </a>
-            <p class="text-white text-center">© {{ 'now'|date('Y') }}</p>
+            <div class="col"></div>
+            <div class="col"></div>
+
+            <div class="col mb-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Goals</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Market</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Events</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Groups</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0"></a></li>
+                </ul>
+            </div>
+
+            <div class="col mb-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Privacy</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Terms & conditions</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Contact</a></li>
+                    <li class="nav-item mb-2"><a href="#" class="nav-link p-0">About us</a></li>
+                </ul>
+            </div>
         </div>
-
-        <div class="col"></div>
-        <div class="col"></div>
-
-        <div class="col mb-3">
-            <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Goals</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Market</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Events</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Groups</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0"></a></li>
-            </ul>
-        </div>
-
-        <div class="col mb-3">
-            <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Privacy</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Terms & conditions</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">Contact</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0">About us</a></li>
-            </ul>
-        </div>
-    </footer>
+    </div>
 {% endblock %}
