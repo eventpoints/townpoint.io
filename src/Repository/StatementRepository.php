@@ -6,6 +6,7 @@ use App\DataTransferObject\StatementFilterDto;
 use App\Entity\Statement;
 use App\Enum\StatementTypeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -65,6 +66,7 @@ class StatementRepository extends ServiceEntityRepository
         }
 
         $qb->setMaxResults(50);
+        $qb->orderBy('statement.createdAt', Order::Descending->value);
 
         return $qb->getQuery()->getResult();
     }

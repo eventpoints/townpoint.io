@@ -46,7 +46,7 @@ services:
         protocol: udp
 
   js-watch:
-    image: node:14
+    image: node:21
     volumes:
       - .:/app:cached
     working_dir: /app

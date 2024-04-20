@@ -21,7 +21,7 @@
                 <span class="badge rounded-pill text-bg-dark">{{ statement.type.value }}</span>
             </div>
         </div>
-        <div class="card-body bg-light">
+        <div class="card-body">
             <div>{{ statement.content|raw }}</div>
         </div>
         <div class="card-footer d-flex justify-content-between">
@@ -30,13 +30,13 @@
             }) }}>
                 <input type="hidden"
                        value="{{ url('show_statement', {id: statement.id}) }}" {{ stimulus_target('clipboard', 'source') }}>
-                <a {{ stimulus_action('clipboard', 'copy', 'click') }} class="btn btn-outline-primary"
+                <a {{ stimulus_action('clipboard', 'copy', 'click') }} class="btn btn-outline-dark rounded-pill"
                                                                        href="#">
                     <div class="mdi mdi-content-copy"></div>
                 </a>
             </div>
             <div>
-                <a class="btn btn-outline-primary"
+                <a class="btn btn-outline-dark rounded-pill"
                    href="{{ path('show_statement', {id: statement.id}) }}">
                     <div class="mdi mdi-arrow-right"></div>
                 </a>
