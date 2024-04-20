@@ -6,14 +6,16 @@ export default class extends Controller {
     }
 
     scrollToElement() {
-        const hash = window.location.hash;
+        document.addEventListener('htmx:load', function (event) {
+            const hash = window.location.hash;
 
-        if (hash) {
-            const id = hash.substring(1);
-            let el = document.getElementById(id)
-            el.scrollIntoView()
-            el.classList.add('shadow')
-        }
+            if (hash) {
+                const id = hash.substring(1);
+                let el = document.getElementById(id)
+                el.scrollIntoView()
+                el.classList.add('shadow')
+            }
+        });
     }
-    
+
 }
