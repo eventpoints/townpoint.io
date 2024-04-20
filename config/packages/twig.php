@@ -11,7 +11,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'default_path' => '%kernel.project_dir%/templates',
         'globals' => [
             'app_time' => service(ApplicationTimeService::class),
-            'supported_locales' => explode(',', (string) $_ENV['SUPPORTED_LOCALES']),
         ],
         'form_themes' => [
             'bootstrap_5_layout.html.twig',
