@@ -1,4 +1,4 @@
-FROM ghcr.io/eventpoints/php:main AS php
+FROM ghcr.io/eventpoints/php:main AS composer
 
 ENV APP_ENV="prod" \
     APP_DEBUG=0 \
@@ -6,14 +6,14 @@ ENV APP_ENV="prod" \
     PHP_EXPOSE_PHP="off" \
     PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
 
-RUN rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN mkdir -p var/cache var/log
 
-# Intentionally split into multiple steps to leverage docker layer caching
 COPY composer.json composer.lock symfony.lock ./
 
 RUN composer install --no-dev --prefer-dist --no-interaction --no-scripts
+
 
 FROM node:14 as js-builder
 
@@ -40,6 +40,7 @@ COPY . .
 RUN composer install --no-dev --no-interaction --classmap-authoritative
 RUN composer symfony:dump-env prod
 RUN chmod -R 777 var
+
 
 FROM ghcr.io/eventpoints/caddy:main AS caddy
 
