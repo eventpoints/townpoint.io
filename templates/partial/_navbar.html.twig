@@ -1,0 +1,45 @@
+<header class="p-3 mb-3 border-bottom">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+
+            {% if app.user %}
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ app.user.avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" style="">
+                        <li><a class="dropdown-item"
+                               href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}">{{ app.user.currentTown.name|title }}</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ path('user_account') }}">{{ app.user.fullName }}</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Sign out</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
+                    </li>
+                </ul>
+            {% endif %}
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            </ul>
+
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <span class="fw-bolder fs-3">town</span><span class="fw-light fs-3">point</span>
+            </a>
+
+        </div>
+    </div>
+</header>

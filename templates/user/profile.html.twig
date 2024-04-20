@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center mt-3">
+            <div class="col-12 col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img height="100" width="100" class="rounded-circle mb-3 border"
+                                 src="{{ app.user.avatar }}"/>
+                            <div class="bold fs-5 fw-light">{{ user.fullName }}</div>
+                            <div class="text-muted small">@{{ user.handle }}</div>
+                        </div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% if user.originTown %}
+                            <a href="#" class="list-group-item list-group-item-action">
+                                {{ user.originTown.__toString }}
+                            </a>
+                        {% endif %}
+                        <a href="{{ path('show_town', { continent: user.currentTown.country.continent.value, country_slug: user.currentTown.country.slug, town_slug: user.currentTown.slug}) }}" class="list-group-item list-group-item-action">
+                            {{ user.currentTown.__toString|title }}
+                        </a>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <button type="button" class="btn btn-outline-primary">
+                            <div class="mdi mdi-send fs-4"></div>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary">
+                            <div class="mdi mdi-send fs-4"></div>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger">
+                            <div class="mdi mdi-flag fs-4"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

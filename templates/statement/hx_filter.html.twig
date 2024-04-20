@@ -1,0 +1,133 @@
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="form-floating mb-3">
+            <input name="keyword"
+                   hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+                   hx-trigger="keyup changed delay:500ms"
+                   hx-target="#statements-results"
+                   hx-indicator=".htmx-indicator"
+                   type="text" class="form-control" id="statement-filter-keyword" placeholder="search">
+            <label for="floatingInput">search</label>
+        </div>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="event"
+               id="event"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="event">{{ 'event'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               id="classified"
+               value="classified"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="classified">{{ 'classified'|trans }}</label>
+
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               id="announcement"
+               value="announcement"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="announcement">{{ 'announcement'|trans }}</label>
+
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="recommendation"
+               id="recommendation"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="recommendation">{{ 'recommendation'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="lost_and_found"
+               id="lost_and_found"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="lost_and_found">{{ 'lost_and_found'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="question"
+               id="question"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="question">{{ 'question'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="item_for_sale"
+               id="item_for_sale"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="item_for_sale">{{ 'item_for_sale'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="looking_to_buy"
+               id="looking_to_buy"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="looking_to_buy">{{ 'looking_to_buy'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="local_business_service"
+               id="local_business_service"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="local_business_service">{{ 'local_business_service'|trans }}</label>
+
+    </div>
+</div>

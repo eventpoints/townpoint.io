@@ -1,0 +1,47 @@
+{% for statement in statements %}
+    <div class="card mb-3" id="{{ statement.id }}">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="d-flex justify-content-start align-items-start">
+                    <a class="link-dark text-decoration-none"
+                       href="{{ path('user_profile', {handle: statement.owner.handle}) }}">
+                        <img height="35" class="rounded-circle border me-2"
+                             src="{{ statement.owner.avatar }}"/>
+                    </a>
+                    <div>
+                        <div>
+                            <a class="link-dark text-decoration-none"
+                               href="{{ path('user_profile', {handle: statement.owner.handle}) }}">
+                                {{ statement.owner.fullName }}
+                            </a>
+                        </div>
+                        <div>{{ statement.createdAt.diffForHumans }}</div>
+                    </div>
+                </div>
+                <span class="badge rounded-pill text-bg-dark">{{ statement.type.value }}</span>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <div>{{ statement.content|raw }}</div>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <div class="d-flex justify-content-between" {{ stimulus_controller('clipboard', {
+                successContent: '<div class="mdi mdi-check"></div>'|raw
+            }) }}>
+                <input type="hidden"
+                       value="{{ url('show_statement', {id: statement.id}) }}" {{ stimulus_target('clipboard', 'source') }}>
+                <a {{ stimulus_action('clipboard', 'copy', 'click') }} class="btn btn-outline-primary"
+                                                                       href="#">
+                    <div class="mdi mdi-content-copy"></div>
+                </a>
+            </div>
+            <div>
+                <a class="btn btn-outline-primary"
+                   href="{{ path('show_statement', {id: statement.id}) }}">
+                    <div class="mdi mdi-arrow-right"></div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+{% endfor %}

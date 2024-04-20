@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center g-2">
+            <div class="col-12 col-md-8">
+
+                <div class="text-end mb-3">
+                    <a class="btn btn-primary" href="{{ path('create_debate') }}">{{ 'create-debate'|trans }}</a>
+                </div>
+
+                {% for debate in debates %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="fs-3">
+                                {{ debate.resolution }}
+                            </div>
+                        </div>
+                        <a class="stretched-link" href="{{ path('show_debate', {id: debate.id}) }}"></a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

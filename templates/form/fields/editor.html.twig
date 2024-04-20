@@ -1,0 +1,41 @@
+{% block editor_widget %}
+    <div {{ stimulus_controller('editor') }}>
+        <div class="d-flex justify-content-between">
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button {{ stimulus_action('editor', 'toggleBold', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-format-bold fs-4"></span>
+                </button>
+                <button {{ stimulus_action('editor', 'toggleItalic', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-format-italic fs-4"></span>
+                </button>
+                <button {{ stimulus_action('editor', 'toggleStrikethrough', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-format-strikethrough fs-4"></span>
+                </button>
+                <button {{ stimulus_action('editor', 'toggleH3', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-format-size fs-4"></span>
+                </button>
+            </div>
+
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button {{ stimulus_action('editor', 'createOrderedList', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-format-list-numbered fs-4"></span>
+                </button>
+                <button {{ stimulus_action('editor', 'createUnorderedList', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-format-list-bulleted fs-4"></span>
+                </button>
+                <button {{ stimulus_action('editor', 'insertCodeBlock', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-code-tags fs-4"></span>
+                </button>
+            </div>
+
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button {{ stimulus_action('editor', 'addUrl', 'click') }} type="button" class="btn btn-outline-primary">
+                    <span class="mdi mdi-link fs-4"></span>
+                </button>
+            </div>
+        </div>
+        <input type="hidden" {{ stimulus_target('editor', 'output') }} id="{{ form.vars.id }}" name="{{ form.vars.full_name }}"
+               value="{{ form.vars.value }}" />
+        <div class="editor-textarea p-2 my-3 border border-secondary rounded" {{ stimulus_target('editor', 'editor') }} contenteditable="true"></div>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center mt-3">
+            <div class="col-12 col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <img class="rounded-circle border border-2" height="100" width="100"
+                                     src="{{ user.avatar }}"/>
+                            </div>
+                            <div>
+                                <div class="fw-bold fs-3">{{ user.fullName }}</div>
+                                <div class="text-muted">@{{ user.handle }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if user == app.user %}
+
+                        {{ component('account_basics_component') }}
+
+                    {% else %}
+                        <div class="card-body">{{ user.autobio }}</div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-end">
+                                <a class="btn btn-outline-primary" href="#">
+                                    <div class="mdi mdi-send fs-3"></div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

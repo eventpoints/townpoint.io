@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-5">
+
+                <a class="btn btn-outline-primary mb-3" href="{{ path('show_town', { continent: statement.town.country.continent.value, country_slug: statement.town.country.slug, town_slug: statement.town.slug, _fragment: statement.id}) }}" >
+                    <div class="mdi mdi-arrow-left"></div>
+                </a>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="d-flex justify-content-start align-items-start">
+                                <img height="35" class="rounded-circle me-2" src="{{ statement.owner.avatar }}"/>
+                                <div>
+                                    <div>{{ statement.owner.fullName }}</div>
+                                    <div>{{ statement.createdAt.diffForHumans }}</div>
+                                </div>
+                            </div>
+                            <span class="badge rounded-pill text-bg-dark">{{ statement.type.value }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div>{{ statement.content|raw }}</div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

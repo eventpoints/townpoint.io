@@ -1,0 +1,15 @@
+<div {{ attributes }}>
+    <div class="card-body">
+        {{ form_start(form) }}
+        {{ form_row(form.firstName) }}
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.country) }}
+        {% if form.currentTown is defined %}
+            {{ form_row(form.currentTown) }}
+        {% endif %}
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">{{ 'save'|trans }}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container" {{ stimulus_controller('scroll-to') }}>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-5">
+
+                <nav aria-label="breadcrumb">
+                    <div class="breadcrumb">
+                        <div class="breadcrumb-item">
+                            <a href="{{ path('show_earth') }}">{{ 'earth'|trans|title }}</a>
+                        </div>
+                        <div class="breadcrumb-item">
+                            <a href="{{ path('show_continent', {continent: continent.value}) }}">{{ continent.value|title }}</a>
+                        </div>
+                        <div class="breadcrumb-item">
+                            <a href="{{ path('show_country', {continent: app.user.currentTown.country.continent.value, country_slug: town.country.slug}) }}">{{ town.country.name|title }}</a>
+                        </div>
+                        <div class="breadcrumb-item active" aria-current="page">
+                            <a href="{{ path('show_town', {continent: app.user.currentTown.country.continent.value, country_slug: town.country.slug, town_slug: town.slug}) }}">{{ town.name|title }}</a>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="card mb-3">
+                    {{ form_start(statementForm) }}
+                    <div class="card-body">
+                        {{ form_row(statementForm.content) }}
+                        {{ form_row(statementForm.type) }}
+                    </div>
+                    <div class="card-footer text-end">
+                        <button class="btn btn-primary" type="submit">{{ 'publish'|trans }}</button>
+                    </div>
+                    {{ form_end(statementForm) }}
+                </div>
+
+
+                {{ include('statement/hx_filter.html.twig') }}
+
+                <div id="statements-results" hx-get="{{ path('htmx_statements', {town_slug: town.slug}) }}">
+                    <div class="htmx-indicator my-3 d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
