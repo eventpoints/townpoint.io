@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +37,7 @@ class CustomAuthenticator extends AbstractLoginFormAuthenticator
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
             [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),            ]
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')), ]
         );
     }
 
@@ -46,8 +47,15 @@ class CustomAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('create_event', [
-            'step' => 'details',
+        $user = $token->getUser();
+        if (! $user instanceof User) {
+            return new RedirectResponse($this->urlGenerator->generate('app_login'));
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('show_town', [
+            'continent' => $user->getCurrentTown()->getCountry()->getContinent()->value,
+            'country_slug' => $user->getCurrentTown()->getCountry()->getSlug(),
+            'town_slug' => $user->getCurrentTown()->getSlug(),
         ]));
     }
 

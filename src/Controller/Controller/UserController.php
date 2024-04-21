@@ -19,14 +19,14 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/account', name: 'user_account')]
-    public function index(#[CurrentUser] User $currentUser, Request $request): Response
+    public function account(#[CurrentUser] User $currentUser, Request $request): Response
     {
         $userAccountForm = $this->createForm(UserAccountFormType::class, $currentUser);
         $userAccountForm->handleRequest($request);
         if ($userAccountForm->isSubmitted() && $userAccountForm->isValid()) {
             $this->userRepository->save($currentUser, true);
             return $this->redirectToRoute('user_profile', [
-                'id' => $currentUser->getId(),
+                'handle' => $currentUser->getHandle(),
             ]);
         }
 

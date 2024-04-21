@@ -3,9 +3,15 @@
         {{ form_start(form) }}
         {{ form_row(form.firstName) }}
         {{ form_row(form.lastName) }}
-        {{ form_row(form.country) }}
+        {{ form_row(form.autobio) }}
+        {{ form_row(form.currentCountry) }}
         {% if form.currentTown is defined %}
             {{ form_row(form.currentTown) }}
+        {% endif %}
+
+        {{ form_row(form.originCountry) }}
+        {% if form.originTown is defined %}
+            {{ form_row(form.originTown) }}
         {% endif %}
         <div class="text-end">
             <button type="submit" class="btn btn-primary">{{ 'save'|trans }}</button>

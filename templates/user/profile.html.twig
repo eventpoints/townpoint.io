@@ -9,19 +9,34 @@
                         <div class="text-center">
                             <img height="100" width="100" class="rounded-circle mb-3 border"
                                  src="{{ app.user.avatar }}"/>
-                            <div class="bold fs-5 fw-light">{{ user.fullName }}</div>
+                            <div class="bold fs-4 fw-light">{{ user.fullName }}</div>
                             <div class="text-muted small">@{{ user.handle }}</div>
                         </div>
                     </div>
                     <div class="list-group list-group-flush">
-                        {% if user.originTown %}
-                            <a href="#" class="list-group-item list-group-item-action">
-                                {{ user.originTown.__toString }}
-                            </a>
+                        {% if user.autobio %}
+                            <div class="list-group-item text-center lead">
+                                {{ user.autobio }}
+                            </div>
                         {% endif %}
-                        <a href="{{ path('show_town', { continent: user.currentTown.country.continent.value, country_slug: user.currentTown.country.slug, town_slug: user.currentTown.slug}) }}" class="list-group-item list-group-item-action">
-                            {{ user.currentTown.__toString|title }}
-                        </a>
+
+
+                        <div class="list-group-item border-0 p-0">
+                            <div class="list-group  list-group-flush list-group-horizontal">
+                                {% if user.originTown %}
+                                    <a href="#" class="list-group-item text-center border-0 list-group-item-action">
+                                        <div>from</div>
+                                        <div>{{ user.originTown.__toString|title }}</div>
+                                    </a>
+                                {% endif %}
+                                <a href="{{ path('show_town', { continent: user.currentTown.country.continent.value, country_slug: user.currentTown.country.slug, town_slug: user.currentTown.slug}) }}"
+                                   class="list-group-item text-center border-0 list-group-item-action">
+                                    <div>in</div>
+                                    <div>{{ user.currentTown.__toString|title }}</div>
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <button type="button" class="btn btn-outline-primary">

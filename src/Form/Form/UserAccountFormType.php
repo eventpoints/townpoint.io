@@ -40,7 +40,12 @@ class UserAccountFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('country', EntityType::class, [
+            ->add('autobio', TextType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+            ])
+            ->add('currentCountry', EntityType::class, [
                 'mapped' => false,
                 'class' => Country::class,
                 'data' => $user->getCurrentTown()->getCountry(),
@@ -49,11 +54,34 @@ class UserAccountFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->addDependent('currentTown', 'country', function (DependentField $field, null|Country $country) use ($user): void {
+            ->addDependent('currentTown', 'currentCountry', function (DependentField $field, null|Country $country) use ($user): void {
                 $field->add(EntityType::class, [
                     'class' => Town::class,
                     'placeholder' => 'city',
                     'data' => $user->getCurrentTown(),
+                    'choices' => $country?->getTowns(),
+                    'choice_label' => fn (Town $town): string => ucfirst($town->getName()),
+                    'row_attr' => [
+                        'class' => 'form-floating mb-3',
+                    ],
+                ]);
+            })
+            ->add('originCountry', EntityType::class, [
+                'mapped' => false,
+                'required' => false,
+                'class' => Country::class,
+                'data' => $user->getOriginTown()?->getCountry(),
+                'choice_label' => 'name',
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+            ])
+            ->addDependent('originTown', 'originCountry', function (DependentField $field, null|Country $country) use ($user): void {
+                $field->add(EntityType::class, [
+                    'class' => Town::class,
+                    'required' => false,
+                    'placeholder' => 'city',
+                    'data' => $user->getOriginTown(),
                     'choices' => $country?->getTowns(),
                     'choice_label' => fn (Town $town): string => ucfirst($town->getName()),
                     'row_attr' => [
