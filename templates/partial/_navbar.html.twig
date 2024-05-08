@@ -1,23 +1,40 @@
-<nav class="navbar navbar-expand mb-3">
-    <div class="container-fluid">
-        <div class="navbar-nav align-items-center">
-            {% if app.user %}
-                <a class="nav-link" href="{{ path('user_profile', {handle: app.user.handle}) }}"><img
-                            src="{{ app.user.avatar }}" class="rounded-circle border {{ app.request.attributes.get('_route') == 'user_profile' ? "shadow" }}" height="30"/></a>
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
-                   href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}"><span
-                            class="mdi mdi-town-hall fs-2"></span></a>
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'user_account' ? "active" }}" href="{{ path('user_account') }}"><span class="mdi mdi-account-circle fs-2"></span></a>
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}" href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
-                <a class="nav-link link-danger" href="{{ path('app_logout') }}"><span class="mdi mdi-exit-to-app fs-2"></span></a>
-            {% else %}
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? "active" }}" aria-current="page" href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_register' ? "active" }}" aria-current="page" href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
-            {% endif %}
+<div class="d-flex justify-content-center">
+    <a href="#" class="navbar-brand d-flex align-items-center my-3">
+        <img class="me-2" height="30" width="30" src="{{ asset('images/app/logo.png') }}"/>
+        <span class="fw-bolder fs-2">town</span><span class="fw-light fs-2">point</span>
+    </a>
+</div>
+
+{% if app.user %}
+    <nav class="navbar border-bottom nav-justified mb-3">
+        <div class="container">
+            <a class="nav-link" href="{{ path('user_profile', {handle: app.user.handle}) }}"><img
+                        src="{{ app.user.avatar }}"
+                        class="rounded-circle border {{ app.request.attributes.get('_route') == 'user_profile' ? "shadow" }}"
+                        height="30"/></a>
+            <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
+               href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}"><span
+                        class="mdi mdi-town-hall fs-2"></span></a>
+            <a class="nav-link {{ app.request.attributes.get('_route') == 'user_account' ? "active" }}"
+               href="{{ path('user_account') }}"><span class="mdi mdi-account-circle fs-2"></span></a>
+            <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}"
+               href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
+            <a class="nav-link link-danger" href="{{ path('app_logout') }}"><span
+                        class="mdi mdi-exit-to-app fs-2"></span></a>
+
         </div>
-        <a href="#" class="navbar-brand d-flex align-items-center ">
-            <img class="me-2" height="30" width="30" src="{{ asset('images/app/logo.png') }}" />
-            <span class="fw-bolder fs-2">town</span><span class="fw-light fs-2">point</span>
-        </a>
-    </div>
-</nav>
+    </nav>
+{% else %}
+    <nav class="navbar navbar-expand border-bottom">
+        <div class="container">
+            <div class="navbar-nav justify-content-center">
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? "active" }}"
+                   aria-current="page"
+                   href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_register' ? "active" }}"
+                   aria-current="page"
+                   href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
+            </div>
+        </div>
+    </nav>
+{% endif %}
