@@ -3,6 +3,8 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
+use Carbon\CarbonImmutable;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +25,8 @@ class CustomAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator
+        private UrlGeneratorInterface $urlGenerator,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -51,6 +54,9 @@ class CustomAuthenticator extends AbstractLoginFormAuthenticator
         if (! $user instanceof User) {
             return new RedirectResponse($this->urlGenerator->generate('app_login'));
         }
+
+        $user->setLastActiveAt(new CarbonImmutable());
+        $this->userRepository->save(entity: $user, flush: true);
 
         return new RedirectResponse($this->urlGenerator->generate('show_town', [
             'continent' => $user->getCurrentTown()->getCountry()->getContinent()->value,

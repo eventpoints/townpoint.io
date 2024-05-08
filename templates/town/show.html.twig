@@ -4,9 +4,28 @@
     <div class="container" {{ stimulus_controller('scroll-to') }}>
         <div class="row justify-content-center">
             <div class="col-12 col-md-3">
-                <div class="sticky-top top-0">
+                <div class="sticky-top top-0 z-2">
                     {{ include('statement/hx_filter.html.twig') }}
                 </div>
+
+                <div class="list-group">
+                    <div class="list-group-item">
+                        recently online
+                    </div>
+                    {% for user in activeUsers %}
+                        <a href="{{ path('user_profile', { handle: user.handle }) }}"
+                           class="list-group-item list-group-item-action d-flex justify-content-start align-items-center">
+                            <div>
+                                <img src="{{ user.avatar }}" height="50" class="border rounded-circle me-3"/>
+                            </div>
+                            <div>
+                                <div class="fw-bold">{{ user.firstName }}</div>
+                                <div>{{ user.lastActiveAt.diffForHumans }}</div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
             </div>
             <div class="col-12 col-md-5">
 
@@ -35,7 +54,7 @@
                     </a>
                 </p>
                 <div class="collapse" id="statement-form">
-                    <div class="card mb-3 card-body">
+                    <div class="card mb-3">
                         {{ form_start(statementForm) }}
                         <div class="card-body">
                             {{ form_row(statementForm.content) }}

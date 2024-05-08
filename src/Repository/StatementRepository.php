@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\DataTransferObject\StatementFilterDto;
 use App\Entity\Statement;
+use App\Entity\Town;
 use App\Enum\StatementTypeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
@@ -49,9 +50,13 @@ class StatementRepository extends ServiceEntityRepository
     /**
      * @return array<int, Statement>
      */
-    public function findByFilter(StatementFilterDto $statementFilterDto): array
+    public function findByFilterAndTown(StatementFilterDto $statementFilterDto, Town $town): array
     {
         $qb = $this->createQueryBuilder('statement');
+
+        $qb->andWhere(
+            $qb->expr()->eq('statement.town', ':town')
+        )->setParameter('town', $town->getId());
 
         if ($statementFilterDto->getKeyword() !== null && $statementFilterDto->getKeyword() !== '' && $statementFilterDto->getKeyword() !== '0') {
             $qb->andWhere(

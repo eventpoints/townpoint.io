@@ -8,7 +8,7 @@
                     <div class="card-body">
                         <div class="text-center">
                             <img height="100" width="100" class="rounded-circle mb-3 border"
-                                 src="{{ app.user.avatar }}"/>
+                                 src="{{ user.avatar }}"/>
                             <div class="bold fs-4 fw-light">{{ user.fullName }}</div>
                             <div class="text-muted small">@{{ user.handle }}</div>
                         </div>
@@ -39,17 +39,38 @@
 
                     </div>
                     <div class="card-footer d-flex justify-content-between align-items-center">
-                        <button type="button" class="btn btn-outline-primary">
-                            <div class="mdi mdi-send fs-4"></div>
-                        </button>
-                        <button type="button" class="btn btn-outline-primary">
-                            <div class="mdi mdi-send fs-4"></div>
-                        </button>
-                        <button type="button" class="btn btn-outline-danger">
-                            <div class="mdi mdi-flag fs-4"></div>
-                        </button>
+                        <a href="{{ path('create_direct_message', {id: user.id}) }}"
+                           class="btn btn-outline-dark rounded-pill">
+                            <span class="mdi mdi-send fs-4"></span>
+                        </a>
+                        <a class="btn btn-outline-danger rounded-pill">
+                            <span class="mdi mdi-flag fs-4"></span>
+                        </a>
                     </div>
                 </div>
+
+                <div class="list-group mb-3">
+                    <div class="list-group-item">
+                        recent profile views
+                    </div>
+
+                    {% for view in profileViews %}
+                        <a href="{{ path('user_profile', { handle: view.owner.handle }) }}"
+                           class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <img src="{{ view.owner.avatar }}" height="50" class="border rounded-circle me-3"/>
+                                <div>
+                                    <div class="fw-bold">{{ view.owner.firstName }}</div>
+                                    <div>{{ view.owner.lastActiveAt.diffForHumans }}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="badge rounded-pill text-bg-dark">{{ view.count }}</div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
             </div>
         </div>
     </div>

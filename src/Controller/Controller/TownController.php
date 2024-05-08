@@ -11,6 +11,7 @@ use App\Enum\FlashMessageEnum;
 use App\Form\Form\StatementFormType;
 use App\Repository\CountryRepository;
 use App\Repository\StatementRepository;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,8 @@ class TownController extends AbstractController
 {
     public function __construct(
         private readonly CountryRepository $countryRepository,
-        private readonly StatementRepository $statementRepository
+        private readonly StatementRepository $statementRepository,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -43,6 +45,8 @@ class TownController extends AbstractController
     ): Response {
         $statement = new Statement(owner: $currentUser, town: $town);
         $statementForm = $this->createForm(StatementFormType::class, $statement);
+        $activeUsers = $this->userRepository->findActiveWithin20Minutes();
+
         $statementForm->handleRequest($request);
         if ($statementForm->isSubmitted() && $statementForm->isValid()) {
             $this->statementRepository->save(entity: $statement, flush: true);
@@ -59,6 +63,7 @@ class TownController extends AbstractController
             'continent' => $continent,
             'country' => $country,
             'town' => $town,
+            'activeUsers' => $activeUsers,
         ]);
     }
 

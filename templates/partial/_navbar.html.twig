@@ -1,46 +1,23 @@
-<header class="p-3 mb-3 border-bottom">
+<nav class="navbar navbar-expand mb-3">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-
-
+        <div class="navbar-nav align-items-center">
             {% if app.user %}
-                <div class="dropdown text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ app.user.avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">
-                    </a>
-                    <ul class="dropdown-menu text-small" style="">
-                        <li><a class="dropdown-item"
-                               href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}">{{ app.user.currentTown.name|title }}</a>
-                        </li>
-                        <li><a class="dropdown-item" href="{{ path('user_account') }}">{{ app.user.fullName }}</a></li>
-                        <li><a class="dropdown-item" href="{{ path('user_profile', {handle: app.user.handle}) }}">profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Sign out</a></li>
-                    </ul>
-                </div>
+                <a class="nav-link" href="{{ path('user_profile', {handle: app.user.handle}) }}"><img
+                            src="{{ app.user.avatar }}" class="rounded-circle border {{ app.request.attributes.get('_route') == 'user_profile' ? "shadow" }}" height="30"/></a>
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
+                   href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}"><span
+                            class="mdi mdi-town-hall fs-2"></span></a>
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'user_account' ? "active" }}" href="{{ path('user_account') }}"><span class="mdi mdi-account-circle fs-2"></span></a>
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}" href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
+                <a class="nav-link link-danger" href="{{ path('app_logout') }}"><span class="mdi mdi-exit-to-app fs-2"></span></a>
             {% else %}
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page"
-                           href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page"
-                           href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
-                    </li>
-                </ul>
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? "active" }}" aria-current="page" href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
+                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_register' ? "active" }}" aria-current="page" href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
             {% endif %}
-
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            </ul>
-
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-                <span class="fw-bolder fs-3">town</span><span class="fw-light fs-3">point</span>
-            </a>
-
         </div>
+        <a href="#" class="navbar-brand d-flex align-items-center ">
+            <img class="me-2" height="30" width="30" src="{{ asset('images/app/logo.png') }}" />
+            <span class="fw-bolder fs-2">town</span><span class="fw-light fs-2">point</span>
+        </a>
     </div>
-</header>
+</nav>

@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6">
+
+                <div class="d-flex justify-content-end gap-1 mb-3">
+                    <a class="btn btn-outline-dark rounded-pill d-flex justify-content-between align-items-center"
+                       data-bs-toggle="collapse" href="#message-form" role="button" aria-expanded="false"
+                       aria-controls="collapseExample">
+                        <span class="mdi mdi-plus fs-4"></span>
+                    </a>
+                    <div class="dropdown z-3">
+                        <button class="btn btn-outline-dark rounded-pill " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="mdi mdi-dots-vertical fs-4"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item text-danger" href="#">report</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="collapse" id="message-form">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-floating">
+                                <div>
+                                    {{ form_start(messageForm) }}
+                                    {{ form_row(messageForm.content) }}
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-outline-dark">
+                                            <span class="mdi mdi-send fs-4"></span>
+                                        </button>
+                                    </div>
+                                    {{ form_end(messageForm) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="messages">
+                    {% for message in conversation.messages %}
+                        <div class="card z-0 mb-3">
+                            <div class="card-header rounded-top bg-white sticky-top top-0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="d-flex justify-content-start align-items-start">
+                                        <a class="link-dark text-decoration-none"
+                                           href="{{ path('user_profile', {handle: message.owner.handle}) }}">
+                                            <img height="35" class="rounded-circle border me-2"
+                                                 src="{{ message.owner.avatar }}"/>
+                                        </a>
+                                        <div>
+                                            <div>
+                                                <a class="link-dark text-decoration-none"
+                                                   href="{{ path('user_profile', {handle: message.owner.handle}) }}">
+                                                    {{ message.owner.fullName }}
+                                                </a>
+                                            </div>
+                                            <div>{{ message.createdAt.diffForHumans }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div>{{ message.content|raw }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}

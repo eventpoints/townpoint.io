@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -76,9 +77,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Statement::class)]
     private Collection $statements;
 
+    /**
+     * @var Collection<int, ConversationParticipant>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: ConversationParticipant::class)]
+    private Collection $conversationParticipants;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private null|CarbonImmutable $lastActiveAt = null;
+
+    /**
+     * @var Collection<int, ProfileView>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: ProfileView::class)]
+    private Collection $authouredViews;
+
+    /**
+     * @var Collection<int, ProfileView>
+     */
+    #[ORM\OneToMany(mappedBy: 'target', targetEntity: ProfileView::class)]
+    private Collection $viewsRecived;
+
     public function __construct()
     {
         $this->statements = new ArrayCollection();
+        $this->conversationParticipants = new ArrayCollection();
+        $this->lastActiveAt = new CarbonImmutable();
+        $this->authouredViews = new ArrayCollection();
+        $this->viewsRecived = new ArrayCollection();
     }
 
     public function getId(): null|Uuid
@@ -285,5 +311,109 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     public function setHandle(string $handle): void
     {
         $this->handle = $handle;
+    }
+
+    /**
+     * @return Collection<int, ConversationParticipant>
+     */
+    public function getConversationParticipants(): Collection
+    {
+        return $this->conversationParticipants;
+    }
+
+    public function addConversationParticipant(ConversationParticipant $conversationParticipant): static
+    {
+        if (! $this->conversationParticipants->contains($conversationParticipant)) {
+            $this->conversationParticipants->add($conversationParticipant);
+            $conversationParticipant->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversationParticipant(ConversationParticipant $conversationParticipant): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->conversationParticipants->removeElement($conversationParticipant) && $conversationParticipant->getOwner() === $this) {
+            $conversationParticipant->setOwner(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, null|Conversation>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversationParticipants->map(fn (ConversationParticipant $conversationParticipant): null|Conversation => $conversationParticipant->getConversation());
+    }
+
+    public function getLastActiveAt(): null|CarbonImmutable
+    {
+        return $this->lastActiveAt;
+    }
+
+    public function setLastActiveAt(CarbonImmutable $lastActiveAt): static
+    {
+        $this->lastActiveAt = $lastActiveAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProfileView>
+     */
+    public function getAuthouredViews(): Collection
+    {
+        return $this->authouredViews;
+    }
+
+    public function addAuthouredView(ProfileView $authouredView): static
+    {
+        if (! $this->authouredViews->contains($authouredView)) {
+            $this->authouredViews->add($authouredView);
+            $authouredView->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthouredView(ProfileView $authouredView): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->authouredViews->removeElement($authouredView) && $authouredView->getOwner() === $this) {
+            $authouredView->setOwner(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProfileView>
+     */
+    public function getViewsRecived(): Collection
+    {
+        return $this->viewsRecived;
+    }
+
+    public function addViewsRecived(ProfileView $viewsRecived): static
+    {
+        if (! $this->viewsRecived->contains($viewsRecived)) {
+            $this->viewsRecived->add($viewsRecived);
+            $viewsRecived->setTarget($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewsRecived(ProfileView $viewsRecived): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->viewsRecived->removeElement($viewsRecived) && $viewsRecived->getTarget() === $this) {
+            $viewsRecived->setTarget(null);
+        }
+
+        return $this;
     }
 }

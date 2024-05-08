@@ -40,7 +40,7 @@ class StatementController extends AbstractController
         $keyword = $request->get('keyword');
         $type = StatementTypeEnum::match($request->get('type'));
         $statementFilterDto = new StatementFilterDto($keyword, $type);
-        $statements = $this->statementRepository->findByFilter($statementFilterDto);
+        $statements = $this->statementRepository->findByFilterAndTown($statementFilterDto, $town);
         return $this->render('statement/hx_index.html.twig', [
             'statements' => $statements,
             'town' => $town,

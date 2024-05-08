@@ -1,4 +1,4 @@
-<div class="card mb-3">
+<div class="card bg-white mb-3">
     <div class="card-body">
         <div class="form-floating mb-3">
             <input name="keyword"
@@ -128,6 +128,20 @@
                hx-indicator=".htmx-indicator"
         >
         <label class="btn" for="local_business_service">{{ 'local_business_service'|trans }}</label>
+
+        <input type="radio"
+               class="btn-check"
+               name="type"
+               value="chance_encounter"
+               id="chance_encounter"
+               autocomplete="off"
+               hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+               hx-trigger="click"
+               hx-target="#statements-results"
+               hx-indicator=".htmx-indicator"
+        >
+        <label class="btn" for="chance_encounter">{{ 'chance_encounter'|trans }}</label>
+
 
     </div>
 </div>

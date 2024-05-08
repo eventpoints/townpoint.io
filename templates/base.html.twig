@@ -18,9 +18,7 @@
 
 {{ include('/partial/_navbar.html.twig') }}
 
-<div {{ stimulus_controller('user-timezone', {
-    timezone: 'utc'
-}) }}>
+<div>
     {% block body %}{% endblock %}
 </div>
 </body>

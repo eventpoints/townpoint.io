@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -54,5 +56,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return array<int, user>
+     */
+    public function findActiveWithin20Minutes(): array
+    {
+        $qb = $this->createQueryBuilder('user');
+        $twentyMinutesAgo = (new CarbonImmutable())->subMinutes(15);
+
+        $qb->andWhere(
+            $qb->expr()->gte('user.lastActiveAt', ':twentyMinutesAgo')
+        )->setParameter('twentyMinutesAgo', $twentyMinutesAgo);
+
+        $qb->orderBy('user.lastActiveAt', Order::Descending->value);
+
+        $qb->setMaxResults(30);
+
+        return $qb->getQuery()->getResult();
     }
 }
