@@ -45,4 +45,11 @@
 
         </div>
     </div>
+{% else %}
+    <div class="text-center text-muted">
+        <div>
+            <span class="mdi mdi-robot-dead fs-3"></span>
+        </div>
+        <div>{{ 'no-statements-found'|trans }}</div>
+    </div>
 {% endfor %}

@@ -12,6 +12,7 @@ use App\Form\Form\StatementFormType;
 use App\Repository\CountryRepository;
 use App\Repository\StatementRepository;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Order;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,6 +88,8 @@ class TownController extends AbstractController
     ): Response {
         $countries = $this->countryRepository->findBy([
             'continent' => $continent,
+        ], [
+            'name' => Order::Ascending->value,
         ]);
         return $this->render('continent/show.html.twig', [
             'continent' => $continent,

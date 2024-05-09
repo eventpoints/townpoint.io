@@ -6,6 +6,7 @@ use App\Enum\ContinentEnum;
 use App\Repository\CountryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -24,6 +25,9 @@ class Country
      * @var Collection<int, Town> $towns
      */
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: Town::class, cascade: ['persist'])]
+    #[ORM\OrderBy([
+        "name" => Order::Ascending->value,
+    ])]
     private Collection $towns;
 
     public function __construct(

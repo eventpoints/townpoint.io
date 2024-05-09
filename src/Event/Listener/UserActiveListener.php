@@ -25,11 +25,7 @@ class UserActiveListener
             return;
         }
 
-        $fiveMinutesAgo = (new CarbonImmutable())->subMinutes(15);
-
-        if ($currentUser->getLastActiveAt()->gte($fiveMinutesAgo)) {
-            $currentUser->setLastActiveAt(new CarbonImmutable());
-            $this->userRepository->save(entity: $currentUser, flush: true);
-        }
+        $currentUser->setLastActiveAt(new CarbonImmutable());
+        $this->userRepository->save(entity: $currentUser, flush: true);
     }
 }

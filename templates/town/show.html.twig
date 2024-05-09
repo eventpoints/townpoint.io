@@ -68,7 +68,7 @@
                 </div>
 
 
-                <div id="statements-results" hx-get="{{ path('htmx_statements', {town_slug: town.slug}) }}"
+                <div class="mt-5" id="statements-results" hx-get="{{ path('htmx_statements', {town_slug: town.slug}) }}"
                      hx-trigger="load">
                     <div class="htmx-indicator my-3 d-flex justify-content-center">
                         <div class="spinner-border" role="status">
