@@ -66,6 +66,11 @@
                                 <div>{{ message.content|raw }}</div>
                             </div>
                         </div>
+                    {% else %}
+                        <div class="text-center text-muted">
+                            <div class="mdi mdi-feather fs-3"></div>
+                            <div hx-get="{{ path('get_single_quote') }}"  hx-trigger="load"></div>
+                        </div>
                     {% endfor %}
                 </div>
             </div>

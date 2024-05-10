@@ -6,11 +6,14 @@ use App\Entity\Conversation;
 use App\Entity\ConversationParticipant;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Enum\FlashMessageEnum;
 use App\Form\Form\MessageFormType;
 use App\Repository\ConversationRepository;
 use App\Service\RandomService\Contract\RandomGeneratorInterface;
+use App\Service\RandomService\RandomConversationNameService;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,6 +23,7 @@ class ConversationController extends AbstractController
 {
     public function __construct(
         private readonly ConversationRepository $conversationRepository,
+        #[Autowire(service: RandomConversationNameService::class)]
         private readonly RandomGeneratorInterface $randomConversationNameService
     ) {
     }
@@ -88,9 +92,18 @@ class ConversationController extends AbstractController
         return $this->redirectToRoute('show_conversation');
     }
 
-    //    #[Route(path: '/conversations/add/{id}', name: 'add_conversation_participant')]
-    //    public function add(Conversation $conversation): Response
-    //    {
-    //
-    //    }
+    #[Route(path: '/conversations/delete/{id}/{token}', name: 'delete_conversation')]
+    public function delete(Conversation $conversation, string $token): Response
+    {
+        $isTokenValid = $this->isCsrfTokenValid($conversation->getId()->toRfc4122(), $token);
+
+        if (! $isTokenValid) {
+            $this->addFlash(FlashMessageEnum::MESSAGE->value, 'invalid token, try again');
+            return $this->redirectToRoute('conversations');
+        }
+
+        $this->conversationRepository->remove(entity: $conversation, flush: true);
+        $this->addFlash(FlashMessageEnum::MESSAGE->value, 'conversation removed');
+        return $this->redirectToRoute('conversations');
+    }
 }

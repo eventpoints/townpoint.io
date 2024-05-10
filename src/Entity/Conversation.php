@@ -26,7 +26,7 @@ class Conversation
     /**
      * @var Collection<int, Message>
      */
-    #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy([
         "createdAt" => Order::Descending->value,
     ])]
@@ -35,7 +35,7 @@ class Conversation
     /**
      * @var Collection<int, ConversationParticipant>
      */
-    #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: ConversationParticipant::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: ConversationParticipant::class, cascade: ['persist', 'remove'])]
     private Collection $conversationParticipants;
 
     public function __construct(
