@@ -36,7 +36,7 @@
            href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
     </nav>
 {% else %}
-    <nav class="navbar navbar-expand border-bottom">
+    <nav class="navbar bg-body-tertiary navbar-expand border-bottom">
         <div class="container">
             <div class="navbar-nav justify-content-center">
                 <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? "active" }}"
