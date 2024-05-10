@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Conversation;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -41,5 +43,29 @@ class ConversationRepository extends ServiceEntityRepository
             $this->getEntityManager()
                 ->flush();
         }
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findByTwoParticipants(User $currentUser, User $target): null|Conversation
+    {
+        $qb = $this->createQueryBuilder('conversation');
+        $qb->leftJoin('conversation.conversationParticipants', 'participant');
+
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->eq('participant.owner', ':currentUser'),
+                $qb->expr()->eq('participant.owner', ':target')
+            )
+        )->setParameters([
+            'currentUser' => $currentUser->getId(),
+            'target' => $target->getId(),
+        ]);
+
+        $qb->groupBy('conversation.id')
+            ->having('COUNT(DISTINCT participant.owner) = 2');
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

@@ -8,6 +8,8 @@ use App\Entity\Message;
 use App\Entity\User;
 use App\Form\Form\MessageFormType;
 use App\Repository\ConversationRepository;
+use App\Service\RandomService\Contract\RandomGeneratorInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +19,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class ConversationController extends AbstractController
 {
     public function __construct(
-        private readonly ConversationRepository $conversationRepository
+        private readonly ConversationRepository $conversationRepository,
+        private readonly RandomGeneratorInterface $randomConversationNameService
     ) {
     }
 
@@ -27,14 +30,20 @@ class ConversationController extends AbstractController
         return $this->render('/conversation/index.html.twig');
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     #[Route(path: '/conversations/dm/{id}', name: 'create_direct_message', methods: [Request::METHOD_GET])]
     public function directMessage(#[CurrentUser] User $currentUser, User $user): Response
     {
-        $first = ['happy', 'smooth', 'ripe', 'big', 'lovely'];
-        $second = ['spaceship', 'cup', 'kitten', 'book', 'candle'];
-        $title = $first[array_rand($first)] . ' ' . $second[array_rand($second)];
+        $conversation = $this->conversationRepository->findByTwoParticipants(currentUser: $currentUser, target: $user);
+        if ($conversation instanceof Conversation) {
+            return $this->redirectToRoute('show_conversation', [
+                'id' => $conversation->getId(),
+            ]);
+        }
 
-        $conversation = new Conversation(title: $title);
+        $conversation = new Conversation(title: $this->randomConversationNameService->generate());
         $owner = new ConversationParticipant(conversation: $conversation, owner: $currentUser);
         $target = new ConversationParticipant(conversation: $conversation, owner: $user);
         $conversation->addConversationParticipant($owner);

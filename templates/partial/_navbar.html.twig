@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center bg-body-tertiary">
     <a href="#" class="navbar-brand d-flex align-items-center my-3">
         <img class="me-2" height="30" width="30" src="{{ asset('images/app/logo.png') }}"/>
         <span class="fw-bolder fs-2">town</span><span class="fw-light fs-2">point</span>
@@ -6,23 +6,34 @@
 </div>
 
 {% if app.user %}
-    <nav class="navbar border-bottom nav-justified mb-3">
-        <div class="container">
-            <a class="nav-link" href="{{ path('user_profile', {handle: app.user.handle}) }}"><img
-                        src="{{ app.user.avatar }}"
-                        class="rounded-circle border {{ app.request.attributes.get('_route') == 'user_profile' ? "shadow" }}"
-                        height="30"/></a>
-            <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
-               href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}"><span
-                        class="mdi mdi-town-hall fs-2"></span></a>
-            <a class="nav-link {{ app.request.attributes.get('_route') == 'user_account' ? "active" }}"
-               href="{{ path('user_account') }}"><span class="mdi mdi-account-circle fs-2"></span></a>
-            <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}"
-               href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
-            <a class="nav-link link-danger" href="{{ path('app_logout') }}"><span
-                        class="mdi mdi-exit-to-app fs-2"></span></a>
-
-        </div>
+    <nav class="navbar bg-body-tertiary justify-content-start nav-underline mb-3">
+        <a class="nav-link">
+            <div class="dropdown">
+                <a type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img
+                            src="{{ app.user.avatar }}"
+                            class="rounded-circle border"
+                            height="30"/>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item"
+                           href="{{ path('user_profile', {handle: app.user.handle}) }}">{{ 'profile'|trans }}</a></li>
+                    <li><a class="dropdown-item" href="{{ path('conversations') }}">{{ 'conversations'|trans }}</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">{{ 'logout'|trans }}</a>
+                    </li>
+                </ul>
+            </div>
+        </a>
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'user_profile' ? "active" }}"
+           href="{{ path('user_profile', {handle: app.user.handle}) }}"><span class="mdi mdi-account-circle fs-2"></span></a>
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
+           href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}"><span
+                    class="mdi mdi-town-hall fs-2"></span></a>
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}"
+           href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
     </nav>
 {% else %}
     <nav class="navbar navbar-expand border-bottom">

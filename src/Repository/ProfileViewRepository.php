@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ProfileView;
 use App\Entity\User;
+use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
@@ -44,7 +45,7 @@ class ProfileViewRepository extends ServiceEntityRepository
     /**
      * @return array<int, array<mixed>>
      */
-    public function findByTargetUser(User $user): array
+    public function findByTargetUserWithinLastTwentyFourHours(User $user): array
     {
         $qb = $this->createQueryBuilder('profile_view');
         $qb->leftJoin('profile_view.owner', 'owner');
@@ -53,6 +54,11 @@ class ProfileViewRepository extends ServiceEntityRepository
             ->andWhere($qb->expr()->eq('profile_view.target', ':user'))
             ->setParameter('user', $user->getId(), 'uuid')
             ->groupBy('owner.id', 'owner.handle', 'owner.firstName', 'owner.lastName', 'owner.avatar', 'owner.lastActiveAt');
+
+        $twentyFourHoursAgo = (CarbonImmutable::now())->subHours(24);
+        $qb->andWhere(
+            $qb->expr()->gte('profile_view.createdAt', ':twentyFourHours')
+        )->setParameter('twentyFourHours', $twentyFourHoursAgo);
 
         $qb->orderBy('owner.lastActiveAt', Order::Descending->value);
         $qb->setMaxResults(30);

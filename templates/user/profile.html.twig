@@ -4,7 +4,14 @@
     <div class="container">
         <div class="row justify-content-center mt-3">
             <div class="col-12 col-md-4">
-                <div class="card mb-3">
+                <div class="card position-relative mb-3">
+                    {% if app.user == user %}
+                        <div class="text-end mt-2 me-2">
+                            <a href="{{ path('user_account') }}" class="btn btn-outline-dark rounded-pill">
+                                <span class="mdi mdi-pencil fs-4"></span>
+                            </a>
+                        </div>
+                    {% endif %}
                     <div class="card-body">
                         <div class="text-center">
                             <img height="100" width="100" class="rounded-circle mb-3 border"
@@ -19,8 +26,6 @@
                                 {{ user.autobio }}
                             </div>
                         {% endif %}
-
-
                         <div class="list-group-item border-0 p-0">
                             <div class="list-group  list-group-flush list-group-horizontal">
                                 {% if user.originTown %}
@@ -38,15 +43,18 @@
                         </div>
 
                     </div>
-                    <div class="card-footer d-flex justify-content-between align-items-center">
-                        <a href="{{ path('create_direct_message', {id: user.id}) }}"
-                           class="btn btn-outline-dark rounded-pill">
-                            <span class="mdi mdi-send fs-4"></span>
-                        </a>
-                        <a class="btn btn-outline-danger rounded-pill">
-                            <span class="mdi mdi-flag fs-4"></span>
-                        </a>
-                    </div>
+                    {% if app.user != user %}
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+
+                            <a href="{{ path('create_direct_message', {id: user.id}) }}"
+                               class="btn btn-outline-dark rounded-pill">
+                                <span class="mdi mdi-send fs-4"></span>
+                            </a>
+                            <a class="btn btn-outline-danger rounded-pill">
+                                <span class="mdi mdi-flag fs-4"></span>
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="list-group mb-3">
@@ -68,6 +76,11 @@
                                 <div class="badge rounded-pill text-bg-dark">{{ view.count }}</div>
                             </div>
                         </a>
+                    {% else %}
+                        <div class="list-group-item text-muted text-center">
+                            <div class="mdi mdi-lighthouse-on fs-3"></div>
+                            <div>{{ 'they-have-not-found-you-yet'|trans }}</div>
+                        </div>
                     {% endfor %}
                 </div>
 

@@ -25,7 +25,7 @@ class ProfileController extends AbstractController
         User $user,
         Request $request,
     ): Response {
-        $profileViews = $this->profileViewRepository->findByTargetUser(user: $user);
+        $profileViews = $this->profileViewRepository->findByTargetUserWithinLastTwentyFourHours(user: $user);
 
         return $this->render('user/profile.html.twig', [
             'user' => $user,

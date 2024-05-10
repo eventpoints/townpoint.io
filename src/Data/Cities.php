@@ -12,7 +12,7 @@ class Cities
         return match ($alpha2) {
             'cz' => $this->getCzechCities(),
             'de' => $this->getCitiesInGermany(),
-            'gb' => $this->getCitiesInUnitedKigdom(),
+            'gb' => $this->getCitiesInUnitedKingdom(),
             default => []
         };
     }
@@ -276,7 +276,7 @@ class Cities
     /**
      * @return array<array<string, mixed>>
      */
-    public function getCitiesInUnitedKigdom(): array
+    public function getCitiesInUnitedKingdom(): array
     {
         return [
             [
