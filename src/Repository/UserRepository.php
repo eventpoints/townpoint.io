@@ -76,4 +76,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @return array<int, User>
+     */
+    public function findByHandle(string $keyword): array
+    {
+        $qb = $this->createQueryBuilder('user');
+        $qb->andWhere(
+            $qb->expr()->like($qb->expr()->lower('user.handle'), ':keyword'),
+        )->setParameter('keyword', '%' . strtolower($keyword) . '%');
+
+        $qb->orWhere(
+            $qb->expr()->like($qb->expr()->lower('user.email'), ':keyword'),
+        )->setParameter('keyword', '%' . strtolower($keyword) . '%');
+
+        $qb->orWhere(
+            $qb->expr()->orX(
+                $qb->expr()->like($qb->expr()->lower('user.firstName'), ':keyword'),
+                $qb->expr()->like($qb->expr()->lower('user.lastName'), ':keyword')
+            )
+        )->setParameter('keyword', '%' . strtolower($keyword) . '%');
+
+        $qb->orderBy('user.handle', Order::Descending->value);
+
+        $qb->setMaxResults(50);
+        return $qb->getQuery()->getResult();
+    }
 }

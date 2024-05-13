@@ -98,6 +98,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\OneToMany(mappedBy: 'target', targetEntity: ProfileView::class)]
     private Collection $viewsRecived;
 
+    /**
+     * @var Collection<int, MessageRead>
+     */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: MessageRead::class)]
+    private Collection $messageReads;
+
     public function __construct()
     {
         $this->statements = new ArrayCollection();
@@ -105,6 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         $this->lastActiveAt = new CarbonImmutable();
         $this->authouredViews = new ArrayCollection();
         $this->viewsRecived = new ArrayCollection();
+        $this->messageReads = new ArrayCollection();
     }
 
     public function getId(): null|Uuid
@@ -412,6 +419,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
         // set the owning side to null (unless already changed)
         if ($this->viewsRecived->removeElement($viewsRecived) && $viewsRecived->getTarget() === $this) {
             $viewsRecived->setTarget(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MessageRead>
+     */
+    public function getMessageReads(): Collection
+    {
+        return $this->messageReads;
+    }
+
+    public function addMessageRead(MessageRead $messageRead): static
+    {
+        if (! $this->messageReads->contains($messageRead)) {
+            $this->messageReads->add($messageRead);
+            $messageRead->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessageRead(MessageRead $messageRead): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->messageReads->removeElement($messageRead) && $messageRead->getOwner() === $this) {
+            $messageRead->setOwner(null);
         }
 
         return $this;

@@ -1,0 +1,8 @@
+{% for read in message.messageReads %}
+    <img height="20" width="20" class="rounded-circle border"
+         src="{{ read.owner.avatar }}"
+         data-bs-toggle="tooltip" data-bs-placement="right"
+         data-bs-title="seen {{ read.createdAt.diffForHumans({short: true}) }}" />
+{% else %}
+    <div class="mdi mdi-check-bold text-success" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="sent {{ message.createdAt.diffForHumans }}"></div>
+{% endfor %}

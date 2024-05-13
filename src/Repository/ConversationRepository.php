@@ -63,8 +63,10 @@ class ConversationRepository extends ServiceEntityRepository
             'target' => $target->getId(),
         ]);
 
-        $qb->groupBy('conversation.id')
-            ->having('COUNT(DISTINCT participant.owner) = 2');
+        $qb->groupBy('conversation.id');
+        $qb->andHaving(
+            $qb->expr()->gt($qb->expr()->count('participant.owner'), 2)
+        );
 
         return $qb->getQuery()->getOneOrNullResult();
     }

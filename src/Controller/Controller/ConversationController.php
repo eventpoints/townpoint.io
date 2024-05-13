@@ -5,10 +5,13 @@ namespace App\Controller\Controller;
 use App\Entity\Conversation;
 use App\Entity\ConversationParticipant;
 use App\Entity\Message;
+use App\Entity\MessageRead;
 use App\Entity\User;
 use App\Enum\FlashMessageEnum;
 use App\Form\Form\MessageFormType;
 use App\Repository\ConversationRepository;
+use App\Repository\MessageRepository;
+use App\Repository\UserRepository;
 use App\Service\RandomService\Contract\RandomGeneratorInterface;
 use App\Service\RandomService\RandomConversationNameService;
 use Doctrine\ORM\NonUniqueResultException;
@@ -24,7 +27,9 @@ class ConversationController extends AbstractController
     public function __construct(
         private readonly ConversationRepository $conversationRepository,
         #[Autowire(service: RandomConversationNameService::class)]
-        private readonly RandomGeneratorInterface $randomConversationNameService
+        private readonly RandomGeneratorInterface $randomConversationNameService,
+        private readonly MessageRepository $messageRepository,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -105,5 +110,73 @@ class ConversationController extends AbstractController
         $this->conversationRepository->remove(entity: $conversation, flush: true);
         $this->addFlash(FlashMessageEnum::MESSAGE->value, 'conversation removed');
         return $this->redirectToRoute('conversations');
+    }
+
+    #[Route(path: '/create/conversation', name: 'create_conversation', methods: [Request::METHOD_GET])]
+    public function create(Request $request, #[CurrentUser] User $currentUser): null|Response
+    {
+        $users = $request->get('users');
+        if (count($users) === 1) {
+            $user = $this->userRepository->find($users[0]);
+            $conversation = $this->conversationRepository->findByTwoParticipants(currentUser: $currentUser, target: $user);
+            if ($conversation instanceof Conversation) {
+                return $this->redirectToRoute('show_conversation', [
+                    'id' => $conversation->getId(),
+                ]);
+            }
+        }
+
+        $conversation = new Conversation(
+            title: $this->randomConversationNameService->generate(),
+            owner: $currentUser
+        );
+
+        foreach ($users as $id) {
+            $user = $this->userRepository->find($id);
+            if (! $user instanceof User) {
+                continue;
+            }
+
+            $isParticipant = $conversation->getConversationParticipants()->exists(fn (int $key, ConversationParticipant $conversationParticipant): bool => $conversationParticipant->getOwner() === $user);
+            if ($isParticipant) {
+                continue;
+            }
+
+            $participant = new ConversationParticipant(
+                conversation: $conversation,
+                owner: $user
+            );
+            $conversation->addConversationParticipant($participant);
+        }
+        $this->conversationRepository->save(entity: $conversation, flush: true);
+
+        return $this->redirectToRoute('show_conversation', [
+            'id' => $conversation->getId(),
+        ]);
+    }
+
+    #[Route(path: '/message/read/{id}', name: 'mark_message_read', methods: [Request::METHOD_PATCH])]
+    public function markRead(Message $message, #[CurrentUser] User $currentUser): null|Response
+    {
+        $isCurrentUserParticipant = $message->getConversation()->getConversationParticipants()->exists(fn (int $key, ConversationParticipant $conversationParticipant): bool => $conversationParticipant->getOwner() === $currentUser);
+        if (! $isCurrentUserParticipant) {
+            return null;
+        }
+
+        $read = $message->getMessageReads()->exists(fn (int $key, MessageRead $read): bool => $read->getOwner() === $currentUser);
+
+        if ($read) {
+            return null;
+        }
+
+        if ($message->getOwner() !== $currentUser) {
+            $read = new MessageRead(message: $message, owner: $currentUser);
+            $message->addMessageRead($read);
+            $this->messageRepository->save(entity: $message, flush: true);
+        }
+
+        return $this->render('message/read.html.twig', [
+            'message' => $message,
+        ]);
     }
 }

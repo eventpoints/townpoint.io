@@ -3,6 +3,31 @@
 {% block body %}
     <div class="container">
         <div class="row justify-content-center">
+
+            <div class="col-12 col-md-3">
+                <div class="list-group">
+                    {% for paricipant in conversation.conversationParticipants %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-start align-items-start">
+                                <a class="link-dark text-decoration-none"
+                                   href="{{ path('user_profile', {handle: paricipant.owner.handle}) }}">
+                                    <img height="35" class="rounded-circle border me-2"
+                                         src="{{ paricipant.owner.avatar }}"/>
+                                </a>
+                                <div>
+                                    <div>
+                                        <a class="link-dark text-decoration-none"
+                                           href="{{ path('user_profile', {handle: paricipant.owner.handle}) }}">
+                                            {{ paricipant.owner.fullName }}
+                                        </a>
+                                    </div>
+                                    <div>{{ paricipant.createdAt.diffForHumans }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
             <div class="col-12 col-md-6">
 
                 <div class="d-flex justify-content-end gap-1 mb-3">
@@ -12,7 +37,8 @@
                         <span class="mdi mdi-plus fs-4"></span>
                     </a>
                     <div class="dropdown z-3">
-                        <button class="btn btn-outline-dark rounded-pill " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-outline-dark rounded-pill " type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                             <span class="mdi mdi-dots-vertical fs-4"></span>
                         </button>
                         <ul class="dropdown-menu">
@@ -41,7 +67,13 @@
 
                 <div id="messages">
                     {% for message in conversation.messages %}
-                        <div class="card z-0 mb-3">
+                        <div class="card z-0 mb-3"
+                                {% if message.owner != app.user and not message.isRead(app.user) %}
+                                    hx-patch="{{ path('mark_message_read', {id: message.id}) }}"
+                                    hx-trigger="revealed"
+                                    hx-target="#message-{{ message.id }}-read"
+                                {% endif %}
+                        >
                             <div class="card-header rounded-top bg-white sticky-top top-0">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div class="d-flex justify-content-start align-items-start">
@@ -62,14 +94,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div>{{ message.content|raw }}</div>
+                            <div class="card-body text-wrap">
+                                <div>{{ message.content|raw|nl2br }}</div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-end align-items-center">
+                                <div class="d-flex justify-content-start align-items-center" id="message-{{ message.id }}-read">
+                                    {% for read in message.messageReads %}
+                                        <img height="20" width="20" class="rounded-circle border"
+                                             src="{{ read.owner.avatar }}"
+                                             data-bs-toggle="tooltip" data-bs-placement="right"
+                                             data-bs-title="seen {{ read.createdAt.diffForHumans({short: true}) }}"/>
+                                    {% else %}
+                                        <div class="mdi mdi-check-bold text-success" data-bs-toggle="tooltip"
+                                             data-bs-placement="right"
+                                             data-bs-title="sent {{ message.createdAt.diffForHumans({short: true}) }}"></div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     {% else %}
                         <div class="text-center text-muted">
                             <div class="mdi mdi-feather fs-3"></div>
-                            <div hx-get="{{ path('get_single_quote') }}"  hx-trigger="load"></div>
+                            <div hx-get="{{ path('get_single_quote') }}" hx-trigger="load"></div>
                         </div>
                     {% endfor %}
                 </div>

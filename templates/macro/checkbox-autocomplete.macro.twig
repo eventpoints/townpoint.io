@@ -1,0 +1,24 @@
+{% macro autocomplete(formAction, autocompletePath) %}
+    <form class="m-0" action="{{ path(formAction) }}" method="get">
+        <div class="list-group list-group-flush">
+            <div class="list-group-item">
+                <div class="input-group">
+                    <div class="form-floating">
+                        <input hx-get="{{ path(autocompletePath) }}" hx-trigger="keyup"
+                               hx-target="#autocomplete-output"
+                               name="keyword" type="text" class="form-control"
+                               id="floatingInputGroup1"
+                               autocomplete="off"
+                               placeholder="Username">
+                        <label for="floatingInputGroup1">Username</label>
+                    </div>
+                </div>
+            </div>
+            <div id="autocomplete-output"></div>
+            <div class="list-group-item text-end">
+                <button type="submit" class="btn btn-dark">{{ 'create'|trans }}</button>
+            </div>
+        </div>
+
+    </form>
+{% endmacro %}

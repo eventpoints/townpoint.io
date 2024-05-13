@@ -38,13 +38,18 @@ class Conversation
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: ConversationParticipant::class, cascade: ['persist', 'remove'])]
     private Collection $conversationParticipants;
 
+    #[ORM\ManyToOne]
+    private ?User $owner = null;
+
     public function __construct(
         #[ORM\Column(length: 255)]
-        private ?string $title = null
+        private ?string $title = null,
+        null|User $owner = null
     ) {
         $this->messages = new ArrayCollection();
         $this->conversationParticipants = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable();
+        $this->setOwner($owner);
     }
 
     public function getId(): Uuid
@@ -128,6 +133,18 @@ class Conversation
         if ($this->conversationParticipants->removeElement($conversationParticipant) && $conversationParticipant->getConversation() === $this) {
             $conversationParticipant->setConversation(null);
         }
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
 
         return $this;
     }

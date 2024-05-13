@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\MessageRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -21,6 +23,12 @@ class Message
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
+    /**
+     * @var Collection<int, MessageRead>
+     */
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageRead::class, cascade: ['persist'])]
+    private Collection $messageReads;
+
     public function __construct(
         #[ORM\Column(type: Types::TEXT)]
         private ?string $content = null,
@@ -31,6 +39,7 @@ class Message
         private ?Conversation $conversation = null
     ) {
         $this->createdAt = new DateTimeImmutable();
+        $this->messageReads = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -84,5 +93,38 @@ class Message
         $this->conversation = $conversation;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, MessageRead>
+     */
+    public function getMessageReads(): Collection
+    {
+        return $this->messageReads;
+    }
+
+    public function addMessageRead(MessageRead $messageRead): static
+    {
+        if (! $this->messageReads->contains($messageRead)) {
+            $this->messageReads->add($messageRead);
+            $messageRead->setMessage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessageRead(MessageRead $messageRead): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->messageReads->removeElement($messageRead) && $messageRead->getMessage() === $this) {
+            $messageRead->setMessage(null);
+        }
+
+        return $this;
+    }
+
+    public function getIsRead(User $user): bool
+    {
+        return $this->getMessageReads()->exists(fn (int $key, MessageRead $read): bool => $read->getOwner() === $user);
     }
 }

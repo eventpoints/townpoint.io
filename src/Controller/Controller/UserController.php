@@ -35,4 +35,15 @@ class UserController extends AbstractController
             'user' => $currentUser,
         ]);
     }
+
+    #[Route(path: '/search/users', name: 'user_search')]
+    public function search(Request $request): Response
+    {
+        $keyword = $request->get('keyword');
+        $users = $this->userRepository->findByHandle($keyword);
+
+        return $this->render('user/search.html.twig', [
+            'users' => $users,
+        ]);
+    }
 }
