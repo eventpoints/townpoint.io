@@ -28,10 +28,9 @@ class StatementFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-
         $resolver->setDefaults([
             'data_class' => Statement::class,
-            'is_disabled_statement_type' => false
+            'is_disabled_statement_type' => false,
         ]);
 
         $resolver->setAllowedTypes('is_disabled_statement_type', 'bool');

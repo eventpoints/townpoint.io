@@ -23,5 +23,4 @@ final class PhotoUploadService implements ImageUploadServiceInterface
 
         return $image->encode('data-url');
     }
-
 }

@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -55,13 +54,13 @@ class RegistrationFormType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
             ->add('originCountry', CountryType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,

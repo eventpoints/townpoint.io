@@ -20,5 +20,4 @@ final class AvatarUploadService implements ImageUploadServiceInterface
         $image->fit(400, 400);
         return $image->encode('data-url');
     }
-
 }

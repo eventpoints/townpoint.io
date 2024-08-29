@@ -4,7 +4,9 @@ namespace App\Data;
 
 class Nationality
 {
-
+    /**
+     * @return string[]
+     */
     public static function getNationalities(): array
     {
         return [
@@ -259,5 +261,4 @@ class Nationality
             'ZW' => 'Zimbabwean',
         ];
     }
-
 }

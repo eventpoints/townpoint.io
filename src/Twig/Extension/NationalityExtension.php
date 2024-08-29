@@ -15,7 +15,7 @@ class NationalityExtension extends AbstractExtension
         ];
     }
 
-    public function getNationality(string $countryCode) : string
+    public function getNationality(string $countryCode): string
     {
         return Nationality::getNationalities()[$countryCode];
     }

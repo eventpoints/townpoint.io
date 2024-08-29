@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Form\Form\AvatarFormType;
 use App\Form\Form\UserAccountFormType;
 use App\Repository\UserRepository;
-use App\Service\AvatarService\Contract\AvatarServiceInterface;
 use App\Service\ImageUploadService\AvatarUploadService;
 use App\Service\ImageUploadService\Contract\ImageUploadServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +21,6 @@ class UserController extends AbstractController
         private readonly UserRepository $userRepository,
         #[Autowire(service: AvatarUploadService::class)]
         private readonly ImageUploadServiceInterface $avatarUploadService
-
     ) {
     }
 
@@ -58,13 +56,12 @@ class UserController extends AbstractController
     #[Route(path: '/change/avatar', name: 'change_avatar')]
     public function changeProfileAvatar(
         Request $request,
-        #[CurrentUser] User $currentUser
-    ) : Response
-    {
+        #[CurrentUser]
+        User $currentUser
+    ): Response {
         $avatarForm = $this->createForm(AvatarFormType::class);
         $avatarForm->handleRequest($request);
         if ($avatarForm->isSubmitted() && $avatarForm->isValid()) {
-
             $image = $avatarForm->get('avatar')->getData();
             $avatar = $this->avatarUploadService->process($image);
             $currentUser->setAvatar($avatar->getEncoded());
@@ -76,8 +73,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/change-avatar.html.twig', [
-            'avatarForm' => $avatarForm
+            'avatarForm' => $avatarForm,
         ]);
     }
-    
 }

@@ -8,5 +8,4 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface ImageUploadServiceInterface
 {
     public function process(UploadedFile $file): Image;
-
 }

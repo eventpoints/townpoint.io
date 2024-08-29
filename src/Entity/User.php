@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[Assert\NotBlank]
     private ?string $lastName = null;
 
-    #[ORM\Column(enumType: GenderEnum::class,nullable: true)]
+    #[ORM\Column(enumType: GenderEnum::class, nullable: true)]
     private null|GenderEnum $gender = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -113,7 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private null|CarbonImmutable $createdAt = null;
 
-
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private null|DateTimeImmutable $bornAt = null;
 
@@ -152,7 +151,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
@@ -240,7 +239,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function __toString(): string
     {
-        return (string)$this->getEmail();
+        return (string) $this->getEmail();
     }
 
     public function getFirstName(): ?string
@@ -302,7 +301,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function addStatement(Statement $statement): static
     {
-        if (!$this->statements->contains($statement)) {
+        if (! $this->statements->contains($statement)) {
             $this->statements->add($statement);
             $statement->setOwner($this);
         }
@@ -340,7 +339,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function addConversationParticipant(ConversationParticipant $conversationParticipant): static
     {
-        if (!$this->conversationParticipants->contains($conversationParticipant)) {
+        if (! $this->conversationParticipants->contains($conversationParticipant)) {
             $this->conversationParticipants->add($conversationParticipant);
             $conversationParticipant->setOwner($this);
         }
@@ -363,7 +362,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
      */
     public function getConversations(): Collection
     {
-        return $this->conversationParticipants->map(fn(ConversationParticipant $conversationParticipant): null|Conversation => $conversationParticipant->getConversation());
+        return $this->conversationParticipants->map(fn (ConversationParticipant $conversationParticipant): null|Conversation => $conversationParticipant->getConversation());
     }
 
     public function getLastActiveAt(): null|CarbonImmutable
@@ -388,7 +387,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function addAuthouredView(ProfileView $authouredView): static
     {
-        if (!$this->authouredViews->contains($authouredView)) {
+        if (! $this->authouredViews->contains($authouredView)) {
             $this->authouredViews->add($authouredView);
             $authouredView->setOwner($this);
         }
@@ -416,7 +415,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function addViewsRecived(ProfileView $viewsRecived): static
     {
-        if (!$this->viewsRecived->contains($viewsRecived)) {
+        if (! $this->viewsRecived->contains($viewsRecived)) {
             $this->viewsRecived->add($viewsRecived);
             $viewsRecived->setTarget($this);
         }
@@ -444,7 +443,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function addMessageRead(MessageRead $messageRead): static
     {
-        if (!$this->messageReads->contains($messageRead)) {
+        if (! $this->messageReads->contains($messageRead)) {
             $this->messageReads->add($messageRead);
             $messageRead->setOwner($this);
         }
@@ -503,12 +502,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \String
 
     public function getAge(): null|int
     {
-        return CarbonImmutable::parse($this->bornAt)->diffInYears();
+        return (int) round(CarbonImmutable::parse($this->bornAt)->diffInYears(), 2);
     }
 
     public function setBornAt(?DateTimeImmutable $bornAt): void
     {
         $this->bornAt = $bornAt;
     }
-
 }

@@ -3,20 +3,12 @@
 namespace App\Controller\Controller;
 
 use App\Entity\Country;
-use App\Entity\Statement;
-use App\Entity\Town;
 use App\Entity\User;
 use App\Enum\ContinentEnum;
-use App\Enum\FlashMessageEnum;
-use App\Form\Form\StatementFormType;
 use App\Repository\CountryRepository;
-use App\Repository\StatementRepository;
-use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Order;
-use Enlightn\SecurityChecker\SecurityChecker;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -24,18 +16,15 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class TownController extends AbstractController
 {
     public function __construct(
-        private readonly CountryRepository $countryRepository,
-        private readonly StatementRepository $statementRepository
+        private readonly CountryRepository $countryRepository
     ) {
     }
 
     #[Route(path: '/earth', name: 'show_town')]
     public function showTown(
-        Request $request,
         #[CurrentUser]
         User $currentUser
     ): Response {
-
         return $this->render('town/show.html.twig');
     }
 

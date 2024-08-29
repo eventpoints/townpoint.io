@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum ThemeEnum : string
+enum ThemeEnum: string
 {
     case DARK_THEME = 'dark';
     case LIGHT_THEME = 'light';

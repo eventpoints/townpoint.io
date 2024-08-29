@@ -2,17 +2,13 @@
 
 namespace App\Form\Form;
 
-use App\Entity\Country;
-use App\Entity\Town;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class UserAccountFormType extends AbstractType
@@ -52,13 +48,13 @@ class UserAccountFormType extends AbstractType
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ])
             ->add('originCountry', CountryType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-                'autocomplete' => true
+                'autocomplete' => true,
             ]);
     }
 

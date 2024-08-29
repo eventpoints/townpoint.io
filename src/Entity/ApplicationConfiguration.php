@@ -47,12 +47,12 @@ class ApplicationConfiguration
     public function setOwner(?User $owner): static
     {
         // unset the owning side of the relation if necessary
-        if ($owner === null && $this->owner !== null) {
+        if (! $owner instanceof \App\Entity\User && $this->owner instanceof \App\Entity\User) {
             $this->owner->setApplicationConfiguration(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($owner !== null && $owner->getApplicationConfiguration() !== $this) {
+        if ($owner instanceof \App\Entity\User && $owner->getApplicationConfiguration() !== $this) {
             $owner->setApplicationConfiguration($this);
         }
 

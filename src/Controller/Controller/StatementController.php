@@ -21,17 +21,16 @@ class StatementController extends AbstractController
 {
     public function __construct(
         private readonly StatementRepository $statementRepository
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/statement/{id}', name: 'show_statement')]
     public function show(
-        Statement           $statement,
-        Request             $request,
-        #[CurrentUser] User $currentUser
-    ): Response
-    {
+        Statement $statement,
+        Request $request,
+        #[CurrentUser]
+        User $currentUser
+    ): Response {
         $replyStatement = new Statement(owner: $currentUser, town: $statement->getTown(), statement: $statement);
         $replyStatementForm = $this->createForm(StatementFormType::class, $replyStatement, [
             'is_disabled_statement_type' => true,
@@ -45,13 +44,13 @@ class StatementController extends AbstractController
             $this->statementRepository->save(entity: $replyStatement, flush: true);
             $this->addFlash(FlashMessageEnum::MESSAGE->value, 'statement published');
             return $this->redirectToRoute('show_statement', [
-                'id' => $statement->getId()
+                'id' => $statement->getId(),
             ]);
         }
 
         return $this->render('statement/show.html.twig', [
             'statement' => $statement,
-            'statementForm' => $replyStatementForm
+            'statementForm' => $replyStatementForm,
         ]);
     }
 
@@ -60,10 +59,9 @@ class StatementController extends AbstractController
         #[MapEntity(mapping: [
             'town_slug' => 'slug',
         ])]
-        Town    $town,
+        Town $town,
         Request $request
-    ): Response
-    {
+    ): Response {
         $keyword = $request->get('keyword');
         $type = StatementTypeEnum::match($request->get('type'));
         $statementFilterDto = new StatementFilterDto($keyword, $type);

@@ -38,14 +38,13 @@ class Statement
         #[ORM\Column(type: Types::TEXT)]
         private ?string $content = null,
         #[ORM\ManyToOne(inversedBy: 'statements')]
-        private ?User   $owner = null,
+        private ?User $owner = null,
         #[ORM\ManyToOne(inversedBy: 'statements')]
-        private ?Town   $town = null,
+        private ?Town $town = null,
         #[ORM\ManyToOne(targetEntity: Statement::class, inversedBy: 'statements')]
         #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id')]
         private Statement|null $statement = null
-    )
-    {
+    ) {
         $this->statements = new ArrayCollection();
         $this->createdAt = new CarbonImmutable();
     }
@@ -114,7 +113,7 @@ class Statement
     }
 
     /**
-     * @return Collection<int, Message>
+     * @return Collection<int, Statement>
      */
     public function getStatements(): Collection
     {
@@ -149,5 +148,4 @@ class Statement
     {
         $this->statement = $statement;
     }
-
 }
