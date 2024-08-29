@@ -14,34 +14,24 @@
                     {% endif %}
                     <div class="card-body">
                         <div class="text-center">
-                            <img height="100" width="100" class="rounded-circle mb-3 border"
+                            <img height="120" width="120" class="rounded-circle mb-3 border object-fit-cover"
                                  src="{{ user.avatar }}"/>
                             <div class="bold fs-4 fw-light">{{ user.fullName }}</div>
                             <div class="text-muted small">@{{ user.handle }}</div>
                         </div>
                     </div>
+                    <div class="card-body hstack gap-3 w-100 text-center">
+                        <div class="w-100">{{ user.originCountry|nationality }}</div>
+                        <div class="w-100">{{ user.currentCountry|country_name }}</div>
+                        <div class="w-100">{{ user.age }}</div>
+                        <div class="w-100">{{ user.gender.value }}</div>
+                    </div>
                     <div class="list-group list-group-flush">
                         {% if user.autobio %}
-                            <div class="list-group-item text-center lead">
+                            <div class="list-group-item text-center">
                                 {{ user.autobio }}
                             </div>
                         {% endif %}
-                        <div class="list-group-item border-0 p-0">
-                            <div class="list-group  list-group-flush list-group-horizontal">
-                                {% if user.originTown %}
-                                    <a href="#" class="list-group-item text-center border-0 list-group-item-action">
-                                        <div>from</div>
-                                        <div>{{ user.originTown.__toString|title }}</div>
-                                    </a>
-                                {% endif %}
-                                <a href="{{ path('show_town', { continent: user.currentTown.country.continent.value, country_slug: user.currentTown.country.slug, town_slug: user.currentTown.slug}) }}"
-                                   class="list-group-item text-center border-0 list-group-item-action">
-                                    <div>in</div>
-                                    <div>{{ user.currentTown.__toString|title }}</div>
-                                </a>
-                            </div>
-                        </div>
-
                     </div>
                     {% if app.user != user %}
                         <div class="card-footer d-flex justify-content-between align-items-center">
@@ -57,6 +47,8 @@
                     {% endif %}
                 </div>
 
+            </div>
+            <div class="col-12 col-md-5">
                 <div class="list-group mb-3">
                     <div class="list-group-item">
                         recent profile views
@@ -79,11 +71,10 @@
                     {% else %}
                         <div class="list-group-item text-muted text-center">
                             <div class="mdi mdi-lighthouse-on fs-3"></div>
-                            <div>{{ 'they-have-not-found-you-yet'|trans }}</div>
+                            <div>{{ 'no-recent-views'|trans }}</div>
                         </div>
                     {% endfor %}
                 </div>
-
             </div>
         </div>
     </div>

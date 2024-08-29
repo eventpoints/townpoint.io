@@ -15,11 +15,7 @@ class SecurityController extends AbstractController
     {
         $user = $this->getUser();
         if ($user instanceof User) {
-            return $this->redirectToRoute('show_town', [
-                'continent' => $user->getCurrentTown()->getCountry()->getContinent()->value,
-                'country_slug' => $user->getCurrentTown()->getCountry()->getSlug(),
-                'town_slug' => $user->getCurrentTown()->getSlug(),
-            ]);
+            return $this->redirectToRoute('show_town');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();

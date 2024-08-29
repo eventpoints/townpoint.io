@@ -58,11 +58,7 @@ class CustomAuthenticator extends AbstractLoginFormAuthenticator
         $user->setLastActiveAt(new CarbonImmutable());
         $this->userRepository->save(entity: $user, flush: true);
 
-        return new RedirectResponse($this->urlGenerator->generate('show_town', [
-            'continent' => $user->getCurrentTown()->getCountry()->getContinent()->value,
-            'country_slug' => $user->getCurrentTown()->getCountry()->getSlug(),
-            'town_slug' => $user->getCurrentTown()->getSlug(),
-        ]));
+        return new RedirectResponse($this->urlGenerator->generate('show_town'));
     }
 
     protected function getLoginUrl(Request $request): string

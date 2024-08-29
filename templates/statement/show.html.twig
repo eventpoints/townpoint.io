@@ -4,12 +4,19 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-5">
+                {% if statement.statement is null %}
+                    <a class="btn btn-outline-dark mb-3 rounded-pill"
+                       href="{{ path('show_town', { continent: statement.town.country.continent.value, country_slug: statement.town.country.slug, town_slug: statement.town.slug, _fragment: statement.id}) }}">
+                        <div class="mdi mdi-arrow-left"></div>
+                    </a>
+                {% else %}
+                    <a class="btn btn-outline-dark mb-3 rounded-pill"
+                       href="{{ path('show_statement', { id: statement.statement.id}) }}">
+                        <div class="mdi mdi-arrow-left"></div>
+                    </a>
+                {% endif %}
 
-                <a class="btn btn-outline-dark mb-3 rounded-pill" href="{{ path('show_town', { continent: statement.town.country.continent.value, country_slug: statement.town.country.slug, town_slug: statement.town.slug, _fragment: statement.id}) }}" >
-                    <div class="mdi mdi-arrow-left"></div>
-                </a>
-
-                <div class="card mb-3">
+                <div class="card mb-5">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="d-flex justify-content-start align-items-start">
@@ -27,6 +34,49 @@
                     </div>
                 </div>
 
+                {% for replyStatement in statement.statements %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex justify-content-start align-items-start">
+                                    <img height="35" class="rounded-circle me-2"
+                                         src="{{ replyStatement.owner.avatar }}"/>
+                                    <div>
+                                        <div>{{ replyStatement.owner.fullName }}</div>
+                                        <div>{{ replyStatement.createdAt.diffForHumans }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div>{{ replyStatement.content|raw }}</div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <div class="d-flex justify-content-between" {{ stimulus_controller('clipboard', {
+                                successContent: 'done'
+                            }) }}
+                            >
+                                <input type="hidden"
+                                       value="{{ url('show_statement', {id: replyStatement.id}) }}" {{ stimulus_target('clipboard', 'source') }}>
+                                <a {{ stimulus_action('clipboard', 'copy', 'click') }}
+                                        class="btn btn-outline-dark rounded-pill"
+                                        href="#">
+                                    <div class="mdi mdi-content-copy"></div>
+                                </a>
+                            </div>
+                            <div>
+                                <a class="btn btn-outline-dark rounded-pill"
+                                   href="{{ path('show_statement', {id: replyStatement.id}) }}">
+                                    <div class="mdi mdi-arrow-right"></div>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+                {{ include('partial/form/statement.form.html.twig') }}
 
             </div>
         </div>

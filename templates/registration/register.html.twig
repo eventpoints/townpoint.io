@@ -6,7 +6,36 @@
     <div class="container">
         <div class="row justify-content-center align-content-center g-0 min-vh-100">
             <div class="col-md-4">
-                {{ component('registration_component') }}
+                {{ form_start(registrationForm) }}
+                <div class="card shadow">
+                    {% for flash_error in app.flashes('verify_email_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    {% endfor %}
+                    <div class="card-body">
+                        <div class="text-end">
+                            <h1 class="h3 mb-3 font-weight-normal">{{ 'register'|trans }}</h1>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(registrationForm.firstName) }}
+                        {{ form_row(registrationForm.lastName) }}
+                        <div class="hstack gap-3">
+                            {{ form_row(registrationForm.bornAt) }}
+                            {{ form_row(registrationForm.gender) }}
+                        </div>
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.currentCountry) }}
+                        {{ form_row(registrationForm.originCountry) }}
+                        {{ form_row(registrationForm.plainPassword, {
+                            label: 'Password'
+                        }) }}
+
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-dark">Register</button>
+                    </div>
+                </div>
+                {{ form_end(registrationForm) }}
             </div>
         </div>
     </div>

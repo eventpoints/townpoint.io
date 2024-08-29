@@ -72,7 +72,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $qb->orderBy('user.lastActiveAt', Order::Descending->value);
 
-        $qb->setMaxResults(30);
+        $qb->setMaxResults(50);
 
         return $qb->getQuery()->getResult();
     }

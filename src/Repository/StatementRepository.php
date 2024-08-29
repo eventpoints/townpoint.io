@@ -9,6 +9,7 @@ use App\Enum\StatementTypeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Statement>
@@ -69,6 +70,10 @@ class StatementRepository extends ServiceEntityRepository
                 $qb->expr()->eq('statement.type', ':type')
             )->setParameter('type', $statementFilterDto->getType());
         }
+
+        $qb->andWhere(
+            $qb->expr()->isNull('statement.statement')
+        );
 
         $qb->setMaxResults(50);
         $qb->orderBy('statement.createdAt', Order::Descending->value);

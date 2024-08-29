@@ -9,9 +9,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('twig', [
         'default_path' => '%kernel.project_dir%/templates',
-        'globals' => [
-            'app_time' => service(ApplicationTimeService::class),
-        ],
         'form_themes' => [
             'bootstrap_5_layout.html.twig',
             'form/fields/selection_group.html.twig',

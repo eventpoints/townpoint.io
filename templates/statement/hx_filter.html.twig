@@ -2,6 +2,7 @@
     <div class="card-body">
         <div class="form-floating mb-3">
             <input name="keyword"
+                   autocomplete="off"
                    hx-post="{{ path('htmx_statements', {town_slug: town.slug}) }}"
                    hx-trigger="keyup changed delay:500ms"
                    hx-target="#statements-results"

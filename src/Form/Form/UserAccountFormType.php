@@ -8,6 +8,7 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,11 +32,13 @@ class UserAccountFormType extends AbstractType
 
         $builder = new DynamicFormBuilder($builder);
         $builder->add('firstName', TextType::class, [
+            'disabled' => true,
             'row_attr' => [
                 'class' => 'form-floating mb-3',
             ],
         ])
             ->add('lastName', TextType::class, [
+                'disabled' => true,
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
@@ -45,50 +48,18 @@ class UserAccountFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('currentCountry', EntityType::class, [
-                'mapped' => false,
-                'class' => Country::class,
-                'data' => $user->getCurrentTown()->getCountry(),
-                'choice_label' => 'name',
+            ->add('currentCountry', CountryType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
+                'autocomplete' => true
             ])
-            ->addDependent('currentTown', 'currentCountry', function (DependentField $field, null|Country $country) use ($user): void {
-                $field->add(EntityType::class, [
-                    'class' => Town::class,
-                    'placeholder' => 'city',
-                    'data' => $user->getCurrentTown(),
-                    'choices' => $country?->getTowns(),
-                    'choice_label' => fn (Town $town): string => ucfirst($town->getName()),
-                    'row_attr' => [
-                        'class' => 'form-floating mb-3',
-                    ],
-                ]);
-            })
-            ->add('originCountry', EntityType::class, [
-                'mapped' => false,
-                'required' => false,
-                'class' => Country::class,
-                'data' => $user->getOriginTown()?->getCountry(),
-                'choice_label' => 'name',
+            ->add('originCountry', CountryType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
-            ])
-            ->addDependent('originTown', 'originCountry', function (DependentField $field, null|Country $country) use ($user): void {
-                $field->add(EntityType::class, [
-                    'class' => Town::class,
-                    'required' => false,
-                    'placeholder' => 'city',
-                    'data' => $user->getOriginTown(),
-                    'choices' => $country?->getTowns(),
-                    'choice_label' => fn (Town $town): string => ucfirst($town->getName()),
-                    'row_attr' => [
-                        'class' => 'form-floating mb-3',
-                    ],
-                ]);
-            });
+                'autocomplete' => true
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

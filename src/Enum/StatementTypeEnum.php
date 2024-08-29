@@ -14,6 +14,7 @@ enum StatementTypeEnum: string
     case LOOKING_TO_BUY = 'looking_to_buy';
     case LOCAL_BUSINESS_SERVICE = 'local_business_service';
     case CHANCE_ENCOUNTER = 'chance_encounter';
+    case RESPONSE_STATEMENT = 'response-statement';
 
     public static function match(null|string $value): null|StatementTypeEnum
     {

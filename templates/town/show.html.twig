@@ -3,81 +3,13 @@
 {% block body %}
     <div class="container" {{ stimulus_controller('scroll-to') }}>
         <div class="row justify-content-center">
-            <div class="col-12 col-md-3">
-                <div class="sticky-top top-0 z-2">
-                    {{ include('statement/hx_filter.html.twig') }}
+            <div class="col-12 col-md-6">
+                <div class="fs-3 mb-3">
+                    {{ 'recently-online'|trans }}
                 </div>
-
-                <div class="list-group">
-                    <div class="list-group-item">
-                        recently online
-                    </div>
-                    {% for user in activeUsers %}
-                        <a href="{{ path('user_profile', { handle: user.handle }) }}"
-                           class="list-group-item list-group-item-action d-flex justify-content-start align-items-center">
-                            <div>
-                                <img src="{{ user.avatar }}" height="50" class="border rounded-circle me-3"/>
-                            </div>
-                            <div>
-                                <div class="fw-bold">{{ user.firstName }}</div>
-                                <div>{{ user.lastActiveAt.diffForHumans }}</div>
-                            </div>
-                        </a>
-                    {% endfor %}
+                <div class="row justify-content-between g-3" hx-get="{{ path('get_active_users') }}" hx-trigger="load">
+                    {{ include('partial/_loading-spinner.html.twig') }}
                 </div>
-
-            </div>
-            <div class="col-12 col-md-5">
-
-                <nav aria-label="breadcrumb">
-                    <div class="breadcrumb">
-                        <div class="breadcrumb-item">
-                            <a href="{{ path('show_earth') }}">{{ 'earth'|trans|title }}</a>
-                        </div>
-                        <div class="breadcrumb-item">
-                            <a href="{{ path('show_continent', {continent: continent.value}) }}">{{ continent.value|title }}</a>
-                        </div>
-                        <div class="breadcrumb-item">
-                            <a href="{{ path('show_country', {continent: app.user.currentTown.country.continent.value, country_slug: town.country.slug}) }}">{{ town.country.name|title }}</a>
-                        </div>
-                        <div class="breadcrumb-item active" aria-current="page">
-                            <a href="{{ path('show_town', {continent: app.user.currentTown.country.continent.value, country_slug: town.country.slug, town_slug: town.slug}) }}">{{ town.name|title }}</a>
-                        </div>
-                    </div>
-                </nav>
-
-                <p class="d-flex justify-content-end gap-1">
-                    <a class="btn btn-outline-dark rounded-pill d-flex justify-content-between align-items-center"
-                       data-bs-toggle="collapse" href="#statement-form" role="button" aria-expanded="false"
-                       aria-controls="collapseExample">
-                        <span class="mdi mdi-plus fs-4"></span>
-                    </a>
-                </p>
-                <div class="collapse" id="statement-form">
-                    <div class="card mb-3">
-                        {{ form_start(statementForm) }}
-                        <div class="card-body">
-                            {{ form_row(statementForm.content) }}
-                            {{ form_row(statementForm.type) }}
-                        </div>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-primary" type="submit">{{ 'publish'|trans }}</button>
-                        </div>
-                        {{ form_end(statementForm) }}
-                    </div>
-                </div>
-
-
-                <div class="mt-5" id="statements-results" hx-get="{{ path('htmx_statements', {town_slug: town.slug}) }}"
-                     hx-trigger="load">
-                    <div class="htmx-indicator my-3 d-flex justify-content-center">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
         </div>
     </div>

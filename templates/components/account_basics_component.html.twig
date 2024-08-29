@@ -1,8 +1,10 @@
 <div {{ attributes }}>
     <div class="card-body">
         {{ form_start(form) }}
-        {{ form_row(form.firstName) }}
-        {{ form_row(form.lastName) }}
+        <div class="input-group">
+            {{ form_row(form.firstName) }}
+            {{ form_row(form.lastName) }}
+        </div>
         {{ form_row(form.autobio) }}
         {{ form_row(form.currentCountry) }}
         {% if form.currentTown is defined %}

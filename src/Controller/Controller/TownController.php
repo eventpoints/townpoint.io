@@ -13,6 +13,7 @@ use App\Repository\CountryRepository;
 use App\Repository\StatementRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Order;
+use Enlightn\SecurityChecker\SecurityChecker;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,48 +25,18 @@ class TownController extends AbstractController
 {
     public function __construct(
         private readonly CountryRepository $countryRepository,
-        private readonly StatementRepository $statementRepository,
-        private readonly UserRepository $userRepository
+        private readonly StatementRepository $statementRepository
     ) {
     }
 
-    #[Route(path: '/earth/{continent}/{country_slug}/{town_slug}', name: 'show_town')]
+    #[Route(path: '/earth', name: 'show_town')]
     public function showTown(
-        ContinentEnum $continent,
-        #[MapEntity(mapping: [
-            'country_slug' => 'slug',
-        ])]
-        Country $country,
-        #[MapEntity(mapping: [
-            'town_slug' => 'slug',
-        ])]
-        Town $town,
         Request $request,
         #[CurrentUser]
         User $currentUser
     ): Response {
-        $statement = new Statement(owner: $currentUser, town: $town);
-        $statementForm = $this->createForm(StatementFormType::class, $statement);
-        $activeUsers = $this->userRepository->findActiveWithin20Minutes();
 
-        $statementForm->handleRequest($request);
-        if ($statementForm->isSubmitted() && $statementForm->isValid()) {
-            $this->statementRepository->save(entity: $statement, flush: true);
-            $this->addFlash(FlashMessageEnum::MESSAGE->value, 'statement published');
-            return $this->redirectToRoute('show_town', [
-                'continent' => $continent->value,
-                'country_slug' => $country->getSlug(),
-                'town_slug' => $town->getSlug(),
-            ]);
-        }
-
-        return $this->render('town/show.html.twig', [
-            'statementForm' => $statementForm,
-            'continent' => $continent,
-            'country' => $country,
-            'town' => $town,
-            'activeUsers' => $activeUsers,
-        ]);
+        return $this->render('town/show.html.twig');
     }
 
     #[Route(path: '/earth/{continent}/{country_slug}', name: 'show_country')]

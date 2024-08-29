@@ -2,19 +2,20 @@
 
 namespace App\Form\Form;
 
-use App\Entity\Country;
-use App\Entity\Town;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Enum\GenderEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfonycasts\DynamicForms\DependentField;
 use Symfonycasts\DynamicForms\DynamicFormBuilder;
 
 class RegistrationFormType extends AbstractType
@@ -33,30 +34,35 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-floating mb-3',
                 ],
             ])
+            ->add('bornAt', DateType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3 w-100',
+                ],
+            ])
+            ->add('gender', EnumType::class, [
+                'class' => GenderEnum::class,
+                'choice_label' => 'value',
+                'row_attr' => [
+                    'class' => 'form-floating mb-3 w-100',
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
             ])
-            ->add('country', EntityType::class, [
-                'mapped' => false,
-                'class' => Country::class,
-                'choice_label' => 'name',
+            ->add('currentCountry', CountryType::class, [
                 'row_attr' => [
                     'class' => 'form-floating mb-3',
                 ],
+                'autocomplete' => true
             ])
-            ->addDependent('currentTown', 'country', function (DependentField $field, null|Country $country): void {
-                $field->add(EntityType::class, [
-                    'class' => Town::class,
-                    'placeholder' => 'city',
-                    'choices' => $country?->getTowns() ?? [],
-                    'choice_label' => fn (Town $town): string => ucfirst($town->getName()),
-                    'row_attr' => [
-                        'class' => 'form-floating mb-3',
-                    ],
-                ]);
-            })
+            ->add('originCountry', CountryType::class, [
+                'row_attr' => [
+                    'class' => 'form-floating mb-3',
+                ],
+                'autocomplete' => true
+            ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'attr' => [

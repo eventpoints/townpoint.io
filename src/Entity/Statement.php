@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Enum\StatementTypeEnum;
 use App\Repository\StatementRepository;
 use Carbon\CarbonImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -25,14 +27,26 @@ class Statement
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private CarbonImmutable|null $createdAt = null;
 
+    /**
+     * One Category has Many Categories.
+     * @var Collection<int, Statement>
+     */
+    #[ORM\OneToMany(mappedBy: 'statement', targetEntity: Statement::class, cascade: ['persist'])]
+    private Collection $statements;
+
     public function __construct(
         #[ORM\Column(type: Types::TEXT)]
         private ?string $content = null,
         #[ORM\ManyToOne(inversedBy: 'statements')]
-        private ?User $owner = null,
+        private ?User   $owner = null,
         #[ORM\ManyToOne(inversedBy: 'statements')]
-        private ?Town $town = null
-    ) {
+        private ?Town   $town = null,
+        #[ORM\ManyToOne(targetEntity: Statement::class, inversedBy: 'statements')]
+        #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id')]
+        private Statement|null $statement = null
+    )
+    {
+        $this->statements = new ArrayCollection();
         $this->createdAt = new CarbonImmutable();
     }
 
@@ -98,4 +112,42 @@ class Statement
     {
         $this->type = $type;
     }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getStatements(): Collection
+    {
+        return $this->statements;
+    }
+
+    public function addStatement(Statement $statement): static
+    {
+        if (! $this->statements->contains($statement)) {
+            $this->statements->add($statement);
+            $statement->setStatement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatement(Statement $statement): static
+    {
+        if ($this->statements->removeElement($statement) && $statement->getStatement() === $this) {
+            $statement->setStatement(null);
+        }
+
+        return $this;
+    }
+
+    public function getStatement(): null|Statement
+    {
+        return $this->statement;
+    }
+
+    public function setStatement(null|Statement $statement): void
+    {
+        $this->statement = $statement;
+    }
+
 }

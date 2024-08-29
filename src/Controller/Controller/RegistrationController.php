@@ -6,8 +6,8 @@ use App\Entity\User;
 use App\Form\Form\RegistrationFormType;
 use App\Security\CustomAuthenticator;
 use App\Security\EmailVerifier;
-use App\Service\AvatarService\AvatarService;
-use App\Service\HandleService;
+use App\Service\AvatarService\Contract\AvatarServiceInterface;
+use App\Service\HandleGeneratorService\Contract\HandleGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +21,9 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class RegistrationController extends AbstractController
 {
     public function __construct(
-        private readonly EmailVerifier $emailVerifier,
-        private readonly AvatarService $avatarService,
-        private readonly HandleService $handleService,
+        private readonly EmailVerifier            $emailVerifier,
+        private readonly AvatarServiceInterface   $avatarService,
+        private readonly HandleGeneratorInterface $handleService,
     ) {
     }
 
@@ -44,7 +44,7 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-            $avatar = $this->avatarService->createAvatar($user->getEmail());
+            $avatar = $this->avatarService->generate($user->getEmail());
             $user->setAvatar($avatar);
 
             $entityManager->persist($user);

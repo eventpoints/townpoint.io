@@ -17,6 +17,7 @@ class StatementFormType extends AbstractType
         $builder
             ->add('content', EditorType::class)
             ->add('type', EnumType::class, [
+                'disabled' => $options['is_disabled_statement_type'],
                 'label' => false,
                 'class' => StatementTypeEnum::class,
                 'choice_label' => 'value',
@@ -27,8 +28,12 @@ class StatementFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+
         $resolver->setDefaults([
             'data_class' => Statement::class,
+            'is_disabled_statement_type' => false
         ]);
+
+        $resolver->setAllowedTypes('is_disabled_statement_type', 'bool');
     }
 }

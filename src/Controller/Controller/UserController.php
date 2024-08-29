@@ -3,9 +3,14 @@
 namespace App\Controller\Controller;
 
 use App\Entity\User;
+use App\Form\Form\AvatarFormType;
 use App\Form\Form\UserAccountFormType;
 use App\Repository\UserRepository;
+use App\Service\AvatarService\Contract\AvatarServiceInterface;
+use App\Service\ImageUploadService\AvatarUploadService;
+use App\Service\ImageUploadService\Contract\ImageUploadServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +19,10 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class UserController extends AbstractController
 {
     public function __construct(
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        #[Autowire(service: AvatarUploadService::class)]
+        private readonly ImageUploadServiceInterface $avatarUploadService
+
     ) {
     }
 
@@ -46,4 +54,30 @@ class UserController extends AbstractController
             'users' => $users,
         ]);
     }
+
+    #[Route(path: '/change/avatar', name: 'change_avatar')]
+    public function changeProfileAvatar(
+        Request $request,
+        #[CurrentUser] User $currentUser
+    ) : Response
+    {
+        $avatarForm = $this->createForm(AvatarFormType::class);
+        $avatarForm->handleRequest($request);
+        if ($avatarForm->isSubmitted() && $avatarForm->isValid()) {
+
+            $image = $avatarForm->get('avatar')->getData();
+            $avatar = $this->avatarUploadService->process($image);
+            $currentUser->setAvatar($avatar->getEncoded());
+            $this->userRepository->save($currentUser, true);
+
+            return $this->redirectToRoute('user_account', [
+                'handle' => $currentUser->getHandle(),
+            ]);
+        }
+
+        return $this->render('user/change-avatar.html.twig', [
+            'avatarForm' => $avatarForm
+        ]);
+    }
+    
 }

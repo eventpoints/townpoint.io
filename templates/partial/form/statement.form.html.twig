@@ -1,0 +1,20 @@
+<p class="d-flex justify-content-end gap-1">
+    <a class="btn btn-outline-dark rounded-pill d-flex justify-content-between align-items-center"
+       data-bs-toggle="collapse" href="#statement-form" role="button" aria-expanded="false"
+       aria-controls="collapseExample">
+        <span class="mdi mdi-plus fs-4"></span>
+    </a>
+</p>
+<div class="collapse" id="statement-form">
+    <div class="card mb-3">
+        {{ form_start(statementForm) }}
+        <div class="card-body">
+            {{ form_row(statementForm.content) }}
+            {{ form_row(statementForm.type) }}
+        </div>
+        <div class="card-footer text-end">
+            <button class="btn btn-primary" type="submit">{{ 'publish'|trans }}</button>
+        </div>
+        {{ form_end(statementForm) }}
+    </div>
+</div>

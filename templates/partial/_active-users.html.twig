@@ -1,0 +1,41 @@
+{% for user in users %}
+    <div class="col-12 col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-start align-items-start gap-3">
+                <img src="{{ user.avatar }}" height="50" width="50"
+                     class="border rounded-circle object-fit-cover"/>
+                <div>
+                    <div class="fw-bold">{{ user.fullName }}</div>
+                    {% if user.lastActiveAt.isCurrentMinute() %}
+                        <div class="d-flex justify-content-start align-items-center">
+                            <div class="mdi mdi-circle text-success me-2"></div>
+                            <div>{{ 'active'|trans }}</div>
+                        </div>
+                    {% else %}
+                        <div>{{ user.lastActiveAt.diffForHumans }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item hstack gap-3 w-100 text-center">
+                    <div class="w-100">{{ user.originCountry|nationality }}</div>
+                    <div class="w-100">{{ user.currentCountry|country_name }}</div>
+                    <div class="w-100">{{ user.age }}</div>
+                    <div class="w-100">{{ user.gender.value }}</div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary w-100" href="{{ path('user_profile', { handle: user.handle }) }}">
+                    {{ 'view-profile'|trans }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="list-group-item text-center text-muted">
+        <div>
+            <span class="mdi mdi-robot-dead fs-3"></span>
+        </div>
+        <div>{{ 'no-active-users'|trans }}</div>
+    </div>
+{% endfor %}

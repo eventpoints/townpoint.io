@@ -10,6 +10,9 @@
                             <div>
                                 <img class="rounded-circle border border-2" height="100" width="100"
                                      src="{{ user.avatar }}"/>
+                                <div>
+                                    <a href="{{ path('change_avatar') }}" class="link-dark">{{ 'change-photo'|trans }}</a>
+                                </div>
                             </div>
                             <div>
                                 <div class="fw-bold fs-3">{{ user.fullName }}</div>

@@ -27,11 +27,11 @@
                 </ul>
             </div>
         </a>
+        <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
+           href="{{ path('show_town') }}"><span
+                    class="mdi mdi-town-hall fs-2"></span></a>
         <a class="nav-link {{ app.request.attributes.get('_route') == 'user_profile' ? "active" }}"
            href="{{ path('user_profile', {handle: app.user.handle}) }}"><span class="mdi mdi-account-circle fs-2"></span></a>
-        <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
-           href="{{ path('show_town', { continent: app.user.currentTown.country.continent.value, country_slug: app.user.currentTown.country.slug, town_slug: app.user.currentTown.slug}) }}"><span
-                    class="mdi mdi-town-hall fs-2"></span></a>
         <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}"
            href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
     </nav>

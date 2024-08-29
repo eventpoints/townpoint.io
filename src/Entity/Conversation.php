@@ -148,4 +148,14 @@ class Conversation
 
         return $this;
     }
+
+    public function getUnreadMessages(User $user) : Collection
+    {
+        return $this->getMessages()->filter(function (Message $message) use ($user) {
+            return $message->getMessageReads()->exists(function (int $key, MessageRead $read) use ($user) {
+                return $read->getOwner() === $user;
+            });
+        });
+    }
+
 }

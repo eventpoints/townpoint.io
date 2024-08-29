@@ -12,6 +12,8 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
         "easycorp/easyadmin-bundle": "^4.7",
+        "enlightn/security-checker": "^2.0",
+        "intervention/image": "^2.7",
         "jdenticon/jdenticon": "^1.0",
         "nesbot/carbon": "^3.2.4",
         "phpdocumentor/reflection-docblock": "^5.3",
