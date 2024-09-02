@@ -1,51 +1,56 @@
-<div class="d-flex justify-content-center bg-body-tertiary">
-    <a href="#" class="navbar-brand d-flex align-items-center my-3">
-        <img class="me-2" height="30" width="30" src="{{ asset('images/app/logo.png') }}"/>
-        <span class="fw-bolder fs-2">town</span><span class="fw-light fs-2">point</span>
-    </a>
-</div>
-
-{% if app.user %}
-    <nav class="navbar bg-body-tertiary justify-content-start nav-underline mb-3">
-        <a class="nav-link">
-            <div class="dropdown">
-                <a type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img
-                            src="{{ app.user.avatar }}"
-                            class="rounded-circle border"
-                            height="30"/>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item"
-                           href="{{ path('user_profile', {handle: app.user.handle}) }}">{{ 'profile'|trans }}</a></li>
-                    <li><a class="dropdown-item" href="{{ path('conversations') }}">{{ 'conversations'|trans }}</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">{{ 'logout'|trans }}</a>
-                    </li>
-                </ul>
+<nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
+    <div class="container">
+        <a href="#" class="navbar-brand d-flex align-items-center gap-2">
+            <img class="me-2" height="60" width="60" src="{{ asset('images/app/logo.png') }}"/>
+            <div>
+                <div>
+                    <span class="fw-bolder fs-2">town</span>
+                    <span class="fw-light fs-2">point</span>
+                </div>
+                <div class="text-muted small">Where Global Friendships Meet</div>
             </div>
         </a>
-        <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
-           href="{{ path('show_town') }}"><span
-                    class="mdi mdi-town-hall fs-2"></span></a>
-        <a class="nav-link {{ app.request.attributes.get('_route') == 'user_profile' ? "active" }}"
-           href="{{ path('user_profile', {handle: app.user.handle}) }}"><span class="mdi mdi-account-circle fs-2"></span></a>
-        <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}"
-           href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
-    </nav>
-{% else %}
-    <nav class="navbar bg-body-tertiary navbar-expand border-bottom">
-        <div class="container">
-            <div class="navbar-nav justify-content-center">
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? "active" }}"
-                   aria-current="page"
-                   href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
-                <a class="nav-link {{ app.request.attributes.get('_route') == 'app_register' ? "active" }}"
-                   aria-current="page"
-                   href="{{ path('app_register') }}">{{ 'sign-up'|trans }}</a>
-            </div>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="mdi mdi-dots-vertical fs-1"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav align-items-center ms-auto gap-2 flex-row justify-content-center">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'show_town' ? "active" }}"
+                           href="{{ path('show_town') }}"><span
+                                    class="mdi mdi-town-hall fs-2"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'user_profile' ? "active" }}"
+                           href="{{ path('user_profile', {handle: app.user.handle}) }}"><span
+                                    class="mdi mdi-account-circle fs-2"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'conversations' ? "active" }}"
+                           href="{{ path('conversations') }}"><span class="mdi mdi-forum fs-2"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger"
+                                            href="{{ path('app_logout') }}">
+                            <span class="mdi mdi-exit-to-app fs-2"></span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_login' ? "active" }}"
+                           aria-current="page"
+                           href="{{ path('app_login') }}">{{ 'login'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.request.attributes.get('_route') == 'app_register' ? "active" }}"
+                           aria-current="page"
+                           href="{{ path('app_register') }}">{{ 'join-now'|trans }}</a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
-{% endif %}
+    </div>
+</nav>
