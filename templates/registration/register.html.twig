@@ -4,11 +4,17 @@
 
 {% block body %}
     <div class="container">
-        <div class="row justify-content-center align-content-center g-3 mt-5">
+        <div class="row justify-content-center align-content-center g-5 mt-5">
             <div class="col-md-4">
                 <div class="fs-1">
                     Where Global Friendships Meet.
                 </div>
+                <hr/>
+
+                <div class="lead">
+                    Find friends and make lasting connections around the world
+                </div>
+
             </div>
             <div class="col-md-4">
                 {{ form_start(registrationForm) }}
@@ -18,7 +24,7 @@
                     {% endfor %}
                     <div class="card-body">
                         <div class="text-end">
-                            <h1 class="h3 mb-3 font-weight-normal">{{ 'register'|trans }}</h1>
+                            <h1 class="h3 mb-3 font-weight-normal">{{ 'register'|trans|title }}</h1>
                         </div>
                     </div>
                     <div class="card-body">
@@ -34,7 +40,9 @@
                         {{ form_row(registrationForm.plainPassword, {
                             label: 'Password'
                         }) }}
-
+                    </div>
+                    <div class="card-footer text-center text-muted small">
+                        By continuing you agree to our <a href="#">terms & conditions</a>
                     </div>
                     <div class="card-footer text-end">
                         <button type="submit" class="btn btn-dark">Register</button>
